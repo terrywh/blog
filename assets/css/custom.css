@@ -1,0 +1,18 @@
+.post__content code {
+    font-family: 'Maple Mono', 'Cascadia Mono', Consolas, Monaco, monospace;
+    color: #bb6633;
+}
+
+.theme--dark .post__content code {
+    color: #ee9966;
+}
+
+.post__content pre {
+    padding: 12px;
+}
+
+kbd {
+    border: 1px solid #dfdfdf;
+    box-shadow: 1px 1px 3px #dfdfdf;
+    padding: 3px;
+}

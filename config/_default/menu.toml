@@ -1,0 +1,11 @@
+[[main]]
+name = "首页"
+identifier = "home"
+pageRef = "/"
+weight = 100
+
+[[main]]
+name = "笔记"
+identifier = "post"
+pageRef = "/post"
+weight = 201

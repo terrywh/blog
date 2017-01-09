@@ -1,0 +1,89 @@
+body { /* 对网页中的 <body></body> 所包含的内容定义“样式” */
+	background: #f0f0f0; /* 定义背景颜色为淡灰色 */
+	/* 颜色值可以描述为 RRBBGG ，即用 16 进制形式描述的 红、蓝、绿 原色，取值从 00 ~ FF */
+	margin: 0; /* 区块外空隙 */
+}
+.block { /* 对网页中 class 属性包含 "block" 的 元素 包含的内容定义“样式” */
+	padding: 15px; /* 区块内空隙 */
+	background: #fff; /* 定义背景颜色为白色 */
+	border: 1px solid #556575; /* 定义 1 像素 实线 边框，颜色为蓝色 */
+	text-align: center; /* 让当前元素中的文本（或类文本的元素）水平居中 */
+	margin: 20px; /* 区块外空隙 */
+}
+/* 对网页中 class 属性中同时包含 "block" "entry" 的元素 内部的
+ class 属性包含 "form-inline" 的 元素 内部的
+ class 属性包含 "form-group" 的元素定义样式 */
+.block.entry .form-inline .form-group { 
+	margin-bottom: 15px; /* 含义与 margin 相同，但仅定义 元素外部 下方 空隙 */
+}
+.block.rank .table tbody td { /* 排行榜表格内容居左(由于上层元素设置了 居中) */
+	text-align: left; 
+}
+
+.field {
+	width: 576px; /* 24 * 24 的雷区，每个格子 24px */
+	height: 576px; /* 所以雷区是 480 * 480 px */
+
+	background: #dddddd; /* 将雷区的北京设为灰色 */
+	margin: 0 auto; /* 让雷区显示在 .block.main 元素的中间位置 */
+	border-bottom: 1px dashed #aaaaaa; /* 参考 .field .cell 的说明 */
+	border-right: 1px dashed #aaaaaa; /* 参考 .field .cell 的说明 */
+	/* 使得 .field 内部的 .cell 元素参照定位 */
+	position: relative;
+}
+
+.field .cell {
+	position: absolute; /* 参照上层最近的 position: relative / absolute 的元素进行绝对定位 */
+	/* 我们给格子画上虚线边框。注意边框实际不是所有的边框，右边框实际是下一个格子的左边框 */
+	/* 用外层的 .field 元素将最后的右边框、下边框补齐 */
+	border-top: 1px dashed #aaa; /* #aaaaaa 可以缩写成 #aaa */
+	border-left: 1px dashed #aaa;
+	width: 24px;
+	height: 24px;
+	/* 为了让将来在格子中出现的 数字 或 地雷能够居中 */
+	font-size: 12px;
+	line-height: 24px; /* 文字的行高 与 实际元素高度一致，刚好做到文字居中 */
+}
+
+.field .mask {
+	position: absolute; /* 与上面 cell 类似，使的 mask 能够参照 .cell 定位 */
+	top: 0;
+	left: 0;
+	width: 100%; /* 将其沾满 */
+	height: 100%;
+	/* 为了让遮罩层呈现“凸起”的效果，边框进行一定的颜色定义 */
+	border-top: 2px solid #fcfcfc; /* 上、左 边框高亮 */
+	border-left: 2px solid #fcfcfc;
+	border-right: 2px solid #bbb; /* 下、右边框加深 */
+	border-bottom: 2px solid #bbb;
+	background: #ddd;
+}
+
+.field .mask.flag { /* mask 元素上面展示旗子, 即如果一个元素同时具有 mask 和 flag 两个 class */
+	background: #ddd 0px 0px url(./sprite.png); /* 插上旗子即就是在背景上显示图片 */
+	/* 0px 0px 是指将背景图在元素上的位置 */
+}
+
+.field .cell.bomb { /* 在某个格子中显示地雷 */
+	background: #ddd -24px 0px url(./sprite.png);
+	/* -24px 即就是使背景图左偏移24像素，刚好显示出了地雷的部分 */
+}
+.block.main {
+	position: relative; /* 让其内部的元素参照定位 */
+}
+.block.main .cover {
+	/* 占满父级元素 */
+	position: absolute;
+	top: 0; left: 0;
+	width: 100%; height: 100%;
+	/* 遮盖其他元素 */
+	z-index: 1;
+	/* 半透明 黑色背景 */
+	background: rgba(0,0,0,0.4);
+	/* 文字特征 */
+	color: #fff;
+	font-family: "华文行楷","楷体","微软雅黑","新宋体"; /* 优先使用前面的字体，找不到尝试下一个 */
+	font-size: 48px; /* 文字大一些 */
+	padding: 240px; /* 文字上下做一些留白 */
+	text-align: center; /* 文字居中 */
+}

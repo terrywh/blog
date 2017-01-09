@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>扫雷 - 网页小游戏</title>
+		<!-- 这里引入的一个辅助库，帮助我们更好的定义网页和开发功能，可以暂不纠结具体 -->
+		<link href="https://cdn.bootcss.com/bootstrap/5.3.1/css/bootstrap.min.css" rel="styleSheet" />
+		<script src="https://cdn.bootcss.com/jquery/3.7.1/jquery.min.js"></script>
+		<!-- 下面文件用来定义我们 扫雷 游戏的外观样式（见下文） -->
+		<link href="./minesweeper.css" rel="styleSheet" />
+	</head>
+	<body>
+		<!-- 用户登记 -->
+		<div class="block entry">
+			<form class="form-inline" id="entry_submit">
+				<fieldset class="form-group">
+					<label>请输入您的姓名：</label>
+					<input id="entry_input_name" type="text" class="form-control" placeholder="请输入您的姓名，以便将成绩计入排行榜！">
+				</fieldset>
+				<button type="submit" class="btn btn-primary">开始游戏</button>
+			</form>
+		</div>
+		<!-- 游戏主界面 -->
+		<div class="block main">
+			雷区
+			<div class="cover"></div>
+		</div>
+		<!-- 游戏排行榜 -->
+		<div class="block rank">
+			<!-- 标题，可以使用 h1 ~ h5，大小、颜色稍有不同 -->
+			<h4>排行榜</h4>
+			<!-- table-striped 将会让表格内容变成深浅相间的行 -->
+			<table class="table table-striped">
+				<!-- 表头 -->
+				<thead class="thead-default">
+					<tr>
+						<th>#</th>
+						<th>姓名</th>
+						<th>用时</th>
+					</tr>
+				</thead>
+				<tbody id="rank_table">
+					<!-- 表格内容 -->
+				</tbody>
+			</table>
+		</div>
+		<!-- 我们的程序、逻辑、行为将在下面的 js 文件中定义 -->
+		<script src="./minesweeper-entry.js"></script>
+		<script src="./minesweeper-field.js"></script>
+		<script src="./minesweeper-rank.js"></script>
+	</body>
+</html>

@@ -1,0 +1,6 @@
+[highlight]
+style = "catppuccin-latte"
+
+[goldmark]
+[goldmark.renderer]
+unsafe = true

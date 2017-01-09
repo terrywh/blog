@@ -1,0 +1,21 @@
+
+title = "Hello World"
+author = "terrywh"
+description = "C++/Go/Js/PHP"
+profilePicture = "/avatar.jpg"
+customCss = ["css/custom.css"]
+mainSections = ["post"]
+
+[mermaid]
+enable = true
+
+[[socialIcons]]
+icon = "fa-brands fa-github"
+title = "GitHub"
+url = "https://github.com/terrywh/"
+
+
+[[socialIcons]]
+icon = "fa-solid fa-rss"
+title = "GitHub"
+url = "https://github.com/index.xml"

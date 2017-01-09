@@ -1,0 +1,7 @@
+baseURL = 'https://blog.terrywh.top'
+theme = 'anatole'
+title = "Hello World"
+defaultContentLanguage = "zh-cn"
+
+[params]
+baseURL = 'https://blog.terrywh.top'
