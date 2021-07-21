@@ -8,10 +8,23 @@
     <managingEditor>terry.wuhao[at]gmail.com (TerryWu)</managingEditor>
     <webMaster>terry.wuhao[at]gmail.com (TerryWu)</webMaster>
     <copyright>@copyright 2017</copyright>
-    <lastBuildDate>Fri, 22 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 21 Jul 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://blog.terrywh.net/categories/%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>GDB/GCC 升级、启用 PrettyPrint 支持</title>
+      <link>https://blog.terrywh.net/post/2021/gdb_with_pretty_print/</link>
+      <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/post/2021/gdb_with_pretty_print/</guid>
+      <description> 启用 Pretty Print 可方便在基于 GDB 的调试能够更直观的查看标准库内的结构，如字符串、向量、列表等；
+ 请参考如下步骤进行安装配置：
+ 升级、安装 GCC 这里不在赘述
+ 升级 GDB
+yum install python3-devel # !!!!! pretty print 依赖 python 支持 wget https://mirrors.aliyun.com/gnu/gdb/gdb-10.1.tar.gz tar xf gdb-10.1.tar.gz cd gdb-10.1 mkdir build ../configure --prefix={path_to_install} --with-python=/usr/bin/python3 make &amp;amp;&amp;amp; make install   启用 Pretty Print 支持 编辑 ~/.gdbinit 文件并填写下述内容： bash python import sys sys.path.insert(0, &#39;{path_to_gcc_share}/{gcc-version|libstdc++-{version}}/python&#39;) end source {path_to_gcc_lib}/libstdc++.so{version}-gdb.py # 自动启用，也可手动调用    </description>
+    </item>
     
     <item>
       <title>C&#43;&#43; 表达式求值顺序</title>

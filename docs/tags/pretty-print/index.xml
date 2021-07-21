@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>gcc on Hello World</title>
-    <link>https://blog.terrywh.net/tags/gcc/</link>
-    <description>Recent content in gcc on Hello World</description>
+    <title>pretty print on Hello World</title>
+    <link>https://blog.terrywh.net/tags/pretty-print/</link>
+    <description>Recent content in pretty print on Hello World</description>
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>terry.wuhao[at]gmail.com (TerryWu)</managingEditor>
     <webMaster>terry.wuhao[at]gmail.com (TerryWu)</webMaster>
     <copyright>@copyright 2017</copyright>
     <lastBuildDate>Wed, 21 Jul 2021 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://blog.terrywh.net/tags/gcc/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://blog.terrywh.net/tags/pretty-print/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -24,15 +24,6 @@
  升级、安装 GCC 这里不在赘述
  升级 GDB
 yum install python3-devel # !!!!! pretty print 依赖 python 支持 wget https://mirrors.aliyun.com/gnu/gdb/gdb-10.1.tar.gz tar xf gdb-10.1.tar.gz cd gdb-10.1 mkdir build ../configure --prefix={path_to_install} --with-python=/usr/bin/python3 make &amp;amp;&amp;amp; make install   启用 Pretty Print 支持 编辑 ~/.gdbinit 文件并填写下述内容： bash python import sys sys.path.insert(0, &#39;{path_to_gcc_share}/{gcc-version|libstdc++-{version}}/python&#39;) end source {path_to_gcc_lib}/libstdc++.so{version}-gdb.py # 自动启用，也可手动调用    </description>
-    </item>
-    
-    <item>
-      <title>Server Initialization</title>
-      <link>https://blog.terrywh.net/post/2019/server_init/</link>
-      <pubDate>Wed, 08 May 2019 00:00:00 +0000</pubDate>
-      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
-      <guid>https://blog.terrywh.net/post/2019/server_init/</guid>
-      <description>BASIC apt update apt upgrade apt install aria2 build-essential cmake libpcre3-dev libssl-dev zlib1g-dev mkdir -p /data/server/v2ray  BBR # 验证 lsmod | grep bbr # 挂载 modprobe tcp_bbr echo &amp;quot;tcp_bbr&amp;quot; &amp;gt;&amp;gt; /etc/modules-load.d/modules.conf # 启用 echo &amp;quot;net.core.default_qdisc=fq&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf echo &amp;quot;net.ipv4.tcp_congestion_control=bbr&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf # 生效 sysctl -p  NGINX cd ~ wget http://nginx.org/download/nginx-1.15.12.tar.gz tar xf nginx-1.15.12.tar.gz cd nginx-1.15.12 ./configure --with-http_ssl_module --without-select_module --with-http_v2_module --with-http_gzip_static_module --prefix=/data/server/nginx make -j2 make install  V2RAY cd ~ wget https://github.</description>
     </item>
     
   </channel>
