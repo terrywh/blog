@@ -36,6 +36,20 @@ yum install python3-devel # !!!!! pretty print 依赖 python 支持 wget https:/
     </item>
     
     <item>
+      <title>任务执行器 - C&#43;&#43; 抽象</title>
+      <link>https://blog.terrywh.net/post/2022/task_executor/</link>
+      <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/post/2022/task_executor/</guid>
+      <description>最近在看一本 C++ 的书：Beautiful C++ 30 Core Guidelines for Writing Clean, Safe, and Fast Code 有了些共鸣和一些感受，促使我对已经编码的业务产生了一些“想法”；进行“抽象”是我们经常都提出来的理念，但实际往往会因为“时间紧张”而逐渐被忽略或忘记；
+以往我时不时的去回顾一下过去的开发，总有一种“冲动”把他们重写；由于更全盘的经验，重写的过程会发现很多逻辑会更“顺利”；现在想来，当时的想法还稍显“浅薄”，进行更详尽的思考“抽象”是比“单纯的重写”更恰当的；
+ 首先，在分析整体业务场景，按工作流程，每个步骤需要进行各种同步、异步逻辑，在达成完成条件时，推进到下个步骤；依次为依据，进行“抽象”，大致能够得到：
+template &amp;lt;class Stage, class ...Tasks&amp;gt; class TaskExecutor;   使用 Stage 抽象运行“步骤” 并以模板参数传入子类类型实现对子类实例的访问； 由于支持“异步”这里使用 shared_ptr 维护声明周期； 统一处理“任务完成”并回调到子类成员函数，以期推动状态机继续行进；  很简单的机制，但能够在流程上很清晰的表达“工作任务”、“执行完毕”等概念；
+进一步在业务过程中，有若干“游离”在业务流程外的“检测”、“辅助”功能，按照“一定间隔”持续运行；故进一步将上面执行器机制完善，支持“定时任务”这一抽象概念；
+ # Step 1. Fetch and check out the branch for this merge request git fetch origin git checkout -b master origin/master # Step 2. Review the changes locally # Step 3.</description>
+    </item>
+    
+    <item>
       <title>C&#43;&#43; 表达式求值顺序</title>
       <link>https://blog.terrywh.net/post/2019/evaluation_order/</link>
       <pubDate>Fri, 22 Nov 2019 00:00:00 +0000</pubDate>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>扫雷（二）排行榜（定义和使用函数、对象）  &middot; Hello World</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="" />
+
+<meta name="keywords" content="css, js, html, 扫雷, ">
+
+
+<meta property="og:title" content="扫雷（二）排行榜（定义和使用函数、对象）  &middot; Hello World ">
+<meta property="og:site_name" content="Hello World"/>
+<meta property="og:url" content="https://blog.terrywh.net/post/2016/minesweeper/2/" />
+<meta property="og:locale" content="">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content=""/>
+<meta property="og:article:published_time" content="2016-06-20T00:00:00Z" />
+<meta property="og:article:modified_time" content="2016-06-20T00:00:00Z" />
+
+  
+    
+<meta property="og:article:tag" content="css">
+    
+<meta property="og:article:tag" content="js">
+    
+<meta property="og:article:tag" content="html">
+    
+<meta property="og:article:tag" content="扫雷">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="扫雷（二）排行榜（定义和使用函数、对象）" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:url" content="https://blog.terrywh.net/post/2016/minesweeper/2/" />
+<meta name="twitter:domain" content="https://blog.terrywh.net">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "扫雷（二）排行榜（定义和使用函数、对象）",
+    "author": {
+      "@type": "Person",
+      "name": "TerryWu"
+    },
+    "datePublished": "2016-06-20",
+    "description": "",
+    "wordCount":  601 
+  }
+</script>
+
+
+
+<link rel="canonical" href="https://blog.terrywh.net/post/2016/minesweeper/2/" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://blog.terrywh.net/touch-icon-144-precomposed.png">
+<link href="https://blog.terrywh.net/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.55.5" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<link href='https://fonts.googleapis.com/css?family=Merriweather:300%7CRaleway%7COpen+Sans' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/highlight/tomorrow.css">
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?28e3ab917510194e5abf19306f82fdbb";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+    
+  
+</head>
+<body>
+  <main id="main-wrapper" class="container main_wrapper has-sidebar">
+    <header id="main-header" class="container main_header">
+  <div class="container brand">
+  <div class="container title h1-like">
+  <a class="baselink" href="https://blog.terrywh.net">
+  Hello World
+
+</a>
+
+</div>
+
+  
+<div class="container topline">
+  
+  C++/PHP/Go/NodeJS
+
+
+</div>
+
+
+</div>
+
+  <nav class="container nav primary no-print">
+  
+
+
+  
+<a href="https://blog.terrywh.net/post">列表</a>
+
+<a href="https://blog.terrywh.net/tags">标签</a>
+
+<a href="https://blog.terrywh.net/books">系列</a>
+
+<a href="https://blog.terrywh.net/flame">Flame</a>
+
+
+</nav>
+
+<div class="container nav secondary no-print">
+  
+<a id="contact-link-email" class="contact_link" rel="me" aria-label="Email" href="mailto:terry.wuhao[at]gmail.com">
+  <span class="fa fa-envelope-square"></span></a>
+
+
+
+<a id="contact-link-github" class="contact_link" rel="me" aria-label="Github" href="https://github.com/terrywh">
+  <span class="fa fa-github-square"></span></a>
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+  
+
+</header>
+
+
+<article id="main-content" class="container main_content single">
+  <header class="container hat">
+  <h1>扫雷（二）排行榜（定义和使用函数、对象）
+</h1>
+
+  <div class="metas">
+<time datetime="2016-06-20">20 Jun, 2016</time>
+
+
+  
+  &middot; Read in about 3 min
+  &middot; (601 Words)
+  <br>
+  
+<a class="label" href="https://blog.terrywh.net/tags/css">css</a>
+
+<a class="label" href="https://blog.terrywh.net/tags/js">js</a>
+
+<a class="label" href="https://blog.terrywh.net/tags/html">html</a>
+
+<a class="label" href="https://blog.terrywh.net/tags/%E6%89%AB%E9%9B%B7">扫雷</a>
+
+
+
+</div>
+
+</header>
+
+  <div class="container content">
+  <p>[上一章][chapter-1]我们实现了最基本的游戏界面和游戏的简单入口，这一章，我们完善和制作 排行榜 功能，并为将来游戏结束时使用、记录排行榜提供支持。</p>
+
+<blockquote>
+<ul>
+<li><a href="/post/2016/minesweeper/1/">扫雷（一）游戏入口（概念及准备）</a></li>
+<li><a href="/post/2016/minesweeper/2/">扫雷（二）排行榜（定义和使用函数、对象）</a></li>
+<li><a href="/post/2016/minesweeper/3/">扫雷（三）雷区（元素定位、事件代理、背景图片）</a></li>
+<li><a href="/post/2016/minesweeper/4/">扫雷（四）雷区完善（递归打开、随机布雷）</a></li>
+</ul>
+</blockquote>
+
+<p>在使用 互联网 的时候，我们基本上离不开<strong>浏览器</strong> (<code>browser</code>) 。 浏览器其实可以看作一个 中间人，他将 用户无法理解、看不太懂的 脚本语言描述的程序，转换为 用户可以看得到的界面、接收用户的输入输出动作，并通过执行脚本程序给出对应的反馈。 一般，我们把前面的 “转换为界面” 过程称作 “渲染” (render)。 在[上一章][chapter-1]中，我们在 <code>.html</code> 文件中填写了代码，在浏览器中打开这个文件，看到了界面，我们姑且称这个“渲染”动作为“静态渲染”，那么这一章中，我们将会看到另外一种“动态渲染”。</p>
+
+<blockquote>
+<p><strong>接口</strong> 可以理解为能够让另外的代码、模块调用的函数、对象；<br />
+<strong>分装</strong> 即就是将可以重复使用或功能联系紧密的若干代码聚合在一个可以被 调用 或 访问的模块中；</p>
+</blockquote>
+
+<p>在程序开发过程当中，我们一般会提到“接口”，“封装”等等概念。我理解，提出这些概念的目的，其实是在告诉我们，将程序写的更“清晰”一些。这个“清晰”一般可以描述为两方面：</p>
+
+<ol>
+<li>功能完整 - 实现某个功能应该做些什么事情？如果要做这个事情，是不是可以有不同的做法？</li>
+<li>分工明确 - 某个功能应该在哪里做？代码写在哪里？</li>
+</ol>
+
+<p>定义“接口”，即就是将完整的、能够重复使用的“功能”包装（封装）成函数、对象，并供其他逻辑 或 在其他地方调用；使用者并不需要了解“接口”内部具体的实现逻辑，只需知道接口“形式”即可使用，完成对应的功能，同时使用者 <strong>不需要对其不需了解的事情加以干涉</strong>。我们下面也会封装、实现一些简单的接口来介绍上面的概念。</p>
+
+<h4 id="排行榜的结构">排行榜的结构</h4>
+
+<p>按照网页的开发方式，我一般习惯按照“基本结构”-&gt;“外观润色”-&gt;“行为功能”这个流程进行进行开发。首先，在排行榜（[上一章][chapter-1]中 <code>(3)</code> 的位置）加入下面“基本结构”的 <code>HTML</code> 代码：</p>
+
+<pre><code class="language-html">&lt;!-- 标题，可以使用 h1 ~ h5，大小、颜色稍有不同 --&gt;
+&lt;h4&gt;排行榜&lt;/h4&gt;
+&lt;!-- table-striped 将会让表格内容变成深浅相间的行 --&gt;
+&lt;table class=&quot;table table-striped&quot;&gt;
+	&lt;!-- 表头 --&gt;
+	&lt;thead class=&quot;thead-default&quot;&gt;
+		&lt;tr&gt;
+			&lt;th&gt;#&lt;/th&gt;
+			&lt;th&gt;姓名&lt;/th&gt;
+			&lt;th&gt;用时&lt;/th&gt;
+		&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody id=&quot;rank_table&quot;&gt;
+		&lt;!-- 表格内容 --&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
+
+<blockquote>
+<p>在 HTML 中描述一个表格，使用 <code>&lt;table&gt;</code> 标签，并用 <code>&lt;tr&gt;&lt;/tr&gt;</code> 来表示一行，<code>&lt;th&gt;&lt;/th&gt;</code> 或 <code>&lt;td&gt;&lt;/td&gt;</code>  分别来表达 表头和表体 中的单元格。<br />
+上面元素对应的属性 <code>class</code> 中使用的对应内容，可暂不关心（有兴趣的同学，可以 参看 <a href="http://v3.bootcss.com/css/#tables">中文</a> 或 <a href="http://getbootstrap.com/css/#tables">英文</a> 的文档）</p>
+</blockquote>
+
+<p>上述代码我们建立了一个基本的“表”，并为表体元素起名为 <code>rank_table</code> 便于将来对其进行操作（如，加入实际展示的数据，刷新排行榜等）。</p>
+
+<p>因为我们对上层 <code>&lt;div class=&quot;block&quot;&gt;</code> 元素设置了 <code>text-align: center</code> 居中对齐，表格对齐（标题被设置为左对齐了，内容区域是居中对齐的）有点乱，需要加入下面 CSS 样式（<code>minesweeper.css</code> 文件中）：</p>
+
+<pre><code class="language-css">.block.rank .table tbody td { /* 排行榜表格内容居左(由于上层元素设置了 居中) */
+	text-align: left;  /* left - 左对齐 right - 右对齐 center - 居中 */
+}
+</code></pre>
+
+<blockquote>
+<p>CSS 中存在样式的“继承”，即父级元素设置的样式，如果适用的化，会被“继承”应用的子元素上。<br />
+所谓适用的样式有很多，例如 字体名 <code>font-family</code> 、字体大小 <code>font-size</code> 、颜色 <code>color</code>，当然也存在一些特殊情况，这些属性不会被继承，例如：<br />
+<code>&lt;div style=&quot;color: red;&quot;&gt;&lt;a href=&quot;#&quot;&gt;这个 A 标签的颜色不继承&lt;/a&gt;&lt;/div&gt;</code></p>
+</blockquote>
+
+<h4 id="动态渲染">动态渲染</h4>
+
+<p>编写 <code>minesweeper-rank.js</code> 文件，我们使用 <code>JavaScript</code> 程序为表格加入内容，并“<strong>渲染</strong>”出来：</p>
+
+<pre><code class="language-js">(function($) {
+	// 位置：(A)
+	var data = [
+		{name:&quot;DemoUserA&quot;, time:200}, // 直接使用 XXX 秒 来描述 耗时
+		{name:&quot;DemoUserB&quot;, time:300}, // 展示的时候用程序将其变为 XX 分 XX 秒的形式
+		{name:&quot;DemoUserC&quot;, time:400},
+	]
+	// 我们定义 $ 开头的变脸用来记录要操作的元素
+	var $table = $(&quot;#rank_table&quot;)
+	// 排行榜的 “渲染”
+	function render() {
+		$table.empty() // 清空表格中目前的内容
+		for(var i=0;i&lt;data.length;++i) { // 循环数组，依次生成每一行 tr 的各个单元格 td
+			// i+1 按数值形式计算，如果不加括号先和前面文本进行“连接”，不符合预期
+			$table.append(&quot;&lt;tr&gt;&lt;td&gt;&quot;+(i+1)+&quot;&lt;/td&gt;&lt;td&gt;&quot;+data[i].name // 一行太长，可以换行写
+				+&quot;&lt;/td&gt;&lt;td&gt;&quot;+renderTime(data[i].time) // this 这里指得就是当前 排行榜对象 rank
+				// 调用 renderTime 函数生成 XX分XX秒 形式的文本
+				+&quot;&lt;/td&gt;&lt;/tr&gt;&quot;)
+			// ！ 加入内容，其实就是将 HTML 代码文本 `append()` 添加到表格体中
+		}
+	}
+	// XXX 秒 =&gt; XX 分 XX 秒
+	function renderTime(time) {
+		return parseInt(time/60) + &quot; 分 &quot; + (time % 60) + &quot; 秒&quot;
+	}
+	// 刷新页面时立刻进行“渲染”
+	rank.render()
+	// 位置：(B)
+}(jQuery))
+</code></pre>
+
+<blockquote>
+<p>JavaScript 中可以使用 <code>[ ... ]</code> 形式定义数组，使用 <code>{XXX: YYYY, XXX: YYYY}</code> 形式定义对象；<br />
+数组一般使用 下标形式访问，例如 <code>data[i]</code>；<br />
+对象一般使用 .name 形式访问，例如 <code>data[i]</code> 是一个对象，可以用 <code>data[i].name</code> 来访问其姓名属性；</p>
+</blockquote>
+
+<h4 id="持久化">持久化</h4>
+
+<p>为了让排行榜能够记录并保留数据（不在刷新后消失），我们参照 <a href="chapter-1">第一章</a> 使用 <code>localStorage</code> 对象提供的功能来完成。我们将 <code>(A)</code> 处初始化的代码改为：</p>
+
+<pre><code class="language-js">// 位置： (A)
+var data = localStorage.getItem(&quot;rank_data&quot;)
+if(!data) {
+	data = [ // 为演示方便，我们初始化一些数据
+		{name:&quot;DemoUserA&quot;,time:200}, // 我们直接使用 XXX 秒 来描述用时
+		{name:&quot;DemoUserB&quot;,time:300}, // 我们直接使用 XXX 秒 来描述用时
+		{name:&quot;DemoUserC&quot;,time:400}, // 我们直接使用 XXX 秒 来描述用时
+	]
+	// 我们不能直接包数组数据保存到 localStorage 中，需要对他进行“序列化”，即将起变成文本；
+	localStorage.setItem( &quot;rank_data&quot;, JSON.stringify(data) )
+	// 在 JavaScript 中一般使用 JSON.stringify(obj) 将 obj 变为文本形式以便存储
+	// 这种“变文本”的过程就是“序列化”
+}else{ // 保存了数据，读取出来后需要“还原”：
+	// 由于我们保存的是“序列化”的数据，我们需要将它“反序列化”
+	data = JSON.parse(data)
+	// JSON.parse() 与 上面 JSON.stringify() 对应，用于还原已经“序列化”的文本到其原始值
+}
+</code></pre>
+
+<blockquote>
+<p><code>JSON</code> 与 <code>localStorage</code> 类似，也是由浏览器提供的进行数据“序列化”、“反序列化”的函数对象。 同时 <code>JSON</code> 也是一种文本描述数据的形式，具体说明可以参考 <a href="http://www.json.org/json-zh.html">http://www.json.org/json-zh.html</a>；<br />
+同时 <code>JSON</code> 是目前最流行的数据交换方式的一种，尤其在服务器端与浏览器交互的“数据型接口”中被大量应用。例如大家熟知的 微信公众平台，就提供了 <code>JSON</code> 形式的接口，有兴趣的同学可以看看他们的文档 <a href="https://mp.weixin.qq.com/wiki">https://mp.weixin.qq.com/wiki</a>；</p>
+</blockquote>
+
+<p>我们可以在浏览器中打开网页，并按 <kbd>F12</kbd> 键打开调试界面，在 <code>Resource</code> 面板中，找到 <code>localStorage</code> 项，可以看到我们的程序已经将数据成功的写入了：</p>
+
+<p><img src="/images/2016/minesweeper/2-rank-f12.png" alt="排行榜成功存储" /></p>
+
+<p>大家可以尝试通过这个面板修改 localStorage 的内容，刷新页面后会发现展示的内容也会随之发生变化。</p>
+
+<h4 id="接口">接口</h4>
+
+<p>到这里，我们为排行榜定义的界面和基本显示功能就完成了。但是，这个排行榜还没有办法<strong>动态的调整</strong>，即将来在实际游戏完成的时候，我们需要把当前名称的用户成绩“更新”或“加入”到排行榜里面。虽然是将来，我们需要先为游戏结束做进行这个功能时留下接口。</p>
+
+<p>我们可能需要提供很多这些类似的“接口”，我们把这种接口统一放在一个名为 <code>MineSweeperRank</code> 的全局对象中（在位置 <code>(B)</code> 处加入下面的代码）：</p>
+
+<pre><code class="language-js">// 位置：(B)
+window.MineSweeperRank = { // window 为全局命名空间，同时也代表了浏览器当前打开网页的窗口
+	// 接口1. 加入用户及成绩进入榜单
+	appendUserRank: function(name, time) {
+		// 将成绩插入到 data 中的合适位置
+		// 从后往前，找到用时小于当前 time 的地方
+		for(var i=data.length-1; i&gt;=0; --i) {
+			if(data[i].time &lt; time) {
+				data.splice(i + 1, 0, {&quot;name&quot;: name, &quot;time&quot;: time}) // 从 i + 1 这个位置开始，删除 0 个元素，加入 新增元素
+				break // 找到了速度更快的记录，跳出循环（这时 i 应该还小于 data.length）
+			}
+		}
+		if(i == data.length) { // 没有找到比当前值更小的了，直接排在第一名
+			data.unshift({&quot;name&quot;: name, &quot;time&quot;: time})
+		}
+		// 截取 data 的前 6 项（不要让排行榜太长了）
+		data = data.slice(0, 6)
+		// 数据更新了，我们需要对应更新界面，即重新渲染
+		render()
+		// 保存数据
+		localStorage.setItem( &quot;rank_data&quot;, JSON.stringify(data) )
+	},
+	// 接口2. 清理(清空)榜单
+	clearRank: function() {
+		data.splice(0, data.length)
+		// 数据更新了，我们需要对应更新界面，即重新渲染
+		render()
+		// 保存数据
+		localStorage.setItem( &quot;rank_data&quot;, JSON.stringify(data) )
+	},
+	// 接口3.
+}
+</code></pre>
+
+<p>上面函数目前没有实际的调用者，我们可以在 &ldquo;开发者工具&rdquo; (<kbd>F12</kbd>) 的 <code>Console</code> 界面中输入调用代码（例如：<code>MineSweeperRank.appendUserRank(&quot;Terry&quot;,450)</code>） 尝试调用，看看效果：</p>
+
+<p><img src="/images/2016/minesweeper/2-rank-api.png" alt="尝试调用接口" /></p>
+
+<p>从分工明确的角度，我们也给 “入口” 增加 “接口” 功能，我们将 “获取用户输入的名字” 和 “开始游戏” 作为 “接口” 封装。 注意，前者与上述 排行榜 接口 类似，是“调用”方式的接口。而后者，则是“<strong>触发</strong>”形式的接口。</p>
+
+<p>我们先将“调用”形式的接口实现（调整 <code>minesweeper-entry.js</code> 文件, 在结束行函数大括号内，补充如下代码）：</p>
+
+<pre><code class="language-js">// 位置 (C)
+// 对外接口
+window.MineSweeperEntry = {
+	// 接口1. 获取当前用户名
+	getName: function() {
+		return localStorage.getItem(&quot;entry_input_name&quot;) || &quot;无名氏&quot;
+	},
+
+}
+// 位置 (D)
+</code></pre>
+
+<blockquote>
+<p>JavaScript 使用 <code>||</code> 表示 “逻辑或”，但与其他部分语言不同，<code>||</code> 返回的并非是 “布尔值”，而是条件中 第一个<strong>真</strong>值；<br />
+对应的还存在 <code>&amp;&amp;</code> 标识 “逻辑与”，也同样存在上面的使用方式，返回第一个<strong>假</strong>值，例如：<code>var a = true &amp;&amp; 0</code> 变量 <var>a</var> 的值为 <code>0</code> 而非 false；</p>
+</blockquote>
+
+<p>从分工上说，我们将 获取姓名 接口定义在 “入口”，从 职责上说 我们将 “未输入姓名，处理为 ‘无名氏’” 这个逻辑封装在了接口内部，使用者就不用关心了。</p>
+
+<p>请大家尝试使用 Chrome 浏览器提供的<strong>开发者工具</strong>（<kbd>F12</kbd> 或菜单 <kbd>三</kbd> -&gt; <kbd>更多工具</kbd> -&gt; <kbd>开发者工具</kbd>）。它能够提供界面元素 (HTML/CSS) 的调试、 代码（JavaScript）调试，页面性能测试，网络监控等等功能，甚至很多功能连一些正式的前端开发人员都不太了解。有兴趣的同学可以去看看 <a href="http://devtoolstips.com/">http://devtoolstips.com/</a>，这个网站总结和演示了很多开发者工具的使用技巧，值得学习。</p>
+
+<h4 id="完整版本演示">完整版本演示</h4>
+
+<p><a href="https://blog.terrywh.net/books/minesweeper/minesweeper.html">https://blog.terrywh.net/books/minesweeper/minesweeper.html</a></p>
+</div>
+
+
+  <footer class="container">
+  <div class="container navigation no-print">
+  <h2>Navigation</h2>
+  
+  
+
+    
+    <a class="prev" href="https://blog.terrywh.net/post/2016/minesweeper/1/" title="扫雷（一）游戏入口（概念及准备）">
+      Previous
+    </a>
+    
+
+    
+    <a class="next" href="https://blog.terrywh.net/post/2016/html5-resource-hints/" title="HTML 5 资源预处理 Hints">
+      Next
+    </a>
+    
+
+  
+
+
+</div>
+
+  
+
+</footer>
+
+</article>
+      <footer id="main-footer" class="container main_footer">
+  
+
+  <div class="container nav foot no-print">
+  
+
+  <a class="toplink" href="#">back to top</a>
+
+</div>
+
+  <div class="container credits">
+  
+<div class="container footline">
+  
+
+</div>
+
+
+  
+<div class="container copyright">
+  
+  @copyright 2017
+
+
+</div>
+
+
+</div>
+
+</footer>
+
+    </main>
+    
+
+
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+  </body>
+</html>
+

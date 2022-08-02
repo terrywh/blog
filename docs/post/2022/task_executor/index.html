@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>任务执行器 - C&#43;&#43; 抽象  &middot; Hello World</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="" />
+
+<meta name="keywords" content="c&#43;&#43;, gcc, abstraction, ">
+
+
+<meta property="og:title" content="任务执行器 - C&#43;&#43; 抽象  &middot; Hello World ">
+<meta property="og:site_name" content="Hello World"/>
+<meta property="og:url" content="https://blog.terrywh.net/post/2022/task_executor/" />
+<meta property="og:locale" content="">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content=""/>
+<meta property="og:article:published_time" content="2021-07-21T00:00:00Z" />
+<meta property="og:article:modified_time" content="2021-07-21T00:00:00Z" />
+
+  
+    
+<meta property="og:article:tag" content="c&#43;&#43;">
+    
+<meta property="og:article:tag" content="gcc">
+    
+<meta property="og:article:tag" content="abstraction">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="任务执行器 - C&#43;&#43; 抽象" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:url" content="https://blog.terrywh.net/post/2022/task_executor/" />
+<meta name="twitter:domain" content="https://blog.terrywh.net">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "任务执行器 - C\x2b\x2b 抽象",
+    "author": {
+      "@type": "Person",
+      "name": "TerryWu"
+    },
+    "datePublished": "2021-07-21",
+    "description": "",
+    "wordCount":  98 
+  }
+</script>
+
+
+
+<link rel="canonical" href="https://blog.terrywh.net/post/2022/task_executor/" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://blog.terrywh.net/touch-icon-144-precomposed.png">
+<link href="https://blog.terrywh.net/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.55.5" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<link href='https://fonts.googleapis.com/css?family=Merriweather:300%7CRaleway%7COpen+Sans' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/highlight/tomorrow.css">
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?28e3ab917510194e5abf19306f82fdbb";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+    
+  
+</head>
+<body>
+  <main id="main-wrapper" class="container main_wrapper has-sidebar">
+    <header id="main-header" class="container main_header">
+  <div class="container brand">
+  <div class="container title h1-like">
+  <a class="baselink" href="https://blog.terrywh.net">
+  Hello World
+
+</a>
+
+</div>
+
+  
+<div class="container topline">
+  
+  C++/PHP/Go/NodeJS
+
+
+</div>
+
+
+</div>
+
+  <nav class="container nav primary no-print">
+  
+
+
+  
+<a href="https://blog.terrywh.net/post">列表</a>
+
+<a href="https://blog.terrywh.net/tags">标签</a>
+
+<a href="https://blog.terrywh.net/books">系列</a>
+
+<a href="https://blog.terrywh.net/flame">Flame</a>
+
+
+</nav>
+
+<div class="container nav secondary no-print">
+  
+<a id="contact-link-email" class="contact_link" rel="me" aria-label="Email" href="mailto:terry.wuhao[at]gmail.com">
+  <span class="fa fa-envelope-square"></span></a>
+
+
+
+<a id="contact-link-github" class="contact_link" rel="me" aria-label="Github" href="https://github.com/terrywh">
+  <span class="fa fa-github-square"></span></a>
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+  
+
+</header>
+
+
+<article id="main-content" class="container main_content single">
+  <header class="container hat">
+  <h1>任务执行器 - C&#43;&#43; 抽象
+</h1>
+
+  <div class="metas">
+<time datetime="2021-07-21">21 Jul, 2021</time>
+
+
+  
+  &middot; Read in about 1 min
+  &middot; (98 Words)
+  <br>
+  
+<a class="label" href="https://blog.terrywh.net/tags/c&#43;&#43;">c&#43;&#43;</a>
+
+<a class="label" href="https://blog.terrywh.net/tags/gcc">gcc</a>
+
+<a class="label" href="https://blog.terrywh.net/tags/abstraction">abstraction</a>
+
+
+
+</div>
+
+</header>
+
+  <div class="container content">
+  <blockquote>
+<p>最近在看一本 C++ 的书：Beautiful C++ 30 Core Guidelines for Writing Clean, Safe, and Fast Code 有了些共鸣和一些感受，促使我对已经编码的业务产生了一些“想法”；进行“抽象”是我们经常都提出来的理念，但实际往往会因为“时间紧张”而逐渐被忽略或忘记；</p>
+
+<p>以往我时不时的去回顾一下过去的开发，总有一种“冲动”把他们重写；由于更全盘的经验，重写的过程会发现很多逻辑会更“顺利”；现在想来，当时的想法还稍显“浅薄”，进行更详尽的思考“抽象”是比“单纯的重写”更恰当的；</p>
+</blockquote>
+
+<p>首先，在分析整体业务场景，按工作流程，每个步骤需要进行各种同步、异步逻辑，在达成完成条件时，推进到下个步骤；依次为依据，进行“抽象”，大致能够得到：</p>
+
+<pre><code class="language-c++">template &lt;class Stage, class ...Tasks&gt;
+class TaskExecutor;
+</code></pre>
+
+<ol>
+<li>使用 Stage 抽象运行“步骤” 并以模板参数传入子类类型实现对子类实例的访问；</li>
+<li>由于支持“异步”这里使用 shared_ptr 维护声明周期；</li>
+<li>统一处理“任务完成”并回调到子类成员函数，以期推动状态机继续行进；</li>
+</ol>
+
+<p>很简单的机制，但能够在流程上很清晰的表达“工作任务”、“执行完毕”等概念；</p>
+
+<p>进一步在业务过程中，有若干“游离”在业务流程外的“检测”、“辅助”功能，按照“一定间隔”持续运行；故进一步将上面执行器机制完善，支持“定时任务”这一抽象概念；</p>
+
+<pre><code class="language-C++"></code></pre>
+
+<pre><code class="language-bash"># Step 1. Fetch and check out the branch for this merge request
+
+git fetch origin
+git checkout -b master origin/master
+# Step 2. Review the changes locally
+
+# Step 3. Merge the branch and fix any conflicts that come up
+
+git checkout dev/ark-3.7
+git merge --no-ff master
+# Step 4. Push the result of the merge to git server
+
+git push origin HEAD:dev/ark-3.7
+</code></pre>
+
+</div>
+
+
+  <footer class="container">
+  <div class="container navigation no-print">
+  <h2>Navigation</h2>
+  
+  
+
+    
+    <a class="prev" href="https://blog.terrywh.net/post/2019/evaluation_order/" title="C&#43;&#43; 表达式求值顺序">
+      Previous
+    </a>
+    
+
+    
+    <a class="next" href="https://blog.terrywh.net/post/2021/gdb_with_pretty_print/" title="GDB/GCC 升级、启用 PrettyPrint 支持">
+      Next
+    </a>
+    
+
+  
+
+
+</div>
+
+  
+
+</footer>
+
+</article>
+      <footer id="main-footer" class="container main_footer">
+  
+
+  <div class="container nav foot no-print">
+  
+
+  <a class="toplink" href="#">back to top</a>
+
+</div>
+
+  <div class="container credits">
+  
+<div class="container footline">
+  
+
+</div>
+
+
+  
+<div class="container copyright">
+  
+  @copyright 2017
+
+
+</div>
+
+
+</div>
+
+</footer>
+
+    </main>
+    
+
+
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+  </body>
+</html>
+
