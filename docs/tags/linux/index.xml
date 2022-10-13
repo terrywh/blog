@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>linux on Hello World</title>
+    <title>Linux on Hello World</title>
     <link>https://blog.terrywh.net/tags/linux/</link>
-    <description>Recent content in linux on Hello World</description>
+    <description>Recent content in Linux on Hello World</description>
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>terry.wuhao[at]gmail.com (TerryWu)</managingEditor>
     <webMaster>terry.wuhao[at]gmail.com (TerryWu)</webMaster>

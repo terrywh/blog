@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <title>Go 点滴  &middot; Hello World</title>
+  <title>Openssl 字签证书（域名、IP）  &middot; Hello World</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
@@ -14,25 +14,25 @@
 
 <meta name="description" content="" />
 
-<meta name="keywords" content="go, util, ">
+<meta name="keywords" content="openssl, self signed, ">
 
 
-<meta property="og:title" content="Go 点滴  &middot; Hello World ">
+<meta property="og:title" content="Openssl 字签证书（域名、IP）  &middot; Hello World ">
 <meta property="og:site_name" content="Hello World"/>
-<meta property="og:url" content="https://blog.terrywh.net/post/2021/go_util/" />
+<meta property="og:url" content="https://blog.terrywh.net/post/2022/self_signed_cert/" />
 <meta property="og:locale" content="">
 
 
 <meta property="og:type" content="article" />
 <meta property="og:description" content=""/>
-<meta property="og:article:published_time" content="2021-10-14T00:00:00Z" />
-<meta property="og:article:modified_time" content="2021-10-14T00:00:00Z" />
+<meta property="og:article:published_time" content="2021-10-13T00:00:00Z" />
+<meta property="og:article:modified_time" content="2021-10-13T00:00:00Z" />
 
   
     
-<meta property="og:article:tag" content="go">
+<meta property="og:article:tag" content="openssl">
     
-<meta property="og:article:tag" content="util">
+<meta property="og:article:tag" content="self signed">
     
   
 
@@ -40,9 +40,9 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:site" content="@" />
 <meta name="twitter:creator" content="@" />
-<meta name="twitter:title" content="Go 点滴" />
+<meta name="twitter:title" content="Openssl 字签证书（域名、IP）" />
 <meta name="twitter:description" content="" />
-<meta name="twitter:url" content="https://blog.terrywh.net/post/2021/go_util/" />
+<meta name="twitter:url" content="https://blog.terrywh.net/post/2022/self_signed_cert/" />
 <meta name="twitter:domain" content="https://blog.terrywh.net">
   
 
@@ -50,20 +50,20 @@
   {
     "@context": "http://schema.org",
     "@type": "Article",
-    "headline": "Go 点滴",
+    "headline": "Openssl 字签证书（域名、IP）",
     "author": {
       "@type": "Person",
       "name": "TerryWu"
     },
-    "datePublished": "2021-10-14",
+    "datePublished": "2021-10-13",
     "description": "",
-    "wordCount":  52 
+    "wordCount":  134 
   }
 </script>
 
 
 
-<link rel="canonical" href="https://blog.terrywh.net/post/2021/go_util/" />
+<link rel="canonical" href="https://blog.terrywh.net/post/2022/self_signed_cert/" />
 
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://blog.terrywh.net/touch-icon-144-precomposed.png">
 <link href="https://blog.terrywh.net/favicon.png" rel="icon">
@@ -173,21 +173,21 @@
 
 <article id="main-content" class="container main_content single">
   <header class="container hat">
-  <h1>Go 点滴
+  <h1>Openssl 字签证书（域名、IP）
 </h1>
 
   <div class="metas">
-<time datetime="2021-10-14">14 Oct, 2021</time>
+<time datetime="2021-10-13">13 Oct, 2021</time>
 
 
   
   &middot; Read in about 1 min
-  &middot; (52 Words)
+  &middot; (134 Words)
   <br>
   
-<a class="label" href="https://blog.terrywh.net/tags/go">go</a>
+<a class="label" href="https://blog.terrywh.net/tags/openssl">openssl</a>
 
-<a class="label" href="https://blog.terrywh.net/tags/util">util</a>
+<a class="label" href="https://blog.terrywh.net/tags/self-signed">self signed</a>
 
 
 
@@ -196,26 +196,63 @@
 </header>
 
   <div class="container content">
-  <ul>
-<li>字符串 string &lt;=&gt; []byte 字节序列转化
-``` Go
-func s2b(s string) (b []byte) {
-	/* #nosec G103 */
-	bh := (<em>reflect.SliceHeader)(unsafe.Pointer(&amp;b))
-	/</em> #nosec G103 */
-	sh := (*reflect.StringHeader)(unsafe.Pointer(&amp;s))
-	bh.Data = sh.Data
-	bh.Cap = sh.Len
-	bh.Len = sh.Len
-	return b
-}</li>
+  
+
+<h4 id="生成-root-ca-根证书">生成 ROOT/CA 根证书</h4>
+
+<pre><code class="language-bash">openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout root_ca.key -out root_ca.pem -subj &quot;/C=CN/O=Orgnization/OU=OrgizationUnit/CN=CommonName&quot;
+openssl x509 -outform pem -in root_ca.pem -out root_ca.crt
+</code></pre>
+
+<h4 id="签发证书">签发证书</h4>
+
+<ul>
+<li>配置文件
+``` config
+[req]
+distinguished_name = req_dn
+req_extensions = req_ext
+x509_extensions = x509_ext
+prompt = no</li>
 </ul>
 
-<p>func b2s(b []byte) string {
-	/* #nosec G103 */
-	return *(*string)(unsafe.Pointer(&amp;b))
-}
-```</p>
+<p>[req_dn]
+C = CN
+ST = Beijing
+L = Beijing
+O = Orgnization
+OU = OrgnizationUnit
+CN = CommonName</p>
+
+<p>[req_ext]
+keyUsage = keyEncipherment, dataEncipherment
+extendedKeyUsage = serverAuth</p>
+
+<p>[x509_ext]
+subjectKeyIdentifier = hash
+keyUsage = keyEncipherment, dataEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names</p>
+
+<p>[alt_names]
+DNS.1 = *.meeting.tencent.com
+IP.2 = 10.0.1.47</p>
+
+<pre><code>
+* 签发申请
+</code></pre>
+
+<p>openssl req -new -nodes -newkey rsa:2048 -keyout server.key -out server.csr -config server.conf</p>
+
+<pre><code>
+* 签发证书
+``` bash
+openssl x509 -req -sha256 -days 1024 -in server.csr -CA root_ca.pem -CAkey root_ca.key -CAcreateserial -extfile server.conf -extensions x509_ext -out server.crt
+</code></pre>
+
+<blockquote>
+<p>注意：该配置文件实际在 签发申请 和 签发证书 时都需要使用；</p>
+</blockquote>
 
 </div>
 
@@ -227,11 +264,15 @@ func s2b(s string) (b []byte) {
   
 
     
-    <a class="prev" href="https://blog.terrywh.net/post/2022/self_signed_cert/" title="Openssl 字签证书（域名、IP）">
+    <a class="prev" href="https://blog.terrywh.net/post/2022/cpp20_notes/" title="C&#43;&#43; 20 功能笔记">
       Previous
     </a>
     
 
+    
+    <a class="next" href="https://blog.terrywh.net/post/2021/go_util/" title="Go 点滴">
+      Next
+    </a>
     
 
   

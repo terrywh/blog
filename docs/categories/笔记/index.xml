@@ -23,6 +23,28 @@
     </item>
     
     <item>
+      <title>Openssl 字签证书（域名、IP）</title>
+      <link>https://blog.terrywh.net/post/2022/self_signed_cert/</link>
+      <pubDate>Wed, 13 Oct 2021 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/post/2022/self_signed_cert/</guid>
+      <description>生成 ROOT/CA 根证书 openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout root_ca.key -out root_ca.pem -subj &amp;quot;/C=CN/O=Orgnization/OU=OrgizationUnit/CN=CommonName&amp;quot; openssl x509 -outform pem -in root_ca.pem -out root_ca.crt  签发证书  配置文件 ``` config [req] distinguished_name = req_dn req_extensions = req_ext x509_extensions = x509_ext prompt = no  [req_dn] C = CN ST = Beijing L = Beijing O = Orgnization OU = OrgnizationUnit CN = CommonName
+[req_ext] keyUsage = keyEncipherment, dataEncipherment extendedKeyUsage = serverAuth</description>
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; 20 功能笔记</title>
+      <link>https://blog.terrywh.net/post/2022/cpp20_notes/</link>
+      <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/post/2022/cpp20_notes/</guid>
+      <description> format - https://godbolt.org/z/6rxG4zoaj 从 C 集成的 printf 和 C++ 定义的类型安全的 iostream 复杂实现，均存在一些各自的缺陷和问题，在 C++20 中加入的 format 实现（基于 fmt 库）似乎实现了结合双方的优势；
+ https://fmt.dev/latest/index.html (&amp;lt;=C++17)
+ spaceship operator &amp;lt;=&amp;gt; - https://godbolt.org/z/5797fKdhW 大幅的减少了需要重载的比较运算符；编译器会自动根据 &amp;lt;=&amp;gt; 生成实际比较运算的代码；
+   </description>
+    </item>
+    
+    <item>
       <title>GDB/GCC 升级、启用 PrettyPrint 支持</title>
       <link>https://blog.terrywh.net/post/2021/gdb_with_pretty_print/</link>
       <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
@@ -33,20 +55,6 @@
  升级、安装 GCC 这里不在赘述
  升级 GDB
 yum install python3-devel # !!!!! pretty print 依赖 python 支持 wget https://mirrors.aliyun.com/gnu/gdb/gdb-10.1.tar.gz tar xf gdb-10.1.tar.gz cd gdb-10.1 mkdir build ../configure --prefix={path_to_install} --with-python=/usr/bin/python3 make &amp;amp;&amp;amp; make install   启用 Pretty Print 支持 编辑 ~/.gdbinit 文件并填写下述内容： bash python import sys sys.path.insert(0, &#39;{path_to_gcc_share}/{gcc-version|libstdc++-{version}}/python&#39;) end source {path_to_gcc_lib}/libstdc++.so{version}-gdb.py # 自动启用，也可手动调用    </description>
-    </item>
-    
-    <item>
-      <title>任务执行器 - C&#43;&#43; 抽象</title>
-      <link>https://blog.terrywh.net/post/2022/task_executor/</link>
-      <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
-      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
-      <guid>https://blog.terrywh.net/post/2022/task_executor/</guid>
-      <description>最近在看一本 C++ 的书：Beautiful C++ 30 Core Guidelines for Writing Clean, Safe, and Fast Code 有了些共鸣和一些感受，促使我对已经编码的业务产生了一些“想法”；进行“抽象”是我们经常都提出来的理念，但实际往往会因为“时间紧张”而逐渐被忽略或忘记；
-以往我时不时的去回顾一下过去的开发，总有一种“冲动”把他们重写；由于更全盘的经验，重写的过程会发现很多逻辑会更“顺利”；现在想来，当时的想法还稍显“浅薄”，进行更详尽的思考“抽象”是比“单纯的重写”更恰当的；
- 首先，在分析整体业务场景，按工作流程，每个步骤需要进行各种同步、异步逻辑，在达成完成条件时，推进到下个步骤；依次为依据，进行“抽象”，大致能够得到：
-template &amp;lt;class Stage, class ...Tasks&amp;gt; class TaskExecutor;   使用 Stage 抽象运行“步骤” 并以模板参数传入子类类型实现对子类实例的访问； 由于支持“异步”这里使用 shared_ptr 维护声明周期； 统一处理“任务完成”并回调到子类成员函数，以期推动状态机继续行进；  很简单的机制，但能够在流程上很清晰的表达“工作任务”、“执行完毕”等概念；
-进一步在业务过程中，有若干“游离”在业务流程外的“检测”、“辅助”功能，按照“一定间隔”持续运行；故进一步将上面执行器机制完善，支持“定时任务”这一抽象概念；
- # Step 1. Fetch and check out the branch for this merge request git fetch origin git checkout -b master origin/master # Step 2. Review the changes locally # Step 3.</description>
     </item>
     
     <item>

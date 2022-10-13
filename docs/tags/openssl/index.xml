@@ -8,10 +8,20 @@
     <managingEditor>terry.wuhao[at]gmail.com (TerryWu)</managingEditor>
     <webMaster>terry.wuhao[at]gmail.com (TerryWu)</webMaster>
     <copyright>@copyright 2017</copyright>
-    <lastBuildDate>Wed, 08 May 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 13 Oct 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://blog.terrywh.net/tags/openssl/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Openssl 字签证书（域名、IP）</title>
+      <link>https://blog.terrywh.net/post/2022/self_signed_cert/</link>
+      <pubDate>Wed, 13 Oct 2021 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/post/2022/self_signed_cert/</guid>
+      <description>生成 ROOT/CA 根证书 openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout root_ca.key -out root_ca.pem -subj &amp;quot;/C=CN/O=Orgnization/OU=OrgizationUnit/CN=CommonName&amp;quot; openssl x509 -outform pem -in root_ca.pem -out root_ca.crt  签发证书  配置文件 ``` config [req] distinguished_name = req_dn req_extensions = req_ext x509_extensions = x509_ext prompt = no  [req_dn] C = CN ST = Beijing L = Beijing O = Orgnization OU = OrgnizationUnit CN = CommonName
+[req_ext] keyUsage = keyEncipherment, dataEncipherment extendedKeyUsage = serverAuth</description>
+    </item>
     
     <item>
       <title>PHP 静态链接 openssl/nghttp2 及外部扩展</title>
