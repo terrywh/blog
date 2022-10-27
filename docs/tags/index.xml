@@ -68,11 +68,38 @@
     </item>
     
     <item>
+      <title>clang</title>
+      <link>https://blog.terrywh.net/tags/clang/</link>
+      <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/tags/clang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>feature</title>
+      <link>https://blog.terrywh.net/tags/feature/</link>
+      <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/tags/feature/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>gcc</title>
       <link>https://blog.terrywh.net/tags/gcc/</link>
       <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
       <author>terry.wuhao[at]gmail.com (TerryWu)</author>
       <guid>https://blog.terrywh.net/tags/gcc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>note</title>
+      <link>https://blog.terrywh.net/tags/note/</link>
+      <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/tags/note/</guid>
       <description></description>
     </item>
     
@@ -100,15 +127,6 @@
       <pubDate>Fri, 22 Nov 2019 00:00:00 +0000</pubDate>
       <author>terry.wuhao[at]gmail.com (TerryWu)</author>
       <guid>https://blog.terrywh.net/tags/order/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>clang</title>
-      <link>https://blog.terrywh.net/tags/clang/</link>
-      <pubDate>Wed, 08 May 2019 00:00:00 +0000</pubDate>
-      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
-      <guid>https://blog.terrywh.net/tags/clang/</guid>
       <description></description>
     </item>
     
@@ -185,15 +203,6 @@
     </item>
     
     <item>
-      <title>Linux</title>
-      <link>https://blog.terrywh.net/tags/linux/</link>
-      <pubDate>Mon, 23 Jul 2018 00:00:00 +0000</pubDate>
-      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
-      <guid>https://blog.terrywh.net/tags/linux/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>archlinux</title>
       <link>https://blog.terrywh.net/tags/archlinux/</link>
       <pubDate>Mon, 23 Jul 2018 00:00:00 +0000</pubDate>
@@ -217,6 +226,15 @@
       <pubDate>Mon, 23 Jul 2018 00:00:00 +0000</pubDate>
       <author>terry.wuhao[at]gmail.com (TerryWu)</author>
       <guid>https://blog.terrywh.net/tags/grub/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>linux</title>
+      <link>https://blog.terrywh.net/tags/linux/</link>
+      <pubDate>Mon, 23 Jul 2018 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/tags/linux/</guid>
       <description></description>
     </item>
     
