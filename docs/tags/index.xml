@@ -8,10 +8,64 @@
     <managingEditor>terry.wuhao[at]gmail.com (TerryWu)</managingEditor>
     <webMaster>terry.wuhao[at]gmail.com (TerryWu)</webMaster>
     <copyright>@copyright 2017</copyright>
-    <lastBuildDate>Thu, 14 Oct 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 15 Nov 2023 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://blog.terrywh.net/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>abstraction</title>
+      <link>https://blog.terrywh.net/tags/abstraction/</link>
+      <pubDate>Wed, 15 Nov 2023 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/tags/abstraction/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>c&#43;&#43;</title>
+      <link>https://blog.terrywh.net/tags/c&#43;&#43;/</link>
+      <pubDate>Wed, 15 Nov 2023 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/tags/c&#43;&#43;/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>clang</title>
+      <link>https://blog.terrywh.net/tags/clang/</link>
+      <pubDate>Wed, 15 Nov 2023 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/tags/clang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>feature</title>
+      <link>https://blog.terrywh.net/tags/feature/</link>
+      <pubDate>Wed, 15 Nov 2023 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/tags/feature/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gcc</title>
+      <link>https://blog.terrywh.net/tags/gcc/</link>
+      <pubDate>Wed, 15 Nov 2023 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/tags/gcc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>note</title>
+      <link>https://blog.terrywh.net/tags/note/</link>
+      <pubDate>Wed, 15 Nov 2023 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/tags/note/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>go</title>
@@ -46,60 +100,6 @@
       <pubDate>Wed, 13 Oct 2021 00:00:00 +0000</pubDate>
       <author>terry.wuhao[at]gmail.com (TerryWu)</author>
       <guid>https://blog.terrywh.net/tags/self-signed/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>abstraction</title>
-      <link>https://blog.terrywh.net/tags/abstraction/</link>
-      <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
-      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
-      <guid>https://blog.terrywh.net/tags/abstraction/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>c&#43;&#43;</title>
-      <link>https://blog.terrywh.net/tags/c&#43;&#43;/</link>
-      <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
-      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
-      <guid>https://blog.terrywh.net/tags/c&#43;&#43;/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>clang</title>
-      <link>https://blog.terrywh.net/tags/clang/</link>
-      <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
-      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
-      <guid>https://blog.terrywh.net/tags/clang/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>feature</title>
-      <link>https://blog.terrywh.net/tags/feature/</link>
-      <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
-      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
-      <guid>https://blog.terrywh.net/tags/feature/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>gcc</title>
-      <link>https://blog.terrywh.net/tags/gcc/</link>
-      <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
-      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
-      <guid>https://blog.terrywh.net/tags/gcc/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>note</title>
-      <link>https://blog.terrywh.net/tags/note/</link>
-      <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
-      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
-      <guid>https://blog.terrywh.net/tags/note/</guid>
       <description></description>
     </item>
     

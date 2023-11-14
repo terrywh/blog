@@ -145,11 +145,43 @@
     <h1>Hello World
 </h1>
 
-    <span>last update: <time datetime="2021-10-14T00:00:00Z">14 October at 12:00am</time>
+    <span>last update: <time datetime="2023-11-15T00:00:00Z">15 November at 12:00am</time>
 </span>
 
   </header>
   
+  
+    <article class="container content summary">
+  <div class="container hat">
+  <h2><a href="https://blog.terrywh.net/post/2023/clang_setup/">新版本 CLANG 安装
+</a>
+</h2>
+
+  <time datetime="2023-11-15">15 Nov, 2023</time>
+
+</div>
+
+  <p class="container content">
+  
+  
+     获取并下载 LLVM 项目源代码：https://github.com/llvm/llvm-project/releases
+wget https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.4/llvm-project-17.0.4.src.tar.xz  编译安装
+tar xf llvm-project-17.0.4.src.tar.xz cd llvm-project-17.0.4.src mkdir stage cd stage cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/llvm-17.0 -DLLVM_ENABLE_PROJECTS=&quot;clang;clang-tools-extra;lld;lldb;openmp;polly;pstl&quot; -DLLVM_ENABLE_RUNTIMES=&quot;compiler-rt;libcxx;libcxxabi;libunwind&quot; ../llvm make -j8 make install  使用非标编译器
+CC=gcc CXX=g++ cmake ...   
+  
+
+
+</p>
+
+
+  <div class="container readlink">
+  <a href="https://blog.terrywh.net/post/2023/clang_setup/">Read more &rarr;</a>
+
+</div>
+
+
+</article>
+
   
     <article class="container content summary">
   <div class="container hat">
@@ -437,36 +469,6 @@ CC=gcc CXX=g++ ./configure --prefix=/data/vendor/php-7.2.18 --with-config-file-p
 </article>
 
   
-    <article class="container content summary">
-  <div class="container hat">
-  <h2><a href="https://blog.terrywh.net/post/2018/atom-go-plus-goroot/">Atom 插件 go-plus 配置 GOROOT
-</a>
-</h2>
-
-  <time datetime="2017-08-01">1 Aug, 2017</time>
-
-</div>
-
-  <p class="container content">
-  
-  
-    由于需要在同一台机器部署两种 GO 环境(WSL + Win)，这里对 go-plus 代码进行一点点修改，加入 goroot 配置参数来解决这个问题：
-// ~/.atom/packages/go-plus/lib/config/environment.js // ... // const getenvironment = (): {[string]: ?string} =&gt; { // ... if (!e.GOROOT) { let r = atom.config.get(&quot;go-plus.config.goroot&quot;) if (r &amp;&amp; r.trim() !== '') { e.GOROOT = r } } // e.GINKGO_EDITOR_INTEGRATION = 'true' // return e // }  即通过配置参数 go-plus.config.goroot 模拟环境变量。
-  
-
-
-</p>
-
-
-  <div class="container readlink">
-  <a href="https://blog.terrywh.net/post/2018/atom-go-plus-goroot/">Read more &rarr;</a>
-
-</div>
-
-
-</article>
-
-  
   
 <div class="container pagination">
   
@@ -489,12 +491,16 @@ CC=gcc CXX=g++ ./configure --prefix=/data/vendor/php-7.2.18 --with-config-file-p
   2
 </a>
 
+<a href="https://blog.terrywh.net/page/3/">
+  3
+</a>
+
 
 <a aria-label="Next" href="https://blog.terrywh.net/page/2/">
   <span aria-hidden="true">»</span>
 </a>
 
-<a aria-label="Last" href="https://blog.terrywh.net/page/2/">
+<a aria-label="Last" href="https://blog.terrywh.net/page/3/">
   <span aria-hidden="true">»»</span>
 </a>
 

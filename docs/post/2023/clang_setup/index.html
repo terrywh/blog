@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <title>Go 点滴  &middot; Hello World</title>
+  <title>新版本 CLANG 安装  &middot; Hello World</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
@@ -14,25 +14,33 @@
 
 <meta name="description" content="" />
 
-<meta name="keywords" content="go, util, ">
+<meta name="keywords" content="c&#43;&#43;, gcc, clang, abstraction, feature, note, ">
 
 
-<meta property="og:title" content="Go 点滴  &middot; Hello World ">
+<meta property="og:title" content="新版本 CLANG 安装  &middot; Hello World ">
 <meta property="og:site_name" content="Hello World"/>
-<meta property="og:url" content="https://blog.terrywh.net/post/2021/go_util/" />
+<meta property="og:url" content="https://blog.terrywh.net/post/2023/clang_setup/" />
 <meta property="og:locale" content="">
 
 
 <meta property="og:type" content="article" />
 <meta property="og:description" content=""/>
-<meta property="og:article:published_time" content="2021-10-14T00:00:00Z" />
-<meta property="og:article:modified_time" content="2021-10-14T00:00:00Z" />
+<meta property="og:article:published_time" content="2023-11-15T00:00:00Z" />
+<meta property="og:article:modified_time" content="2023-11-15T00:00:00Z" />
 
   
     
-<meta property="og:article:tag" content="go">
+<meta property="og:article:tag" content="c&#43;&#43;">
     
-<meta property="og:article:tag" content="util">
+<meta property="og:article:tag" content="gcc">
+    
+<meta property="og:article:tag" content="clang">
+    
+<meta property="og:article:tag" content="abstraction">
+    
+<meta property="og:article:tag" content="feature">
+    
+<meta property="og:article:tag" content="note">
     
   
 
@@ -40,9 +48,9 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:site" content="@" />
 <meta name="twitter:creator" content="@" />
-<meta name="twitter:title" content="Go 点滴" />
+<meta name="twitter:title" content="新版本 CLANG 安装" />
 <meta name="twitter:description" content="" />
-<meta name="twitter:url" content="https://blog.terrywh.net/post/2021/go_util/" />
+<meta name="twitter:url" content="https://blog.terrywh.net/post/2023/clang_setup/" />
 <meta name="twitter:domain" content="https://blog.terrywh.net">
   
 
@@ -50,20 +58,20 @@
   {
     "@context": "http://schema.org",
     "@type": "Article",
-    "headline": "Go 点滴",
+    "headline": "新版本 CLANG 安装",
     "author": {
       "@type": "Person",
       "name": "TerryWu"
     },
-    "datePublished": "2021-10-14",
+    "datePublished": "2023-11-15",
     "description": "",
-    "wordCount":  52 
+    "wordCount":  30 
   }
 </script>
 
 
 
-<link rel="canonical" href="https://blog.terrywh.net/post/2021/go_util/" />
+<link rel="canonical" href="https://blog.terrywh.net/post/2023/clang_setup/" />
 
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://blog.terrywh.net/touch-icon-144-precomposed.png">
 <link href="https://blog.terrywh.net/favicon.png" rel="icon">
@@ -173,21 +181,29 @@
 
 <article id="main-content" class="container main_content single">
   <header class="container hat">
-  <h1>Go 点滴
+  <h1>新版本 CLANG 安装
 </h1>
 
   <div class="metas">
-<time datetime="2021-10-14">14 Oct, 2021</time>
+<time datetime="2023-11-15">15 Nov, 2023</time>
 
 
   
   &middot; Read in about 1 min
-  &middot; (52 Words)
+  &middot; (30 Words)
   <br>
   
-<a class="label" href="https://blog.terrywh.net/tags/go">go</a>
+<a class="label" href="https://blog.terrywh.net/tags/c&#43;&#43;">c&#43;&#43;</a>
 
-<a class="label" href="https://blog.terrywh.net/tags/util">util</a>
+<a class="label" href="https://blog.terrywh.net/tags/gcc">gcc</a>
+
+<a class="label" href="https://blog.terrywh.net/tags/clang">clang</a>
+
+<a class="label" href="https://blog.terrywh.net/tags/abstraction">abstraction</a>
+
+<a class="label" href="https://blog.terrywh.net/tags/feature">feature</a>
+
+<a class="label" href="https://blog.terrywh.net/tags/note">note</a>
 
 
 
@@ -197,25 +213,27 @@
 
   <div class="container content">
   <ul>
-<li>字符串 string &lt;=&gt; []byte 字节序列转化
-``` Go
-func s2b(s string) (b []byte) {
-	/* #nosec G103 */
-	bh := (<em>reflect.SliceHeader)(unsafe.Pointer(&amp;b))
-	/</em> #nosec G103 */
-	sh := (*reflect.StringHeader)(unsafe.Pointer(&amp;s))
-	bh.Data = sh.Data
-	bh.Cap = sh.Len
-	bh.Len = sh.Len
-	return b
-}</li>
-</ul>
+<li><p>获取并下载 LLVM 项目源代码：<a href="https://github.com/llvm/llvm-project/releases">https://github.com/llvm/llvm-project/releases</a></p>
 
-<p>func b2s(b []byte) string {
-	/* #nosec G103 */
-	return *(*string)(unsafe.Pointer(&amp;b))
-}
-```</p>
+<pre><code>wget https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.4/llvm-project-17.0.4.src.tar.xz
+</code></pre></li>
+
+<li><p>编译安装</p>
+
+<pre><code>tar xf llvm-project-17.0.4.src.tar.xz
+cd llvm-project-17.0.4.src
+mkdir stage
+cd stage
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/llvm-17.0 -DLLVM_ENABLE_PROJECTS=&quot;clang;clang-tools-extra;lld;lldb;openmp;polly;pstl&quot; -DLLVM_ENABLE_RUNTIMES=&quot;compiler-rt;libcxx;libcxxabi;libunwind&quot; ../llvm
+make -j8
+make install
+</code></pre></li>
+
+<li><p>使用非标编译器</p>
+
+<pre><code>CC=gcc CXX=g++ cmake ...
+</code></pre></li>
+</ul>
 
 </div>
 
@@ -227,15 +245,11 @@ func s2b(s string) (b []byte) {
   
 
     
-    <a class="prev" href="https://blog.terrywh.net/post/2022/self_signed_cert/" title="Openssl 字签证书（域名、IP）">
+    <a class="prev" href="https://blog.terrywh.net/post/2021/go_util/" title="Go 点滴">
       Previous
     </a>
     
 
-    
-    <a class="next" href="https://blog.terrywh.net/post/2023/clang_setup/" title="新版本 CLANG 安装">
-      Next
-    </a>
     
 
   
