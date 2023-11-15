@@ -153,7 +153,7 @@
   
     <article class="container content summary">
   <div class="container hat">
-  <h2><a href="https://blog.terrywh.net/post/2023/clang_setup/">新版本 CLANG 安装
+  <h2><a href="https://blog.terrywh.net/post/2023/compiler_setup/">新版本 GCC / CLANG 安装
 </a>
 </h2>
 
@@ -164,10 +164,9 @@
   <p class="container content">
   
   
-     获取并下载 LLVM 项目源代码：https://github.com/llvm/llvm-project/releases
-wget https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.4/llvm-project-17.0.4.src.tar.xz  编译安装
-tar xf llvm-project-17.0.4.src.tar.xz cd llvm-project-17.0.4.src mkdir stage cd stage cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/llvm-17.0 -DLLVM_ENABLE_PROJECTS=&quot;clang;clang-tools-extra;lld;lldb;openmp;polly;pstl&quot; -DLLVM_ENABLE_RUNTIMES=&quot;compiler-rt;libcxx;libcxxabi;libunwind&quot; ../llvm make -j8 make install  使用非标编译器
-CC=gcc CXX=g++ cmake ...   
+    获取并下载 GCC / LLVM 项目源代码：  https://gcc.gnu.org/releases.html https://github.com/llvm/llvm-project/releases  编译安装  混合 LLVM / GCC 安装，使其能配合混用；  配置环境
+ 启用环境变量;  参考脚本
+# GCC 编译安装（考虑参考当前系统 GCC 编译选项） wget https://ftp.gwdg.de/pub/misc/gcc/releases/gcc-13.2.0/gcc-13.2.0.tar.xz tar xf gcc-13.2.0.tar.xz cd gcc-13.2.0 ./contrib/download_prerequisites # 下载依赖源码 mkdir stage cd stage ../configure --enable-bootstrap --enable-languages=c,c++,lto --prefix=/data/server/compiler --enable-shared --enable-threads=posix --enable-checking=release --disable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl --disable-libmpx --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux make -j8 make install # LLVM 编译安装（重合上面 GCC 安装，自动融合使用） wget https://github.
   
 
 
@@ -175,7 +174,7 @@ CC=gcc CXX=g++ cmake ...
 
 
   <div class="container readlink">
-  <a href="https://blog.terrywh.net/post/2023/clang_setup/">Read more &rarr;</a>
+  <a href="https://blog.terrywh.net/post/2023/compiler_setup/">Read more &rarr;</a>
 
 </div>
 
