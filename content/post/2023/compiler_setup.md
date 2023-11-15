@@ -19,8 +19,8 @@ categories = "笔记"
 
 * 参考脚本
 
-```
-# GCC 编译安装（考虑参考当前系统 GCC 编译选项）
+``` bash
+# GCC 编译安装（考虑参考当前系统 GCC 编译选项 gcc -V）
 wget https://ftp.gwdg.de/pub/misc/gcc/releases/gcc-13.2.0/gcc-13.2.0.tar.xz
 tar xf gcc-13.2.0.tar.xz
 cd gcc-13.2.0
@@ -43,7 +43,7 @@ make install
 ```
 
 * 环境配置脚本
-```
+``` bash
 export PATH=/data/server/compiler/bin${PATH:+:${PATH}}
 export MANPATH=/data/server/compiler/share/man${MANPATH:+:${MANPATH}}
 export INFOPATH=/data/server/compiler/share/info${INFOPATH:+:${INFOPATH}}
