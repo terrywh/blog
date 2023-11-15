@@ -14,13 +14,26 @@
     
     
     <item>
-      <title>新版本 GCC / CLANG 安装</title>
+      <title>GDB 启用 PrettyPrint 支持</title>
+      <link>https://blog.terrywh.net/post/2023/gdb_with_pretty_print/</link>
+      <pubDate>Wed, 15 Nov 2023 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/post/2023/gdb_with_pretty_print/</guid>
+      <description>启用 Pretty Print 可方便在基于 GDB 的调试能够更直观的查看标准库内的结构，如字符串、向量、列表等； 一般系统默认的 GCC/G++ 安装已能正常工作；在升级安装多个 GCC 版本时，可参考如下流程配置：
+  安装 GCC/LLVM 请参考 新版本 GCC/LLVM 安装
+ 依赖组件（依赖 python 支持支持 PrettyPrint 功能）
+yum install -y python3-devel gmp-devel   下载 GDB 编译安装： bash wget https://sourceware.org/pub/gdb/releases/gdb-13.2.tar.xz tar xf gdb-13.2.tar.xz cd gdb-13.2 mkdir stage cd stage CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ ../configure --prefix=/data/server/compiler --with-python=/usr/bin/python3 make -j4 make install   启用 Pretty Print 支持 编辑 ~/.gdbinit 文件并填写下述内容：
+python import sys sys.path.insert(0, &#39;/data/server/compiler/share/gcc-13/python&#39;) end source /data/server/compiler/lib64/libstdc++.</description>
+    </item>
+    
+    <item>
+      <title>新版本 GCC / LLVM 安装</title>
       <link>https://blog.terrywh.net/post/2023/compiler_setup/</link>
       <pubDate>Wed, 15 Nov 2023 00:00:00 +0000</pubDate>
       <author>terry.wuhao[at]gmail.com (TerryWu)</author>
       <guid>https://blog.terrywh.net/post/2023/compiler_setup/</guid>
       <description>获取并下载 GCC / LLVM 项目源代码：  https://gcc.gnu.org/releases.html https://github.com/llvm/llvm-project/releases  编译安装  混合 LLVM / GCC 安装，使其能配合混用；  配置环境
- 启用环境变量;  参考脚本
+ 启用环境变量; 写入库加载路径；  参考脚本
   # GCC 编译安装（考虑参考当前系统 GCC 编译选项 gcc -V） wget https://ftp.gwdg.de/pub/misc/gcc/releases/gcc-13.2.0/gcc-13.2.0.tar.xz tar xf gcc-13.2.0.tar.xz cd gcc-13.2.0 ./contrib/download_prerequisites # 下载依赖源码 mkdir stage cd stage ../configure --enable-bootstrap --enable-languages=c,c++,lto --prefix=/data/server/compiler --enable-shared --enable-threads=posix --enable-checking=release --disable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl --disable-libmpx --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux make -j8 make install # LLVM 编译安装（重合上面 GCC 安装，自动融合使用） wget https://github.</description>
     </item>
     
@@ -36,19 +49,6 @@
  coroutine - https://godbolt.org/z/YcG8M4fzG 原生协程支持，有较高的自由度进行定制；
  custom pipe https://godbolt.org/z/GbfsKesaM 直观使用 operator | 形态表达一个处理流程（配合 outcome::result 错误处理)
   </description>
-    </item>
-    
-    <item>
-      <title>GDB/GCC 升级、启用 PrettyPrint 支持</title>
-      <link>https://blog.terrywh.net/post/2021/gdb_with_pretty_print/</link>
-      <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
-      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
-      <guid>https://blog.terrywh.net/post/2021/gdb_with_pretty_print/</guid>
-      <description> 启用 Pretty Print 可方便在基于 GDB 的调试能够更直观的查看标准库内的结构，如字符串、向量、列表等；
- 请参考如下步骤进行安装配置：
- 升级、安装 GCC 这里不在赘述
- 升级 GDB
-yum install python3-devel # !!!!! pretty print 依赖 python 支持 wget https://mirrors.aliyun.com/gnu/gdb/gdb-10.1.tar.gz tar xf gdb-10.1.tar.gz cd gdb-10.1 mkdir build ../configure --prefix={path_to_install} --with-python=/usr/bin/python3 make &amp;amp;&amp;amp; make install   启用 Pretty Print 支持 编辑 ~/.gdbinit 文件并填写下述内容： bash python import sys sys.path.insert(0, &#39;{path_to_gcc_share}/{gcc-version|libstdc++-{version}}/python&#39;) end source {path_to_gcc_lib}/libstdc++.so{version}-gdb.py # 自动启用，也可手动调用    </description>
     </item>
     
     <item>

@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <title>GDB/GCC 升级、启用 PrettyPrint 支持  &middot; Hello World</title>
+  <title>GDB 启用 PrettyPrint 支持  &middot; Hello World</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
@@ -14,25 +14,27 @@
 
 <meta name="description" content="" />
 
-<meta name="keywords" content="c&#43;&#43;, gcc, pretty print, ">
+<meta name="keywords" content="c&#43;&#43;, gcc, gdb, pretty print, ">
 
 
-<meta property="og:title" content="GDB/GCC 升级、启用 PrettyPrint 支持  &middot; Hello World ">
+<meta property="og:title" content="GDB 启用 PrettyPrint 支持  &middot; Hello World ">
 <meta property="og:site_name" content="Hello World"/>
-<meta property="og:url" content="https://blog.terrywh.net/post/2021/gdb_with_pretty_print/" />
+<meta property="og:url" content="https://blog.terrywh.net/post/2023/gdb_with_pretty_print/" />
 <meta property="og:locale" content="">
 
 
 <meta property="og:type" content="article" />
 <meta property="og:description" content=""/>
-<meta property="og:article:published_time" content="2021-07-21T00:00:00Z" />
-<meta property="og:article:modified_time" content="2021-07-21T00:00:00Z" />
+<meta property="og:article:published_time" content="2023-11-15T00:00:00Z" />
+<meta property="og:article:modified_time" content="2023-11-15T00:00:00Z" />
 
   
     
 <meta property="og:article:tag" content="c&#43;&#43;">
     
 <meta property="og:article:tag" content="gcc">
+    
+<meta property="og:article:tag" content="gdb">
     
 <meta property="og:article:tag" content="pretty print">
     
@@ -42,9 +44,9 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:site" content="@" />
 <meta name="twitter:creator" content="@" />
-<meta name="twitter:title" content="GDB/GCC 升级、启用 PrettyPrint 支持" />
+<meta name="twitter:title" content="GDB 启用 PrettyPrint 支持" />
 <meta name="twitter:description" content="" />
-<meta name="twitter:url" content="https://blog.terrywh.net/post/2021/gdb_with_pretty_print/" />
+<meta name="twitter:url" content="https://blog.terrywh.net/post/2023/gdb_with_pretty_print/" />
 <meta name="twitter:domain" content="https://blog.terrywh.net">
   
 
@@ -52,20 +54,20 @@
   {
     "@context": "http://schema.org",
     "@type": "Article",
-    "headline": "GDB\/GCC 升级、启用 PrettyPrint 支持",
+    "headline": "GDB 启用 PrettyPrint 支持",
     "author": {
       "@type": "Person",
       "name": "TerryWu"
     },
-    "datePublished": "2021-07-21",
+    "datePublished": "2023-11-15",
     "description": "",
-    "wordCount":  56 
+    "wordCount":  66 
   }
 </script>
 
 
 
-<link rel="canonical" href="https://blog.terrywh.net/post/2021/gdb_with_pretty_print/" />
+<link rel="canonical" href="https://blog.terrywh.net/post/2023/gdb_with_pretty_print/" />
 
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://blog.terrywh.net/touch-icon-144-precomposed.png">
 <link href="https://blog.terrywh.net/favicon.png" rel="icon">
@@ -175,21 +177,23 @@
 
 <article id="main-content" class="container main_content single">
   <header class="container hat">
-  <h1>GDB/GCC 升级、启用 PrettyPrint 支持
+  <h1>GDB 启用 PrettyPrint 支持
 </h1>
 
   <div class="metas">
-<time datetime="2021-07-21">21 Jul, 2021</time>
+<time datetime="2023-11-15">15 Nov, 2023</time>
 
 
   
   &middot; Read in about 1 min
-  &middot; (56 Words)
+  &middot; (66 Words)
   <br>
   
 <a class="label" href="https://blog.terrywh.net/tags/c&#43;&#43;">c&#43;&#43;</a>
 
 <a class="label" href="https://blog.terrywh.net/tags/gcc">gcc</a>
+
+<a class="label" href="https://blog.terrywh.net/tags/gdb">gdb</a>
 
 <a class="label" href="https://blog.terrywh.net/tags/pretty-print">pretty print</a>
 
@@ -201,36 +205,41 @@
 
   <div class="container content">
   <blockquote>
-<p>启用 Pretty Print 可方便在基于 GDB 的调试能够更直观的查看标准库内的结构，如字符串、向量、列表等；</p>
+<p>启用 Pretty Print 可方便在基于 GDB 的调试能够更直观的查看标准库内的结构，如字符串、向量、列表等；
+一般系统默认的 GCC/G++ 安装已能正常工作；在升级安装多个 GCC 版本时，可参考如下流程配置：</p>
 </blockquote>
 
-<p>请参考如下步骤进行安装配置：</p>
-
 <ul>
-<li><p>升级、安装 GCC 这里不在赘述</p></li>
+<li><p>安装 GCC/LLVM 请参考 <a href="/post/2023/compiler_setup/">新版本 GCC/LLVM 安装</a></p></li>
 
-<li><p>升级 GDB</p>
+<li><p>依赖组件（依赖 python 支持支持 PrettyPrint 功能）</p>
 
-<pre><code class="language-bash">yum install python3-devel # !!!!! pretty print 依赖 python 支持
-wget https://mirrors.aliyun.com/gnu/gdb/gdb-10.1.tar.gz
-tar xf gdb-10.1.tar.gz
-cd gdb-10.1
-mkdir build
-../configure --prefix={path_to_install} --with-python=/usr/bin/python3
-make &amp;&amp; make install
+<pre><code class="language-bash">yum install -y python3-devel gmp-devel
 </code></pre>
 
 <ul>
-<li>启用 Pretty Print 支持
-编辑 ~/.gdbinit 文件并填写下述内容：
+<li>下载 GDB 编译安装：
 <code>bash
-python
-import sys
-sys.path.insert(0, '{path_to_gcc_share}/{gcc-version|libstdc++-{version}}/python')
-end
-source {path_to_gcc_lib}/libstdc++.so{version}-gdb.py # 自动启用，也可手动调用
+wget https://sourceware.org/pub/gdb/releases/gdb-13.2.tar.xz
+tar xf gdb-13.2.tar.xz
+cd gdb-13.2
+mkdir stage
+cd stage
+CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ ../configure --prefix=/data/server/compiler --with-python=/usr/bin/python3
+make -j4
+make install
 </code></li>
 </ul></li>
+
+<li><p>启用 Pretty Print 支持
+编辑 ~/.gdbinit 文件并填写下述内容：</p>
+
+<pre><code class="language-python">python
+import sys
+sys.path.insert(0, '/data/server/compiler/share/gcc-13/python')
+end
+source /data/server/compiler/lib64/libstdc++.so.6.0.32-gdb.py
+</code></pre></li>
 </ul>
 
 </div>
@@ -243,15 +252,11 @@ source {path_to_gcc_lib}/libstdc++.so{version}-gdb.py # 自动启用，也可手
   
 
     
-    <a class="prev" href="https://blog.terrywh.net/post/2019/evaluation_order/" title="C&#43;&#43; 表达式求值顺序">
+    <a class="prev" href="https://blog.terrywh.net/post/2023/compiler_setup/" title="新版本 GCC / LLVM 安装">
       Previous
     </a>
     
 
-    
-    <a class="next" href="https://blog.terrywh.net/post/2022/cpp_notes/" title="C&#43;&#43; 笔记">
-      Next
-    </a>
     
 
   

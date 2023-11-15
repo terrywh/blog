@@ -9,6 +9,11 @@
   </url>
   
   <url>
+    <loc>https://blog.terrywh.net/post/2023/gdb_with_pretty_print/</loc>
+    <lastmod>2023-11-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://blog.terrywh.net/</loc>
     <lastmod>2023-11-15T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -57,7 +62,19 @@
   </url>
   
   <url>
+    <loc>https://blog.terrywh.net/tags/gdb/</loc>
+    <lastmod>2023-11-15T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.terrywh.net/tags/note/</loc>
+    <lastmod>2023-11-15T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.terrywh.net/tags/pretty-print/</loc>
     <lastmod>2023-11-15T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -110,17 +127,6 @@
   <url>
     <loc>https://blog.terrywh.net/post/2022/cpp_notes/</loc>
     <lastmod>2021-07-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.terrywh.net/post/2021/gdb_with_pretty_print/</loc>
-    <lastmod>2021-07-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.terrywh.net/tags/pretty-print/</loc>
-    <lastmod>2021-07-21T00:00:00+00:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
@@ -199,6 +205,12 @@
   </url>
   
   <url>
+    <loc>https://blog.terrywh.net/tags/linux/</loc>
+    <lastmod>2018-07-23T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.terrywh.net/post/2018/linux-grub-install/</loc>
     <lastmod>2018-07-23T00:00:00+00:00</lastmod>
   </url>
@@ -217,12 +229,6 @@
   
   <url>
     <loc>https://blog.terrywh.net/tags/grub/</loc>
-    <lastmod>2018-07-23T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.terrywh.net/tags/linux/</loc>
     <lastmod>2018-07-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>

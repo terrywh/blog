@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>pretty print on Hello World</title>
-    <link>https://blog.terrywh.net/tags/pretty-print/</link>
-    <description>Recent content in pretty print on Hello World</description>
+    <title>gdb on Hello World</title>
+    <link>https://blog.terrywh.net/tags/gdb/</link>
+    <description>Recent content in gdb on Hello World</description>
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>terry.wuhao[at]gmail.com (TerryWu)</managingEditor>
     <webMaster>terry.wuhao[at]gmail.com (TerryWu)</webMaster>
     <copyright>@copyright 2017</copyright>
     <lastBuildDate>Wed, 15 Nov 2023 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://blog.terrywh.net/tags/pretty-print/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://blog.terrywh.net/tags/gdb/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>

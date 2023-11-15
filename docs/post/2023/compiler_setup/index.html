@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <title>新版本 GCC / CLANG 安装  &middot; Hello World</title>
+  <title>新版本 GCC / LLVM 安装  &middot; Hello World</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
@@ -17,7 +17,7 @@
 <meta name="keywords" content="c&#43;&#43;, gcc, clang, abstraction, feature, note, ">
 
 
-<meta property="og:title" content="新版本 GCC / CLANG 安装  &middot; Hello World ">
+<meta property="og:title" content="新版本 GCC / LLVM 安装  &middot; Hello World ">
 <meta property="og:site_name" content="Hello World"/>
 <meta property="og:url" content="https://blog.terrywh.net/post/2023/compiler_setup/" />
 <meta property="og:locale" content="">
@@ -48,7 +48,7 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:site" content="@" />
 <meta name="twitter:creator" content="@" />
-<meta name="twitter:title" content="新版本 GCC / CLANG 安装" />
+<meta name="twitter:title" content="新版本 GCC / LLVM 安装" />
 <meta name="twitter:description" content="" />
 <meta name="twitter:url" content="https://blog.terrywh.net/post/2023/compiler_setup/" />
 <meta name="twitter:domain" content="https://blog.terrywh.net">
@@ -58,14 +58,14 @@
   {
     "@context": "http://schema.org",
     "@type": "Article",
-    "headline": "新版本 GCC \/ CLANG 安装",
+    "headline": "新版本 GCC \/ LLVM 安装",
     "author": {
       "@type": "Person",
       "name": "TerryWu"
     },
     "datePublished": "2023-11-15",
     "description": "",
-    "wordCount":  105 
+    "wordCount":  118 
   }
 </script>
 
@@ -181,7 +181,7 @@
 
 <article id="main-content" class="container main_content single">
   <header class="container hat">
-  <h1>新版本 GCC / CLANG 安装
+  <h1>新版本 GCC / LLVM 安装
 </h1>
 
   <div class="metas">
@@ -190,7 +190,7 @@
 
   
   &middot; Read in about 1 min
-  &middot; (105 Words)
+  &middot; (118 Words)
   <br>
   
 <a class="label" href="https://blog.terrywh.net/tags/c&#43;&#43;">c&#43;&#43;</a>
@@ -229,6 +229,7 @@
 
 <ul>
 <li>启用环境变量;</li>
+<li>写入库加载路径；</li>
 </ul></li>
 
 <li><p>参考脚本</p></li>
@@ -251,19 +252,28 @@ tar xf llvm-project-17.0.4.src.tar.xz
 cd llvm-project-17.0.4.src
 mkdir stage
 cd stage
-CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS=&quot;clang;clang-tools-extra;lld;lldb;openmp;polly;pstl&quot; -DLLVM_ENABLE_RUNTIMES=&quot;compiler-rt;libcxx;libcxxabi;libunwind&quot; ../llvm
+CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS=&quot;clang;clang-tools-extra;lld;lldb;openmp;polly;pstl&quot; -DLLVM_ENABLE_RUNTIMES=&quot;compiler-rt;libcxx;libcxxabi;libunwind&quot; -DCMAKE_CXX_LINK_FLAGS=&quot;-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64&quot; ../llvm
 make -j8
 make install
 </code></pre>
 
 <ul>
-<li>环境配置脚本
-<code>bash
-export PATH=/data/server/compiler/bin${PATH:+:${PATH}}
+<li><p>环境配置脚本</p>
+
+<pre><code class="language-bash">export PATH=/data/server/compiler/bin${PATH:+:${PATH}}
 export MANPATH=/data/server/compiler/share/man${MANPATH:+:${MANPATH}}
 export INFOPATH=/data/server/compiler/share/info${INFOPATH:+:${INFOPATH}}
 export LD_LIBRARY_PATH=/data/server/compiler/lib:/data/server/compiler/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+</code></pre>
+
+<ul>
+<li>加入库加载路径
+<code>bash
+echo &quot;/data/server/compiler/lib64&quot; &gt; /etc/ld.so.conf.d/compiler_x86_64.conf
+echo &quot;/data/server/compiler/lib&quot;  &gt;&gt; /etc/ld.so.conf.d/compiler_x86_64.conf
+ldconfig
 </code></li>
+</ul></li>
 </ul>
 
 </div>
@@ -281,6 +291,10 @@ export LD_LIBRARY_PATH=/data/server/compiler/lib:/data/server/compiler/lib64${LD
     </a>
     
 
+    
+    <a class="next" href="https://blog.terrywh.net/post/2023/gdb_with_pretty_print/" title="GDB 启用 PrettyPrint 支持">
+      Next
+    </a>
     
 
   
