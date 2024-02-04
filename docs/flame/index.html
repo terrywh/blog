@@ -1,292 +1,342 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <title>Flame  &middot; Hello World</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="HandheldFriendly" content="True">
-<meta name="MobileOptimized" content="320">
+<html lang="zh-cn">
+  <head>
+    
+    <script type="application/ld+json">
+
+{  
+  "@context":"http://schema.org",
+  "@type":"Website",
+  "@id":"https:\/\/blog.terrywh.net",
+  "author": {
+    "@type": "Person",
+    "name": "TerryWu",
+    
+  },
+  "name":"Hello World",
+  "description":"https:\/\/github.com\/terrywh\/php-flame Flame 是一个基于协程的异步网络开发框架（PHP扩展）类似 Swoole 但相对更简单一些:\n\u0026lt;?php \/\/ 框架初始化 flame\\init(\u0026#34;http_server_demo\u0026#34;); \/\/ 第一个（主）协程 flame\\go(function() { \/\/ 创建 HTTP 服务器（监听） $server = new flame\\http\\server(\u0026#34;:::56101\u0026#34;); $server -\u0026gt;before(function($req, $res) { \/\/ 前置处理器（HOOK） $req-\u0026gt;data[\u0026#34;before\u0026#34;] = flame\\time\\now(); \/\/ 记录请求开始时间 }) -\u0026gt;get(\u0026#34;\/hello\u0026#34;, function($req, $res) { \/\/ 路径处理器 \/\/ 简单响应方式 $res-\u0026gt;status = 200; $res-\u0026gt;body = \u0026#34;world\u0026#34;; }) -\u0026gt;post(\u0026#34;\/hello\/world\u0026#34;, function($req, $res) { \/\/ 路径处理器 \/\/ Transfer-Encoding: Chunked $res-\u0026gt;write_header(200); $res-\u0026gt;write(\u0026#34;CHUNKED RESPONSE:\u0026#34;) $res-\u0026gt;write($res-\u0026gt;body); $res-\u0026gt;end(); }) -\u0026gt;after(function($req, $res, $r) { \/\/ 后置处理器（HOOK） flame\\log\\trace($req-\u0026gt;method, $req-\u0026gt;path \/\/ 请求时长日志记录 , \u0026#34;in\u0026#34;, (flame\\time\\now() - $req-\u0026gt;data[\u0026#34;before\u0026#34;]), \u0026#34;ms\u0026#34;); if(!",
+  "url":"https:\/\/blog.terrywh.net\/flame\/",
+  "keywords":"[]"
+}
+
+</script>
+    <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
-<meta name="description" content="" />
-
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.122.0 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="author" content="TerryWu">
 <meta name="keywords" content="">
+<meta name="description" content="https://github.com/terrywh/php-flame Flame 是一个基于协程的异步网络开发框架（PHP扩展）类似 Swoole 但相对更简单一些:
+&lt;?php // 框架初始化 flame\init(&#34;http_server_demo&#34;); // 第一个（主）协程 flame\go(function() { // 创建 HTTP 服务器（监听） $server = new flame\http\server(&#34;:::56101&#34;); $server -&gt;before(function($req, $res) { // 前置处理器（HOOK） $req-&gt;data[&#34;before&#34;] = flame\time\now(); // 记录请求开始时间 }) -&gt;get(&#34;/hello&#34;, function($req, $res) { // 路径处理器 // 简单响应方式 $res-&gt;status = 200; $res-&gt;body = &#34;world&#34;; }) -&gt;post(&#34;/hello/world&#34;, function($req, $res) { // 路径处理器 // Transfer-Encoding: Chunked $res-&gt;write_header(200); $res-&gt;write(&#34;CHUNKED RESPONSE:&#34;) $res-&gt;write($res-&gt;body); $res-&gt;end(); }) -&gt;after(function($req, $res, $r) { // 后置处理器（HOOK） flame\log\trace($req-&gt;method, $req-&gt;path // 请求时长日志记录 , &#34;in&#34;, (flame\time\now() - $req-&gt;data[&#34;before&#34;]), &#34;ms&#34;); if(!">
 
 
-<meta property="og:title" content="Flame  &middot; Hello World ">
-<meta property="og:site_name" content="Hello World"/>
-<meta property="og:url" content="https://blog.terrywh.net/flame/" />
-<meta property="og:locale" content="">
-
-
-<meta property="og:type" content="article" />
-<meta property="og:description" content=""/>
-<meta property="og:article:published_time" content="2017-09-27T12:22:37&#43;08:00" />
-<meta property="og:article:modified_time" content="2017-09-27T12:22:37&#43;08:00" />
+<meta property="og:description" content="https://github.com/terrywh/php-flame Flame 是一个基于协程的异步网络开发框架（PHP扩展）类似 Swoole 但相对更简单一些:
+&lt;?php // 框架初始化 flame\init(&#34;http_server_demo&#34;); // 第一个（主）协程 flame\go(function() { // 创建 HTTP 服务器（监听） $server = new flame\http\server(&#34;:::56101&#34;); $server -&gt;before(function($req, $res) { // 前置处理器（HOOK） $req-&gt;data[&#34;before&#34;] = flame\time\now(); // 记录请求开始时间 }) -&gt;get(&#34;/hello&#34;, function($req, $res) { // 路径处理器 // 简单响应方式 $res-&gt;status = 200; $res-&gt;body = &#34;world&#34;; }) -&gt;post(&#34;/hello/world&#34;, function($req, $res) { // 路径处理器 // Transfer-Encoding: Chunked $res-&gt;write_header(200); $res-&gt;write(&#34;CHUNKED RESPONSE:&#34;) $res-&gt;write($res-&gt;body); $res-&gt;end(); }) -&gt;after(function($req, $res, $r) { // 后置处理器（HOOK） flame\log\trace($req-&gt;method, $req-&gt;path // 请求时长日志记录 , &#34;in&#34;, (flame\time\now() - $req-&gt;data[&#34;before&#34;]), &#34;ms&#34;); if(!">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flame">
+<meta name="twitter:title" content="Flame">
+<meta property="og:url" content="https://blog.terrywh.net/flame/">
+<meta property="twitter:url" content="https://blog.terrywh.net/flame/">
+<meta property="og:site_name" content="Hello World">
+<meta property="og:description" content="https://github.com/terrywh/php-flame Flame 是一个基于协程的异步网络开发框架（PHP扩展）类似 Swoole 但相对更简单一些:
+&lt;?php // 框架初始化 flame\init(&#34;http_server_demo&#34;); // 第一个（主）协程 flame\go(function() { // 创建 HTTP 服务器（监听） $server = new flame\http\server(&#34;:::56101&#34;); $server -&gt;before(function($req, $res) { // 前置处理器（HOOK） $req-&gt;data[&#34;before&#34;] = flame\time\now(); // 记录请求开始时间 }) -&gt;get(&#34;/hello&#34;, function($req, $res) { // 路径处理器 // 简单响应方式 $res-&gt;status = 200; $res-&gt;body = &#34;world&#34;; }) -&gt;post(&#34;/hello/world&#34;, function($req, $res) { // 路径处理器 // Transfer-Encoding: Chunked $res-&gt;write_header(200); $res-&gt;write(&#34;CHUNKED RESPONSE:&#34;) $res-&gt;write($res-&gt;body); $res-&gt;end(); }) -&gt;after(function($req, $res, $r) { // 后置处理器（HOOK） flame\log\trace($req-&gt;method, $req-&gt;path // 请求时长日志记录 , &#34;in&#34;, (flame\time\now() - $req-&gt;data[&#34;before&#34;]), &#34;ms&#34;); if(!">
+<meta name="twitter:description" content="https://github.com/terrywh/php-flame Flame 是一个基于协程的异步网络开发框架（PHP扩展）类似 Swoole 但相对更简单一些:
+&lt;?php // 框架初始化 flame\init(&#34;http_server_demo&#34;); // 第一个（主）协程 flame\go(function() { // 创建 HTTP 服务器（监听） $server = new flame\http\server(&#34;:::56101&#34;); $server -&gt;before(function($req, $res) { // 前置处理器（HOOK） $req-&gt;data[&#34;before&#34;] = flame\time\now(); // 记录请求开始时间 }) -&gt;get(&#34;/hello&#34;, function($req, $res) { // 路径处理器 // 简单响应方式 $res-&gt;status = 200; $res-&gt;body = &#34;world&#34;; }) -&gt;post(&#34;/hello/world&#34;, function($req, $res) { // 路径处理器 // Transfer-Encoding: Chunked $res-&gt;write_header(200); $res-&gt;write(&#34;CHUNKED RESPONSE:&#34;) $res-&gt;write($res-&gt;body); $res-&gt;end(); }) -&gt;after(function($req, $res, $r) { // 后置处理器（HOOK） flame\log\trace($req-&gt;method, $req-&gt;path // 请求时长日志记录 , &#34;in&#34;, (flame\time\now() - $req-&gt;data[&#34;before&#34;]), &#34;ms&#34;); if(!">
+<meta property="og:locale" content="zh-cn">
 
   
+    <meta property="article:published_time" content="2017-09-27T12:22:37">
+  
+  
+    <meta property="article:modified_time" content="2017-09-27T12:22:37">
+  
+  
+  
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+
+    <title>Flame</title>
+
+    <link rel="icon" href="/favicon.png">
     
-  
 
-  
-<meta name="twitter:card" content="summary" />
-<meta name="twitter:site" content="@" />
-<meta name="twitter:creator" content="@" />
-<meta name="twitter:title" content="Flame" />
-<meta name="twitter:description" content="" />
-<meta name="twitter:url" content="https://blog.terrywh.net/flame/" />
-<meta name="twitter:domain" content="https://blog.terrywh.net">
-  
-
-<script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "Article",
-    "headline": "Flame",
-    "author": {
-      "@type": "Person",
-      "name": "TerryWu"
-    },
-    "datePublished": "2017-09-27",
-    "description": "",
-    "wordCount":  94 
-  }
-</script>
-
-
-
-<link rel="canonical" href="https://blog.terrywh.net/flame/" />
-
-<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://blog.terrywh.net/touch-icon-144-precomposed.png">
-<link href="https://blog.terrywh.net/favicon.png" rel="icon">
-
-<meta name="generator" content="Hugo 0.55.5" />
-
-  <!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-
-<link href='https://fonts.googleapis.com/css?family=Merriweather:300%7CRaleway%7COpen+Sans' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="/css/font-awesome.min.css">
-<link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/highlight/tomorrow.css">
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?28e3ab917510194e5abf19306f82fdbb";
-      var s = document.getElementsByTagName("script")[0]; 
-      s.parentNode.insertBefore(hm, s);
-    })();
-</script>
     
+
+    <link rel="canonical" href="https://blog.terrywh.net/flame/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    
+    
+    <link rel="stylesheet" href="https://blog.terrywh.net/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="/" aria-label="去首页">Hello World</a>
+  </div>
   
-</head>
-<body>
-  <main id="main-wrapper" class="container main_wrapper has-sidebar">
-    <header id="main-header" class="container main_header">
-  <div class="container brand">
-  <div class="container title h1-like">
-  <a class="baselink" href="https://blog.terrywh.net">
-  Hello World
+</header>
 
-</a>
+      <nav id="sidebar" data-behavior="">
+  <div class="sidebar-container">
+    
+    <ul class="sidebar-buttons">
+      
 
-</div>
+    </ul>
+    <ul class="sidebar-buttons">
+      
 
-  
-<div class="container topline">
-  
-  C++/PHP/Go/NodeJS
+    </ul>
+    <ul class="sidebar-buttons">
+      
 
-
-</div>
-
-
-</div>
-
-  <nav class="container nav primary no-print">
-  
-
-
-  
-<a href="https://blog.terrywh.net/post">列表</a>
-
-<a href="https://blog.terrywh.net/tags">标签</a>
-
-<a href="https://blog.terrywh.net/books">系列</a>
-
-<a href="https://blog.terrywh.net/flame">Flame</a>
-
-
+    </ul>
+  </div>
 </nav>
 
-<div class="container nav secondary no-print">
+      
+
+      <div id="main" data-behavior=""
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" id="top">
+          
+          
+            <div class="post-header main-content-wrap text-left">
   
-<a id="contact-link-email" class="contact_link" rel="me" aria-label="Email" href="mailto:terry.wuhao[at]gmail.com">
-  <span class="fa fa-envelope-square"></span></a>
+    <h1 class="post-title">
+      Flame
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time datetime="2017-09-27T12:22:37&#43;08:00">
+        
+  九月 27, 2017
 
-
-
-<a id="contact-link-github" class="contact_link" rel="me" aria-label="Github" href="https://github.com/terrywh">
-  <span class="fa fa-github-square"></span></a>
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      </time>
+    
+    
+  </div>
 
 </div>
-
-
-  
-
-</header>
-
-
-<article id="main-content" class="container main_content single">
-  <header class="container hat">
-  <h1>Flame
-</h1>
-
-  <div class="metas">
-<time datetime="2017-09-27">27 Sep, 2017</time>
-
-
-  
-  &middot; Read in about 1 min
-  &middot; (94 Words)
-  <br>
-  
-
-
-</div>
-
-</header>
-
-  <div class="container content">
-  
-
-<h4 id="https-github-com-terrywh-php-flame-https-github-com-terrywh-php-flame"><a href="https://github.com/terrywh/php-flame">https://github.com/terrywh/php-flame</a></h4>
-
+          
+          <div class="post-content markdown">
+            <div class="main-content-wrap">
+              <h4 id="httpsgithubcomterrywhphp-flamehttpsgithubcomterrywhphp-flame"><a href="https://github.com/terrywh/php-flame">https://github.com/terrywh/php-flame</a></h4>
 <p><code>Flame</code> 是一个基于协程的异步网络开发框架（PHP扩展）类似 Swoole 但相对更简单一些:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-PHP" data-lang="PHP"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 框架初始化
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">flame\init</span>(<span style="color:#e6db74">&#34;http_server_demo&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 第一个（主）协程
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">flame\go</span>(<span style="color:#66d9ef">function</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 创建 HTTP 服务器（监听）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    $server <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">flame\http\server</span>(<span style="color:#e6db74">&#34;:::56101&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    $server
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">before</span>(<span style="color:#66d9ef">function</span>($req, $res) { <span style="color:#75715e">// 前置处理器（HOOK）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            $req<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">data</span>[<span style="color:#e6db74">&#34;before&#34;</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">flame\time\now</span>(); <span style="color:#75715e">// 记录请求开始时间
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        })
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/hello&#34;</span>, <span style="color:#66d9ef">function</span>($req, $res) { <span style="color:#75715e">// 路径处理器
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#75715e">// 简单响应方式
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            $res<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">status</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">200</span>;
+</span></span><span style="display:flex;"><span>            $res<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">body</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;world&#34;</span>;
+</span></span><span style="display:flex;"><span>        })
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">post</span>(<span style="color:#e6db74">&#34;/hello/world&#34;</span>, <span style="color:#66d9ef">function</span>($req, $res) { <span style="color:#75715e">// 路径处理器
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#75715e">// Transfer-Encoding: Chunked
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            $res<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">write_header</span>(<span style="color:#ae81ff">200</span>);
+</span></span><span style="display:flex;"><span>            $res<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">write</span>(<span style="color:#e6db74">&#34;CHUNKED RESPONSE:&#34;</span>)
+</span></span><span style="display:flex;"><span>            $res<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">write</span>($res<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">body</span>);
+</span></span><span style="display:flex;"><span>            $res<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">end</span>();
+</span></span><span style="display:flex;"><span>        })
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">after</span>(<span style="color:#66d9ef">function</span>($req, $res, $r) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 后置处理器（HOOK）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#a6e22e">flame\log\trace</span>($req<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">method</span>, $req<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">path</span> <span style="color:#75715e">// 请求时长日志记录
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>                , <span style="color:#e6db74">&#34;in&#34;</span>, (<span style="color:#a6e22e">flame\time\now</span>() <span style="color:#f92672">-</span> $req<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">data</span>[<span style="color:#e6db74">&#34;before&#34;</span>]), <span style="color:#e6db74">&#34;ms&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>$r) {
+</span></span><span style="display:flex;"><span>                $res<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">status</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">404</span>;
+</span></span><span style="display:flex;"><span>                $res<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">file</span>(<span style="color:#66d9ef">__DIR__</span><span style="color:#f92672">.</span><span style="color:#e6db74">&#34;/404.html&#34;</span>); <span style="color:#75715e">// 响应文件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            }
+</span></span><span style="display:flex;"><span>        });
+</span></span><span style="display:flex;"><span>    $server<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">run</span>();
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 启动（调度）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">flame\run</span>();
+</span></span></code></pre></div>
+              
 
-<pre><code class="language-PHP">&lt;?php
-// 框架初始化
-flame\init(&quot;http_server_demo&quot;);
-// 第一个（主）协程
-flame\go(function() {
-    // 创建 HTTP 服务器（监听）
-    $server = new flame\http\server(&quot;:::56101&quot;);
 
-    $server
-        -&gt;before(function($req, $res) { // 前置处理器（HOOK）
-            $req-&gt;data[&quot;before&quot;] = flame\time\now(); // 记录请求开始时间
-        })
-        -&gt;get(&quot;/hello&quot;, function($req, $res) { // 路径处理器
-            // 简单响应方式
-            $res-&gt;status = 200;
-            $res-&gt;body = &quot;world&quot;;
-        })
-        -&gt;post(&quot;/hello/world&quot;, function($req, $res) { // 路径处理器
-            // Transfer-Encoding: Chunked
-            $res-&gt;write_header(200);
-            $res-&gt;write(&quot;CHUNKED RESPONSE:&quot;)
-            $res-&gt;write($res-&gt;body);
-            $res-&gt;end();
-        })
-        -&gt;after(function($req, $res, $r) {
-            // 后置处理器（HOOK）
-            flame\log\trace($req-&gt;method, $req-&gt;path // 请求时长日志记录
-                , &quot;in&quot;, (flame\time\now() - $req-&gt;data[&quot;before&quot;]), &quot;ms&quot;);
-            if(!$r) {
-                $res-&gt;status = 404;
-                $res-&gt;file(__DIR__.&quot;/404.html&quot;); // 响应文件
-            }
-        });
-    $server-&gt;run();
-});
-// 启动（调度）
-flame\run();
-</code></pre>
-
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+            
+            
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享这个帖子">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+  
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="回到顶部">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
 </div>
 
 
-  <footer class="container">
-  <div class="container navigation no-print">
-  <h2>Navigation</h2>
-  
+            
   
 
 
-</div>
-
-  
-
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2024 TerryWu. All Rights Reserved
+  </span>
 </footer>
 
-</article>
-      <footer id="main-footer" class="container main_footer">
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="">
+        
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
   
-
-  <div class="container nav foot no-print">
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享这个帖子">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
   
-
-  <a class="toplink" href="#">back to top</a>
-
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="回到顶部">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
 </div>
 
-  <div class="container credits">
-  
-<div class="container footline">
-  
 
+      </div>
+      
+
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-times"></i>
+    </div>
+    
+    <h4 id="about-card-name">TerryWu</h4>
+    
+    
+    
+  </div>
 </div>
 
-
-  
-<div class="container copyright">
-  
-  @copyright 2017
-
-
-</div>
-
-
-</div>
-
-</footer>
-
-    </main>
     
 
+    
 
-<script src="/js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script src="https://blog.terrywh.net/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
+
+
+
 
 
 

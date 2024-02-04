@@ -3,7 +3,7 @@ publishDir = "docs"
 
 baseURL = "https://blog.terrywh.net"
 defaultContentLanguage = "zh-cn"
-theme = "hyde-y"
+theme = "hextra"
 
 title = "Hello World"
 copyright = "@copyright 2017"

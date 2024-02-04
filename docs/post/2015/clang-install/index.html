@@ -1,295 +1,358 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <title>更新 GCC 后引起的 clang 安装问题  &middot; Hello World</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="HandheldFriendly" content="True">
-<meta name="MobileOptimized" content="320">
+<html lang="zh-cn">
+  <head>
+    
+    <script type="application/ld+json">
+
+{  
+  "@context":"http://schema.org",
+  "@type":"Website",
+  "@id":"https:\/\/blog.terrywh.net",
+  "author": {
+    "@type": "Person",
+    "name": "TerryWu",
+    
+  },
+  "name":"Hello World",
+  "description":"\u003cblockquote\u003e\n\u003cp\u003e安装了新版本 GCC 后，附加 rpath 参数编译安装 CLANG 解决找不到对应新版本的 libstdc\u002b\u002b.so 库的问题\u003c\/p\u003e\n\u003c\/blockquote\u003e",
+  "url":"https:\/\/blog.terrywh.net\/post\/2015\/clang-install\/",
+  "keywords":"[]"
+}
+
+</script>
+    <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.122.0 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="author" content="TerryWu">
+<meta name="keywords" content="">
+<meta name="description" content="
+安装了新版本 GCC 后，附加 rpath 参数编译安装 CLANG 解决找不到对应新版本的 libstdc&#43;&#43;.so 库的问题
+">
 
 
-<meta name="description" content="" />
+<meta property="og:description" content="
+安装了新版本 GCC 后，附加 rpath 参数编译安装 CLANG 解决找不到对应新版本的 libstdc&#43;&#43;.so 库的问题
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="更新 GCC 后引起的 clang 安装问题">
+<meta name="twitter:title" content="更新 GCC 后引起的 clang 安装问题">
+<meta property="og:url" content="https://blog.terrywh.net/post/2015/clang-install/">
+<meta property="twitter:url" content="https://blog.terrywh.net/post/2015/clang-install/">
+<meta property="og:site_name" content="Hello World">
+<meta property="og:description" content="
+安装了新版本 GCC 后，附加 rpath 参数编译安装 CLANG 解决找不到对应新版本的 libstdc&#43;&#43;.so 库的问题
+">
+<meta name="twitter:description" content="
+安装了新版本 GCC 后，附加 rpath 参数编译安装 CLANG 解决找不到对应新版本的 libstdc&#43;&#43;.so 库的问题
+">
+<meta property="og:locale" content="zh-cn">
 
-<meta name="keywords" content="c&#43;&#43;, clang, ">
-
-
-<meta property="og:title" content="更新 GCC 后引起的 clang 安装问题  &middot; Hello World ">
-<meta property="og:site_name" content="Hello World"/>
-<meta property="og:url" content="https://blog.terrywh.net/post/2015/clang-install/" />
-<meta property="og:locale" content="">
-
-
-<meta property="og:type" content="article" />
-<meta property="og:description" content=""/>
-<meta property="og:article:published_time" content="2015-12-03T00:00:00Z" />
-<meta property="og:article:modified_time" content="2015-12-03T00:00:00Z" />
-
+  
+    <meta property="article:published_time" content="2015-12-03T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2015-12-03T00:00:00">
+  
+  
   
     
-<meta property="og:article:tag" content="c&#43;&#43;">
+      <meta property="article:section" content="笔记">
     
-<meta property="og:article:tag" content="clang">
-    
-  
-
-  
-<meta name="twitter:card" content="summary" />
-<meta name="twitter:site" content="@" />
-<meta name="twitter:creator" content="@" />
-<meta name="twitter:title" content="更新 GCC 后引起的 clang 安装问题" />
-<meta name="twitter:description" content="" />
-<meta name="twitter:url" content="https://blog.terrywh.net/post/2015/clang-install/" />
-<meta name="twitter:domain" content="https://blog.terrywh.net">
-  
-
-<script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "Article",
-    "headline": "更新 GCC 后引起的 clang 安装问题",
-    "author": {
-      "@type": "Person",
-      "name": "TerryWu"
-    },
-    "datePublished": "2015-12-03",
-    "description": "",
-    "wordCount":  68 
-  }
-</script>
-
-
-
-<link rel="canonical" href="https://blog.terrywh.net/post/2015/clang-install/" />
-
-<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://blog.terrywh.net/touch-icon-144-precomposed.png">
-<link href="https://blog.terrywh.net/favicon.png" rel="icon">
-
-<meta name="generator" content="Hugo 0.55.5" />
-
-  <!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-
-<link href='https://fonts.googleapis.com/css?family=Merriweather:300%7CRaleway%7COpen+Sans' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="/css/font-awesome.min.css">
-<link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/highlight/tomorrow.css">
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?28e3ab917510194e5abf19306f82fdbb";
-      var s = document.getElementsByTagName("script")[0]; 
-      s.parentNode.insertBefore(hm, s);
-    })();
-</script>
+      <meta property="article:section" content="日志">
     
   
-</head>
-<body>
-  <main id="main-wrapper" class="container main_wrapper has-sidebar">
-    <header id="main-header" class="container main_header">
-  <div class="container brand">
-  <div class="container title h1-like">
-  <a class="baselink" href="https://blog.terrywh.net">
-  Hello World
-
-</a>
-
-</div>
-
   
-<div class="container topline">
-  
-  C++/PHP/Go/NodeJS
-
-
-</div>
-
-
-</div>
-
-  <nav class="container nav primary no-print">
+    
+      <meta property="article:tag" content="c&#43;&#43;">
+    
+      <meta property="article:tag" content="clang">
+    
   
 
 
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+
+    <title>更新 GCC 后引起的 clang 安装问题</title>
+
+    <link rel="icon" href="/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://blog.terrywh.net/post/2015/clang-install/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    
+    
+    <link rel="stylesheet" href="https://blog.terrywh.net/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="/" aria-label="去首页">Hello World</a>
+  </div>
   
-<a href="https://blog.terrywh.net/post">列表</a>
+</header>
 
-<a href="https://blog.terrywh.net/tags">标签</a>
+      <nav id="sidebar" data-behavior="">
+  <div class="sidebar-container">
+    
+    <ul class="sidebar-buttons">
+      
 
-<a href="https://blog.terrywh.net/books">系列</a>
+    </ul>
+    <ul class="sidebar-buttons">
+      
 
-<a href="https://blog.terrywh.net/flame">Flame</a>
+    </ul>
+    <ul class="sidebar-buttons">
+      
 
-
+    </ul>
+  </div>
 </nav>
 
-<div class="container nav secondary no-print">
+      
+
+      <div id="main" data-behavior=""
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" id="top">
+          
+          
+            <div class="post-header main-content-wrap text-left">
   
-<a id="contact-link-email" class="contact_link" rel="me" aria-label="Email" href="mailto:terry.wuhao[at]gmail.com">
-  <span class="fa fa-envelope-square"></span></a>
+    <h1 class="post-title">
+      更新 GCC 后引起的 clang 安装问题
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time datetime="2015-12-03T00:00:00Z">
+        
+  十二月 3, 2015
 
+      </time>
+    
+    
+  
+  
+    <span>发布在</span>
+    
+      <a class="category-link" href="/categories/%e7%ac%94%e8%ae%b0">笔记</a>, 
+    
+      <a class="category-link" href="/categories/%e6%97%a5%e5%bf%97">日志</a>
+    
+  
 
-
-<a id="contact-link-github" class="contact_link" rel="me" aria-label="Github" href="https://github.com/terrywh">
-  <span class="fa fa-github-square"></span></a>
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  </div>
 
 </div>
-
-
-  
-
-</header>
-
-
-<article id="main-content" class="container main_content single">
-  <header class="container hat">
-  <h1>更新 GCC 后引起的 clang 安装问题
-</h1>
-
-  <div class="metas">
-<time datetime="2015-12-03">3 Dec, 2015</time>
-
-
-  
-  &middot; Read in about 1 min
-  &middot; (68 Words)
-  <br>
-  
-<a class="label" href="https://blog.terrywh.net/tags/c&#43;&#43;">c&#43;&#43;</a>
-
-<a class="label" href="https://blog.terrywh.net/tags/clang">clang</a>
-
-
-
-</div>
-
-</header>
-
-  <div class="container content">
-  <blockquote>
+          
+          <div class="post-content markdown">
+            <div class="main-content-wrap">
+              <blockquote>
 <p>安装了新版本 GCC 后，附加 rpath 参数编译安装 CLANG 解决找不到对应新版本的 libstdc++.so 库的问题</p>
 </blockquote>
-
 <p>首先我在 CentOS 7 上面编译安装了 GCC 5.2.0 到 <code>/usr/local</code> 然后删除了自带的 GCC：</p>
-
-<pre><code># gcc-5.2.0
+<pre tabindex="0"><code># gcc-5.2.0
 ./contrib/download_prerequisites
 # gcc-stage
 ../gcc-5.2.0/configure --disable-mulitlib --enable-languages=c,c++,go
 make -j4
 make install
 yum remove gcc gcc-c++
-</code></pre>
-
-<p>安装 clang/llvm 大概需要下载这两个的包，让后把 clang 的包放进 llvm 的 tools 下面，然后：</p>
-
-<pre><code class="language-bash">../llvm-3.7.0.src/configure --enable-optimized --enable-targets=host-only --enable-cxx1y --with-gcc-toolchain=/usr/local
-make LDFLAGS+=&quot;-Wl,-rpath,/usr/local/lib64 -L/usr/local/lib64&quot;
-</code></pre>
-
-<p>上面命令指定 rpath 为了解决一个跟 libstdc++ 版本有关的问题（编译时没有找到新版本 GCC 提供的 <code>libstdc++.so</code> 存在 <code>/usr/local/lib64</code> 中)。</p>
-
+</code></pre><p>安装 clang/llvm 大概需要下载这两个的包，让后把 clang 的包放进 llvm 的 tools 下面，然后：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>../llvm-3.7.0.src/configure --enable-optimized --enable-targets<span style="color:#f92672">=</span>host-only --enable-cxx1y --with-gcc-toolchain<span style="color:#f92672">=</span>/usr/local
+</span></span><span style="display:flex;"><span>make LDFLAGS<span style="color:#f92672">+=</span><span style="color:#e6db74">&#34;-Wl,-rpath,/usr/local/lib64 -L/usr/local/lib64&#34;</span>
+</span></span></code></pre></div><p>上面命令指定 rpath 为了解决一个跟 libstdc++ 版本有关的问题（编译时没有找到新版本 GCC 提供的 <code>libstdc++.so</code> 存在 <code>/usr/local/lib64</code> 中)。</p>
 <blockquote>
 <p>编译安装 GCC 和 clang 非常耗费时间，得有心理准备。</p>
 </blockquote>
+              
+
+
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">标签</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="/tags/c&#43;&#43;/">c&#43;&#43;</a>
+
+  <a class="tag tag--primary tag--small" href="/tags/clang/">clang</a>
+
+                  </div>
+                
+              
+            
+            
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="/post/2016/glibc-memory-freeing/" data-tooltip="Linux 下 GLIBC 内存回收的疑问" aria-label="下一篇: Linux 下 GLIBC 内存回收的疑问">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="/post/2015/shell-utility/" data-tooltip="Shell 命令笔记" aria-label="上一篇: Shell 命令笔记">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享这个帖子">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+  
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="回到顶部">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
 </div>
 
 
-  <footer class="container">
-  <div class="container navigation no-print">
-  <h2>Navigation</h2>
-  
-  
-
-    
-    <a class="prev" href="https://blog.terrywh.net/post/2015/shell-utility/" title="Shell 命令笔记">
-      Previous
-    </a>
-    
-
-    
-    <a class="next" href="https://blog.terrywh.net/post/2016/glibc-memory-freeing/" title="Linux 下 GLIBC 内存回收的疑问">
-      Next
-    </a>
-    
-
+            
   
 
 
-</div>
-
-  
-
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2024 TerryWu. All Rights Reserved
+  </span>
 </footer>
 
-</article>
-      <footer id="main-footer" class="container main_footer">
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="">
+        
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="/post/2016/glibc-memory-freeing/" data-tooltip="Linux 下 GLIBC 内存回收的疑问" aria-label="下一篇: Linux 下 GLIBC 内存回收的疑问">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="/post/2015/shell-utility/" data-tooltip="Shell 命令笔记" aria-label="上一篇: Shell 命令笔记">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
   
-
-  <div class="container nav foot no-print">
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享这个帖子">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
   
-
-  <a class="toplink" href="#">back to top</a>
-
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="回到顶部">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
 </div>
 
-  <div class="container credits">
-  
-<div class="container footline">
-  
 
+      </div>
+      
+
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-times"></i>
+    </div>
+    
+    <h4 id="about-card-name">TerryWu</h4>
+    
+    
+    
+  </div>
 </div>
 
-
-  
-<div class="container copyright">
-  
-  @copyright 2017
-
-
-</div>
-
-
-</div>
-
-</footer>
-
-    </main>
     
 
+    
 
-<script src="/js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script src="https://blog.terrywh.net/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
+
+
+
 
 
 
