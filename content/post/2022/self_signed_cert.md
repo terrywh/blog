@@ -23,7 +23,7 @@ openssl x509 -outform pem -in root_ca.pem -out root_ca.crt
 > 1. 缺失 `nonRepudiation` 在新版本 Chrome 中导致 SSL_ERR_IMCOMPATIBLE 错误无法继续访问；
 > 2. 该配置文件实际在 签发申请 和 签发证书 时都需要使用；
 
-``` config
+``` config {filename="server.conf"}
 [req]
 distinguished_name = req_dn
 req_extensions = req_ext
@@ -55,7 +55,7 @@ IP.2 = 10.0.0.1
 
 * 签发申请
 
-```
+``` bash
 openssl req -new -nodes -newkey rsa:2048 -keyout server.key -out server.csr -config server.conf
 ```
 

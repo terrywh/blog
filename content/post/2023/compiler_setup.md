@@ -44,7 +44,7 @@ make install
 ```
 
 * 环境配置脚本
-``` bash
+``` bash {filename="/data/server/compiler/enable"}
 export PATH=/data/server/compiler/bin${PATH:+:${PATH}}
 export MANPATH=/data/server/compiler/share/man${MANPATH:+:${MANPATH}}
 export INFOPATH=/data/server/compiler/share/info${INFOPATH:+:${INFOPATH}}
