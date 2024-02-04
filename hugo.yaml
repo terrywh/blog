@@ -1,0 +1,23 @@
+cleanDestinationDir: true
+publishDir: docs
+
+baseURL: "https://blog.terrywh.net"
+defaultContentLanguage: "zh-cn"
+theme: "hextra"
+
+title: "Hello World"
+copyright: "@copyright 2017"
+
+author:
+  name: "TerryWu"
+  email: "terry.wuhao[at]gmail.com"
+
+params:
+  sidebar: "left"
+  topline: "C++/PHP/Go/NodeJS"
+  github: "terrywh"
+
+taxonomies:
+  category: "categories"
+  tag: "tags"
+  book: "books"

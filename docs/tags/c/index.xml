@@ -1,0 +1,58 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hello World – C</title>
+    <link>https://blog.terrywh.net/tags/c/</link>
+    <description>Recent content in C on Hello World</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>terry.wuhao[at]gmail.com (TerryWu)</managingEditor>
+    <webMaster>terry.wuhao[at]gmail.com (TerryWu)</webMaster>
+    <copyright>@copyright 2017</copyright>
+    <lastBuildDate>Tue, 23 Feb 2016 00:00:00 +0000</lastBuildDate>
+    
+	  <atom:link href="https://blog.terrywh.net/tags/c/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+      
+        
+      
+    
+    
+    <item>
+      <title>Linux 下 GLIBC 内存回收的疑问</title>
+      <link>https://blog.terrywh.net/post/2016/glibc-memory-freeing/</link>
+      <pubDate>Tue, 23 Feb 2016 00:00:00 +0000</pubDate>
+      <author>terry.wuhao[at]gmail.com (TerryWu)</author>
+      <guid>https://blog.terrywh.net/post/2016/glibc-memory-freeing/</guid>
+      <description>
+        
+        
+        &lt;p&gt;记得好早之前刚刚接触 Linux 下 C/C++ 开发的时候就有个疑问：在程序内 free 掉的空间没有立刻交换给操作系统，程序进程的内存没有减少。后来一度在开发各种长连接程序时 GOOGLE 各种资料，最近又偶尔遇到，借此机会把相关的说法整理如下。&lt;/p&gt;
+&lt;p&gt;其中两个重点内容如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.gnu.org/software/libc/manual/html_node/Freeing-after-Malloc.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Freeing Memory Allocated with malloc&lt;/a&gt;：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Occasionally, &lt;code&gt;free&lt;/code&gt; can actually return memory to the operating system and make the process smaller. Usually, all it can do is allow a later call to &lt;code&gt;malloc&lt;/code&gt; to reuse the space. In the meantime, the space remains in your program as part of a free-list used internally by &lt;code&gt;malloc&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;注意这里的 “**Occasionally**” 用词；
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;&lt;a href=&#34;http://man7.org/linux/man-pages/man3/mallopt.3.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Linux Programmer&amp;rsquo;s Manual - mallopt&lt;/a&gt;：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;M_TRIM_THRESHOLD&lt;/strong&gt;&lt;br&gt;
+When the amount of contiguous free memory at the top of the heap grows sufficiently large, &lt;code&gt;free(3)&lt;/code&gt; employs &lt;code&gt;sbrk(2)&lt;/code&gt; to release this memory back to the system.  (This can be useful in programs that continue to execute for a long period after freeing a significant amount of memory.)  The &lt;code&gt;M_TRIM_THRESHOLD&lt;/code&gt; parameter specifies the minimum size (in bytes) that this block of memory must reach before &lt;code&gt;sbrk(2)&lt;/code&gt; is used to trim the heap.&lt;/p&gt;
+&lt;p&gt;The default value for this parameter is &lt;code&gt;128*1024&lt;/code&gt;. Setting &lt;code&gt;M_TRIM_THRESHOLD&lt;/code&gt; to -1 disables trimming completely.&lt;/p&gt;
+&lt;p&gt;Modifying &lt;code&gt;M_TRIM_THRESHOLD&lt;/code&gt; is a trade-off between increasing the number of system calls (when the parameter is set low) and wasting unused memory at the top of the heap (when the parameter is set high).&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;根据上面的资料，总结一下：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;内存会在 &lt;code&gt;free&lt;/code&gt; 后被后续的 &lt;code&gt;malloc&lt;/code&gt; 复用，当 &lt;code&gt;free&lt;/code&gt; 的栈顶连续内存达到 &lt;code&gt;M_TRIM_THRESHOLD&lt;/code&gt; 描述的值（默认 128kB）后归还系统;&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+      </description>
+    </item>
+    
+  </channel>
+</rss>
