@@ -186,6 +186,35 @@ python import sys sys.path.insert(0, '/data/server/compiler/share/gcc-13/python'
   
     <article class="container content summary">
   <div class="container hat">
+  <h2><a href="https://blog.terrywh.net/post/2024/github_mirror/">Github 腾讯镜像访问
+</a>
+</h2>
+
+  <time datetime="2023-11-15">15 Nov, 2023</time>
+
+</div>
+
+  <p class="container content">
+  
+  
+    https://mirrors.tencent.com/github.com/shadowsocks/shadowsocks-rust/releases/download/v1.17.1/shadowsocks-v1.17.1.x86_64-unknown-linux-gnu.tar.xz
+  
+
+
+</p>
+
+
+  <div class="container readlink">
+  <a href="https://blog.terrywh.net/post/2024/github_mirror/">Read more &rarr;</a>
+
+</div>
+
+
+</article>
+
+  
+    <article class="container content summary">
+  <div class="container hat">
   <h2><a href="https://blog.terrywh.net/post/2023/compiler_setup/">新版本 GCC / LLVM 安装
 </a>
 </h2>
@@ -257,8 +286,8 @@ python import sys sys.path.insert(0, '/data/server/compiler/share/gcc-13/python'
   <p class="container content">
   
   
-    生成 ROOT/CA 根证书 openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout root_ca.key -out root_ca.pem -subj &quot;/C=CN/O=Orgnization/OU=OrgizationUnit/CN=CommonName&quot; openssl x509 -outform pem -in root_ca.pem -out root_ca.crt  签发证书  配置文件 ``` config [req] distinguished_name = req_dn req_extensions = req_ext x509_extensions = x509_ext prompt = no  [req_dn] C = CN ST = Beijing L = Beijing O = Orgnization OU = OrgnizationUnit CN = CommonName
-[req_ext] keyUsage = keyEncipherment, dataEncipherment extendedKeyUsage = serverAuth
+    生成 ROOT/CA 根证书 openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout root_ca.key -out root_ca.pem -subj &quot;/C=CN/O=Orgnization/OU=OrgizationUnit/CN=CommonName&quot; openssl x509 -outform pem -in root_ca.pem -out root_ca.crt  签发证书  配置文件   注意： 1. 缺失 nonRepudiation 在新版本 Chrome 中导致 SSL_ERR_IMCOMPATIBLE 错误无法继续访问； 2. 该配置文件实际在 签发申请 和 签发证书 时都需要使用；
+ [req] distinguished_name = req_dn req_extensions = req_ext x509_extensions = x509_ext prompt = no [req_dn] C = CN ST = Beijing L = Beijing O = Orgnization OU = OrgnizationUnit CN = CommonName [req_ext] keyUsage = nonRepudiation, keyEncipherment, dataEncipherment extendedKeyUsage = serverAuth [x509_ext] keyUsage = nonRepudiation, keyEncipherment, dataEncipherment subjectKeyIdentifier = hash extendedKeyUsage = serverAuth subjectAltName = @alt_names [alt_names] DNS.
   
 
 
@@ -431,36 +460,6 @@ CC=gcc CXX=g++ ./configure --prefix=/data/vendor/php-7.2.18 --with-config-file-p
 
   <div class="container readlink">
   <a href="https://blog.terrywh.net/post/2018/linux-grub-install/">Read more &rarr;</a>
-
-</div>
-
-
-</article>
-
-  
-    <article class="container content summary">
-  <div class="container hat">
-  <h2><a href="https://blog.terrywh.net/flame/">Flame
-</a>
-</h2>
-
-  <time datetime="2017-09-27">27 Sep, 2017</time>
-
-</div>
-
-  <p class="container content">
-  
-  
-    https://github.com/terrywh/php-flame Flame 是一个基于协程的异步网络开发框架（PHP扩展）类似 Swoole 但相对更简单一些:
-&lt;?php // 框架初始化 flame\init(&quot;http_server_demo&quot;); // 第一个（主）协程 flame\go(function() { // 创建 HTTP 服务器（监听） $server = new flame\http\server(&quot;:::56101&quot;); $server -&gt;before(function($req, $res) { // 前置处理器（HOOK） $req-&gt;data[&quot;before&quot;] = flame\time\now(); // 记录请求开始时间 }) -&gt;get(&quot;/hello&quot;, function($req, $res) { // 路径处理器 // 简单响应方式 $res-&gt;status = 200; $res-&gt;body = &quot;world&quot;; }) -&gt;post(&quot;/hello/world&quot;, function($req, $res) { // 路径处理器 // Transfer-Encoding: Chunked $res-&gt;write_header(200); $res-&gt;write(&quot;CHUNKED RESPONSE:&quot;) $res-&gt;write($res-&gt;body); $res-&gt;end(); }) -&gt;after(function($req, $res, $r) { // 后置处理器（HOOK） flame\log\trace($req-&gt;method, $req-&gt;path // 请求时长日志记录 , &quot;in&quot;, (flame\time\now() - $req-&gt;data[&quot;before&quot;]), &quot;ms&quot;); if(!
-  
-
-
-</p>
-
-
-  <div class="container readlink">
-  <a href="https://blog.terrywh.net/flame/">Read more &rarr;</a>
 
 </div>
 

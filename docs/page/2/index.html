@@ -153,6 +153,36 @@
   
     <article class="container content summary">
   <div class="container hat">
+  <h2><a href="https://blog.terrywh.net/flame/">Flame
+</a>
+</h2>
+
+  <time datetime="2017-09-27">27 Sep, 2017</time>
+
+</div>
+
+  <p class="container content">
+  
+  
+    https://github.com/terrywh/php-flame Flame 是一个基于协程的异步网络开发框架（PHP扩展）类似 Swoole 但相对更简单一些:
+&lt;?php // 框架初始化 flame\init(&quot;http_server_demo&quot;); // 第一个（主）协程 flame\go(function() { // 创建 HTTP 服务器（监听） $server = new flame\http\server(&quot;:::56101&quot;); $server -&gt;before(function($req, $res) { // 前置处理器（HOOK） $req-&gt;data[&quot;before&quot;] = flame\time\now(); // 记录请求开始时间 }) -&gt;get(&quot;/hello&quot;, function($req, $res) { // 路径处理器 // 简单响应方式 $res-&gt;status = 200; $res-&gt;body = &quot;world&quot;; }) -&gt;post(&quot;/hello/world&quot;, function($req, $res) { // 路径处理器 // Transfer-Encoding: Chunked $res-&gt;write_header(200); $res-&gt;write(&quot;CHUNKED RESPONSE:&quot;) $res-&gt;write($res-&gt;body); $res-&gt;end(); }) -&gt;after(function($req, $res, $r) { // 后置处理器（HOOK） flame\log\trace($req-&gt;method, $req-&gt;path // 请求时长日志记录 , &quot;in&quot;, (flame\time\now() - $req-&gt;data[&quot;before&quot;]), &quot;ms&quot;); if(!
+  
+
+
+</p>
+
+
+  <div class="container readlink">
+  <a href="https://blog.terrywh.net/flame/">Read more &rarr;</a>
+
+</div>
+
+
+</article>
+
+  
+    <article class="container content summary">
+  <div class="container hat">
   <h2><a href="https://blog.terrywh.net/post/2018/atom-go-plus-goroot/">Atom 插件 go-plus 配置 GOROOT
 </a>
 </h2>
@@ -415,37 +445,6 @@ Preload is the only exception here, being more of an instruction than just a hin
 
   <div class="container readlink">
   <a href="https://blog.terrywh.net/post/2015/clang-install/">Read more &rarr;</a>
-
-</div>
-
-
-</article>
-
-  
-    <article class="container content summary">
-  <div class="container hat">
-  <h2><a href="https://blog.terrywh.net/post/2015/shell-utility/">Shell 命令笔记
-</a>
-</h2>
-
-  <time datetime="2015-11-07">7 Nov, 2015</time>
-
-</div>
-
-  <p class="container content">
-  
-  
-    <blockquote>
-<p>总结了一些挺实用的 Shell 命令，Windows 和 Linux 的都有一些，如启用 Wifi 热点，清理 DNS 缓存，挂载共享等。</p>
-</blockquote>
-  
-
-
-</p>
-
-
-  <div class="container readlink">
-  <a href="https://blog.terrywh.net/post/2015/shell-utility/">Read more &rarr;</a>
 
 </div>
 

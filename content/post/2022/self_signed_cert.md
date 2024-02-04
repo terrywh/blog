@@ -18,6 +18,11 @@ openssl x509 -outform pem -in root_ca.pem -out root_ca.crt
 #### 签发证书
 
 * 配置文件
+
+> 注意：
+> 1. 缺失 `nonRepudiation` 在新版本 Chrome 中导致 SSL_ERR_IMCOMPATIBLE 错误无法继续访问；
+> 2. 该配置文件实际在 签发申请 和 签发证书 时都需要使用；
+
 ``` config
 [req]
 distinguished_name = req_dn
@@ -34,28 +39,30 @@ OU = OrgnizationUnit
 CN = CommonName
 
 [req_ext]
-keyUsage = keyEncipherment, dataEncipherment
+keyUsage = nonRepudiation, keyEncipherment, dataEncipherment
 extendedKeyUsage = serverAuth
 
 [x509_ext]
+keyUsage = nonRepudiation, keyEncipherment, dataEncipherment
 subjectKeyIdentifier = hash
-keyUsage = keyEncipherment, dataEncipherment
 extendedKeyUsage = serverAuth
 subjectAltName = @alt_names
 
 [alt_names]
 DNS.1 = *.meeting.tencent.com
-IP.2 = 10.0.1.47
+IP.2 = 10.0.0.1
 ```
 
 * 签发申请
+
 ```
 openssl req -new -nodes -newkey rsa:2048 -keyout server.key -out server.csr -config server.conf
 ```
 
 * 签发证书
+
 ``` bash
 openssl x509 -req -sha256 -days 1024 -in server.csr -CA root_ca.pem -CAkey root_ca.key -CAcreateserial -extfile server.conf -extensions x509_ext -out server.crt
 ```
 
-> 注意：该配置文件实际在 签发申请 和 签发证书 时都需要使用；
+
