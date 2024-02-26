@@ -4,14 +4,20 @@
 
 
 // ---------------------------------------------------------------------------------------------------------------------
+div.highlight {
+  margin-top: 0.2rem;
+}
 pre.highlight {
   padding: 1rem;
   border: #e9ecef 1px solid;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
 blockquote {
-  border-left: #e9ecef 3px solid;
+  margin-top: 0.2rem;
   padding-left: 1rem;
+  padding: 0.6rem 1rem 0rem 1rem;
+  border: 1px solid #e9ecef;
+  border-left: #e9ecef 3px solid;
   color: rgb(108, 117, 125);
 }
 // ---------------------------------------------------------------------------------------------------------------------

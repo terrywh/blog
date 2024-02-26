@@ -35,7 +35,8 @@ make install
 
 * 启用 Pretty Print 支持
 编辑 ~/.gdbinit 文件并填写下述内容：
-``` python {filename="~/.gdbinit"}
+``` python 
+# filename="~/.gdbinit"
 python
 import sys
 sys.path.insert(0, '/data/server/compiler/share/gcc-13/python')
