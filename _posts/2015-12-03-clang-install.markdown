@@ -1,17 +1,14 @@
 ---
-layout: default
+
 title: "更新 GCC 后引起的 clang 安装问题"
 date: 2015-12-03
 tags:
   - c++
   - clang
   - gcc
-
 categories: post
 
 ---
-
-# {{ page.title }}
 
 ![clang](/assets/images/2015/clang-install-1.png)
 

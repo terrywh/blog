@@ -8,10 +8,7 @@ categories: post
 
 ---
 
-# {{page.title}}
-
 blog.terrywh.net 迁移到 [DigitalOcean](https://www.digitalocean.com) 并重新部署，使用 [Hugo](http://gohugo.io/) 生成静态站点。
-
 
 整个站点内容的 markdown 文件保存在 Git 仓库中。同时使用 Git 钩子自动更新，编写一个脚本文件 `regenerate.sh`：
 

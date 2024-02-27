@@ -9,8 +9,6 @@ categories: book
 
 ---
 
-# {{page.title}}
-
 ![mnesweeper](/assets/images/2016/minesweeper/cover.png)
 
 在 [第三章](/2016/minesweeper/3) 中我们基本完成了雷区的绘制和布雷相关接口功能，我们留下了一个未完成的功能，“一次性打开连续的空格”。在开始编写主要游戏流程前，我们先把这里完成。

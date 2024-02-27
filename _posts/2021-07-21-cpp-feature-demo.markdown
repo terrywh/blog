@@ -1,14 +1,12 @@
 ---
 
-title: "C++ 新功能演示"
+title: "C++ 功能演示"
 date: 2021-07-21
 tags: 
   - c++
 categories: post
 
 ---
-
-# {{page.title}}
 
 * `format` - [https://godbolt.org/z/6rxG4zoaj](https://godbolt.org/z/6rxG4zoaj)
 > 从 C 集成的 printf 和 C++ 定义的类型安全的 iostream 复杂实现，均存在一些各自的缺陷和问题，在 C++20 中加入的 format 实现（基于 fmt 库）集合了前两者的优势；

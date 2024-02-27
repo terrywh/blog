@@ -7,11 +7,9 @@ categories: post
 
 ---
 
-# {{ page.title }}
-
 ![ilovebash](/assets/images/2015/shell-utility-1.jpg)
 
-> 总结了一些挺实用的 Shell 命令，Windows 和 Linux 的都有一些，如启用 Wifi 热点，清理 DNS 缓存，挂载共享等。
+这里记录了一些挺实用的 Shell 命令，Windows 和 Linux 的都有一些，如启用 Wifi 热点，清理 DNS 缓存，挂载共享等。
 
 * Wifi HotSpot (Windows)
 ``` bash

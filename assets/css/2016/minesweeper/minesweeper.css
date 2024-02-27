@@ -60,12 +60,12 @@ body { /* 对网页中的 <body></body> 所包含的内容定义“样式” */
 }
 
 .field .mask.flag { /* mask 元素上面展示旗子, 即如果一个元素同时具有 mask 和 flag 两个 class */
-	background: #ddd 0px 0px url(./flag_and_bomb.png); /* 插上旗子即就是在背景上显示图片 */
+	background: #ddd 0px 0px url(/assets/images/2016/minesweeper/sprite.png); /* 插上旗子即就是在背景上显示图片 */
 	/* 0px 0px 是指将背景图在元素上的位置 */
 }
 
 .field .cell.bomb { /* 在某个格子中显示地雷 */
-	background: #ddd -24px 0px url(./flag_and_bomb.png);
+	background: #ddd -24px 0px url(/assets/images/2016/minesweeper/sprite.png);
 	/* -24px 即就是使背景图左偏移24像素，刚好显示出了地雷的部分 */
 }
 .block.main {

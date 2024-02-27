@@ -8,7 +8,6 @@ tags:
 categories: book
 
 ---
-# {{page.title}}
 
 ![mnesweeper](/assets/images/2016/minesweeper/cover.png)
 

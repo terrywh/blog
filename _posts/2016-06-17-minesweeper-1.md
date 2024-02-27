@@ -9,8 +9,6 @@ categories: book
 
 ---
 
-# {{page.title}}
-
 ![mnesweeper](/assets/images/2016/minesweeper/cover.png)
 
 记得我最开始接触编程就是父亲在“裕兴学习机”上开发了一款“扫雷”的游戏，从此开始喜欢上了计算机编程。作为纪念，也希望能给一些正在学习网页开发的同学一点点帮助，我这里也从头开始用“网页”技术开发一款“扫雷”的小游戏。
@@ -32,12 +30,10 @@ categories: book
 
 　　**最后**，需要注意一点，在整个调试过程当中，请保证您的**设备连接在互联网上**（由于直接引入了网络上一些成熟的JavaScript库 CSS 库，辅助、简化开发工作。当然这些库可以暂时不去详细学习，只需要按照教程能够看懂即可）；
 
-![安装开发所需的工具](/images/2016/minesweeper/1-tools.png)
+![安装开发所需的工具](/assets/images/2016/minesweeper/1-tools.png)
 
 #### 游戏的入口
-
-　　目前我们暂时不进入到实际“扫雷”的开发中，我们把入口准备一下：进入游戏时，我们让用户输入自己的姓名（将来游戏结束时记录各个用户对应的成绩）：
-
+目前我们暂时不进入到实际“扫雷”的开发中，我们把入口准备一下：进入游戏时，我们让用户输入自己的姓名（将来游戏结束时记录各个用户对应的成绩）：
 ``` html
 <!DOCTYPE html>
 <html>
@@ -71,61 +67,45 @@ categories: book
 	</body>
 </html>
 ```
-
 把上面的代码放在一个文本文件中，并保存在后缀 `.html` 并在浏览器中打开就能看到下面的样子：
-
-![基本网页结构](/images/2016/minesweeper/1-page-demo.png)
-
+![基本网页结构](/assets/images/2016/minesweeper/1-page-demo.png)  
 上面的代码即就是 `HTML`。使用 `HTML` 我们能够定义出网页的基本结构：
-
 1. 最外层 `<!DOCTYPE html><html>` 和结尾处的 `</html>` 定义了一个网页的范围，也就是说，我们制作网页的内容都应该出现在这个范围之内；
-
 2. `<head>` ... `</head>` 中描述了网页的一部分“非可视区域”或“附加”信息，例如页面的文本编码（编码概念可以暂不纠结，姑且使用 UTF-8 这种编码即可），网页标题（显示窗口标题的文字），附加的样式表（`<meta href="" .... />`）等等；
-
 	> 按照 HTML5 标准中的描述，无内容标签（有内容标签：`<标签>内容</标签>`）不要求必须闭合例如 上面 `<meta .../>` 也可以写作 `<meta ... >`, 按照 XHTML 标准要求所有标签必须闭合。
-
 3. `<body>` ... `</body>` 中描述网页“可视区域”的结构，我们创建了三个区块（`<div class="xxx">...</div>`），并在其内部填充了简单的文本内容；
-
 	> 在 `HTML` 语言中使用 `<!-- -->` 来包含注释内容；
+4. `class="xxxx"` 表达了我们将对指定的区块进行“样式”定义，即 `CSS`（级联样式表），我们下面就对上述三个区块，进行对应的样式（外观、位置等）定义：（将下面内容保存为 `minesweeper.css`）：
+	``` css
+	body { /* 对网页中的 <body></body> 所包含的内容定义“样式” */
+		background: #f0f0f0; /* 定义背景颜色为淡灰色 */
+		/* 颜色值为 6 位 16 进制数字，RRGGBB 即红、绿、蓝 原色，取值从 00 ~ ff */
+		margin: 0; /* 区块外空隙 */
+	}
 
-4. `class="xxxx"` 表达了我们将对指定的区块进行“样式”定义，即 `CSS`（级联样式表），我们下面就对上述三个区块，进行对应的样式（外观、位置等）定义（将下面内容保存为 `minesweeper.css`）：
-
-
-
-``` css
-body { /* 对网页中的 <body></body> 所包含的内容定义“样式” */
-	background: #f0f0f0; /* 定义背景颜色为淡灰色 */
-	/* 颜色值为 6 位 16 进制数字，RRGGBB 即红、绿、蓝 原色，取值从 00 ~ ff */
-	margin: 0; /* 区块外空隙 */
-}
-
-.block { /* 对网页中 class="block" 的 <div> 包含的内容定义“样式” */
-	padding: 15px; /* 区块内空隙 */
-	background: #fff; /* 定义背景颜色为白色 */
-	border: 1px solid #556575; /* 定义 1 像素 实线 边框，颜色为蓝色 */
-	text-align: center; /* 让当前元素中的文本（或类文本的元素）水平居中 */
-	margin: 20px; /* 区块外空隙 */
-}
-```
+	.block { /* 对网页中 class="block" 的 <div> 包含的内容定义“样式” */
+		padding: 15px; /* 区块内空隙 */
+		background: #fff; /* 定义背景颜色为白色 */
+		border: 1px solid #556575; /* 定义 1 像素 实线 边框，颜色为蓝色 */
+		text-align: center; /* 让当前元素中的文本（或类文本的元素）水平居中 */
+		margin: 20px; /* 区块外空隙 */
+	}
+	```
 > `CSS` 中，使用 `/* */` 来表达注释
 
 为了让用户输入姓名，我们需要给用户提供一个输入框；将下面的代码替换到位置 `(1)` ：
-
 ``` html
 <form class="form-inline entry">
 	<fieldset class="form-group">
 		<label>请输入您的姓名：</label>
 		<input id="entry_input_name" type="text" class="form-control" placeholder="请输入您的姓名，以便将成绩计入排行榜！">
 	</fieldset>
-	<div class="entry-start">
-		<button id="entry_button_start" type="button" class="btn btn-primary">开始游戏</button>
-	</div>
+	<button id="entry_button_start" type="button" class="btn btn-primary">开始游戏</button>
 </form>
 ```
 
 上面代码为网页加入了输入框，及开始游戏用的按钮；为了后续方便我们对实际元素的操控，我们给每个元素起了一个名字（`id="xxxxxx"`）；  
 我们需要再补充一点“样式”让布局更美观一些（不加入这些样式的话，输入框会和开始按钮挤在一起，大家可以自行试验）：
-
 ``` css
 /* 对网页中 class 属性中同时包含 "block" "entry" 的元素 内部的
  class 属性包含 "form-inline" 的 元素 内部的
@@ -136,8 +116,7 @@ body { /* 对网页中的 <body></body> 所包含的内容定义“样式” */
 ```
 
 到这里，我们目前需要呈献给用户的“界面”已经初具规模了，大家可以自行在输入框中输入文字，点击按钮看到“按下”效果：
-
-![基本成型的网页](/images/2016/minesweeper/1-page.png)
+![基本成型的网页](/assets/images/2016/minesweeper/1-page.png)
 
 但有个问题：用户输入的姓名会在网页刷新（<kbd>F5</kbd>）后就会消失。我们希望在用户输入后，除非自行删除或修改，应该能保持之前输入的内容，所以我们加入下面的 JavaScript 代码（`minesweeper-entry.js` 文件中）：
 
@@ -166,4 +145,4 @@ body { /* 对网页中的 <body></body> 所包含的内容定义“样式” */
 > **对象**，简单来说就是可以用 . 点 来访问、调用内部属性、函数的变量；
 
 #### 完整版本演示
-https://blog.terrywh.net/books/minesweeper/minesweeper.html
+[DEMO](/book/2016/07/01/minesweeper/minesweeper-demo.html)

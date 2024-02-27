@@ -1,6 +1,5 @@
 ---
 
-layout: default
 title: "php-flame"
 date: 2017-09-27 12:22:37
 tags:
@@ -11,8 +10,6 @@ tags:
 categories: post
 
 ---
-
-# FLAME
 
 #### [https://github.com/terrywh/php-flame](https://github.com/terrywh/php-flame)
 `Flame` 是一个基于协程的异步网络开发框架（PHP扩展）类似 Swoole 但相对更简单一些:

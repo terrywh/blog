@@ -8,8 +8,6 @@ categories: post
 
 ---
 
-# {{page.title}}
-
 #### 生成 ROOT/CA 根证书
 
 ``` bash
@@ -20,12 +18,12 @@ openssl x509 -outform pem -in root_ca.pem -out root_ca.crt
 #### 签发证书
 
 * 配置文件
+注意：
+1. 缺失 `nonRepudiation` 在新版本 Chrome 中导致 SSL_ERR_IMCOMPATIBLE 错误无法继续访问；<small class="text-secondary">(更新：2023-12-22)</small>
+2. 该配置文件实际在 签发申请 和 签发证书 时都需要使用；
 
-> 注意：
-> 1. 缺失 `nonRepudiation` 在新版本 Chrome 中导致 SSL_ERR_IMCOMPATIBLE 错误无法继续访问；
-> 2. 该配置文件实际在 签发申请 和 签发证书 时都需要使用；
-
-``` config {filename="server.conf"}
+``` config
+# filename="server.conf"
 [req]
 distinguished_name = req_dn
 req_extensions = req_ext

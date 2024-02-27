@@ -8,8 +8,6 @@ categories: post
 
 ---
 
-# {{page.title}}
-
 由于需要在同一台机器部署两种 GO 环境(WSL + Win)，这里对 go-plus 代码进行一点点修改，加入 goroot 配置参数来解决这个问题：
 
 ``` javascript
