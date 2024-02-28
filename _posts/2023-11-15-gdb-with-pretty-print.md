@@ -9,6 +9,8 @@ categories: post
 
 ---
 
+> 安装版本更新时间：2024-02-27 [gdb](https://www.sourceware.org/gdb/download/)(14.1)
+
 启用 Pretty Print 可方便在基于 GDB 的调试能够更直观的查看标准库内的结构，如字符串、向量、列表等；
 一般系统默认的 GCC/G++ 安装已能正常工作；在升级安装多个 GCC 版本时，可参考如下流程配置：
 
@@ -21,16 +23,15 @@ yum install -y python3-devel gmp-devel
 
 * 下载 GDB 编译安装：
 ``` bash
-wget https://sourceware.org/pub/gdb/releases/gdb-13.2.tar.xz
-tar xf gdb-13.2.tar.xz
-cd gdb-13.2
+wget https://sourceware.org/pub/gdb/releases/gdb-14.1.tar.xz
+tar xf gdb-14.1.tar.xz
+cd gdb-14.1
 mkdir stage
 cd stage
 CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ ../configure --prefix=/data/server/compiler --with-python=/usr/bin/python3
 make -j4
 make install
 ```
-
 
 * 启用 Pretty Print 支持
 编辑 ~/.gdbinit 文件并填写下述内容：
