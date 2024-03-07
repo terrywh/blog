@@ -9,7 +9,7 @@ categories: post
 
 ---
 
-> 安装版本更新时间：2024-02-20 [gcc](https://gcc.gnu.org/releases.html)(13.2) / [llvm](https://github.com/llvm/llvm-project/releases)(17.0.6)
+> 安装版本更新时间：2024-02-20 [gcc](https://gcc.gnu.org/releases.html)(13.2) / [llvm](https://github.com/llvm/llvm-project/releases)(18.1.0)
 
 ### 安装脚本
 
@@ -30,9 +30,9 @@ make install
 #### LLVM
 重合上面 GCC 安装，自动融合使用；注意，部分系统环境可能不允许如 `pstl` / `libunwind` 同时编译输出：
 ``` bash
-wget https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.6/llvm-project-17.0.6.src.tar.xz
-tar xf llvm-project-17.0.6.src.tar.xz
-cd llvm-project-17.0.6.src
+wget https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.0/llvm-project-18.1.0.src.tar.xz
+tar xf llvm-project-18.1.0.src.tar.xz
+cd llvm-project-18.1.0.src
 mkdir stage
 cd stage
 CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;openmp;polly;pstl" -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind" -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64" ../llvm
