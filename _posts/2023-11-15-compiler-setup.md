@@ -22,29 +22,16 @@ cd gcc-13.2.0
 ./contrib/download_prerequisites # 下载依赖源码
 mkdir stage
 cd stage
-../configure --enable-bootstrap --enable-languages=c,c++,lto --prefix=/data/server/compiler --enable-shared --enable-threads=posix --enable-checking=release --disable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl --disable-libmpx --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+../configure --enable-bootstrap --enable-languages=c,c++,lto --prefix=/data/server/compiler --enable-shared --enable-threads=posix --enable-checking=release --disable-multilib --with-system-zlib --enable-__cxa_atexit  --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl --disable-libmpx --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
 make -j8
 make install
 ```
 
 请参考 [配置 GDB PrettyPrint 支持]({%post_url 2023-11-15-gdb-with-pretty-print %}) 
 
-#### LLVM
-重合上面 GCC 安装，自动融合使用；注意，部分系统环境可能不允许如 `pstl` / `libunwind` 同时编译输出：
-``` bash
-wget https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.2/llvm-project-18.1.2.src.tar.xz
-tar xf llvm-project-18.1.2.src.tar.xz
-cd llvm-project-18.1.2.src
-mkdir stage
-cd stage
-CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;openmp;polly;pstl" -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind" -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64" ../llvm
-make -j8
-make install
-```
+#### 启用工具链
+> 优先启用工具链，否则可能在后续安装 clang 的过程中出现依赖错误导致的编译问题；
 
-### 环境配置
-
-配置启用工具链：
 ``` bash
 # file="/data/server/compiler/enable"
 # 指定默认编译器
@@ -59,8 +46,20 @@ export INFOPATH=/data/server/compiler/share/info${INFOPATH:+:${INFOPATH}}
 export LD_LIBRARY_PATH=/data/server/compiler/lib:/data/server/compiler/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 ```
 
+#### LLVM
+重合上面 GCC 安装，自动融合使用；注意，部分系统环境可能不允许如 `pstl` / `libunwind` 同时编译输出：
+``` bash
+wget https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.2/llvm-project-18.1.2.src.tar.xz
+tar xf llvm-project-18.1.2.src.tar.xz
+cd llvm-project-18.1.2.src
+mkdir stage
+cd stage
+CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;openmp;polly;pstl" -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind" -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64" ../llvm
+make -j8
+make install
+```
 
-配置动态库加载路径：
+#### 动态库加载
 ``` bash
 echo "/data/server/compiler/lib64" > /etc/ld.so.conf.d/compiler_x86_64.conf
 echo "/data/server/compiler/lib"  >> /etc/ld.so.conf.d/compiler_x86_64.conf
