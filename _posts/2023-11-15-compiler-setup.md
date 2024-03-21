@@ -27,6 +27,8 @@ make -j8
 make install
 ```
 
+请参考 [配置 GDB PrettyPrint 支持]({%post_url 2023-11-15-gdb-with-pretty-print %}) 
+
 #### LLVM
 重合上面 GCC 安装，自动融合使用；注意，部分系统环境可能不允许如 `pstl` / `libunwind` 同时编译输出：
 ``` bash
@@ -35,7 +37,7 @@ tar xf llvm-project-18.1.2.src.tar.xz
 cd llvm-project-18.1.2.src
 mkdir stage
 cd stage
-CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;openmp;polly;pstl" -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi" -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64" ../llvm
+CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;openmp;polly;pstl" -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind" -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64" ../llvm
 make -j8
 make install
 ```
@@ -45,9 +47,15 @@ make install
 配置启用工具链：
 ``` bash
 # file="/data/server/compiler/enable"
+# 指定默认编译器
+# export CC=/data/server/compiler/bin/gcc
+# export CXX=/data/server/compiler/bin/g++
+# 执行路径
 export PATH=/data/server/compiler/bin${PATH:+:${PATH}}
+# 文档路径
 export MANPATH=/data/server/compiler/share/man${MANPATH:+:${MANPATH}}
 export INFOPATH=/data/server/compiler/share/info${INFOPATH:+:${INFOPATH}}
+# 加载路径
 export LD_LIBRARY_PATH=/data/server/compiler/lib:/data/server/compiler/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 ```
 
