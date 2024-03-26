@@ -9,6 +9,8 @@ tags:
 
 ---
 
+> 更新：2024-03-26
+
 #### BASIC
 ``` bash
 apt update
@@ -34,20 +36,12 @@ sysctl -p
 #### NGINX
 ``` bash
 cd ~
-wget http://nginx.org/download/nginx-1.15.12.tar.gz
-tar xf nginx-1.15.12.tar.gz
-cd nginx-1.15.12
+wget http://nginx.org/download/nginx-1.25.4.tar.gz
+tar xf nginx-1.25.4.tar.gz
+cd nginx-1.25.4
 ./configure --with-http_ssl_module --without-select_module --with-http_v2_module --with-http_gzip_static_module --prefix=/data/server/nginx
 make -j2
 make install
-```
-
-#### V2RAY
-``` bash
-cd ~
-wget https://github.com/v2ray/v2ray-core/releases/download/v4.18.1/v2ray-linux-64.zip
-cd /data/server/v2ray
-unzip ~/v2ray-linux-64.zip
 ```
 
 #### Certificate
@@ -73,3 +67,13 @@ aria2c --conf-path=/data/htdocs/downloads.terrywh.net/etc/aria2.conf
 
 #### GDB (pretty print)
 安装新版本 GDB 及配置 PrettyPrint 请参考 [GDB 安装并 PrettyPrint 支持]({%post_url 2023-11-15-gdb-with-pretty-print %})
+
+#### HELIX
+> https://github.com/helix-editor/helix/releases
+``` bash
+# ~/.config/helix/config.toml
+theme = "onedark"
+[editor]
+true-color = true
+mouse = false
+```
