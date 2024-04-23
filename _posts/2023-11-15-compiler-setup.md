@@ -16,8 +16,10 @@ categories: post
 #### 缺失依赖
 各种系统缺失的依赖组件不尽相同，常见容易缺失的组件可以考虑下面安装命令：
 ``` bash
-yum install -y ninja-build doxygen libxml2-devel swig python3-devel
+yum install -y doxygen libxml2-devel swig python3-devel cmake ninja-build
 ```
+注意：
+1. 我的一台开发机遇到了问题：https://reviews.llvm.org/D145596（使用 cmake >= 3.26 会导致一些编译参数问题；后退回到了 3.25 版本恢复）
 
 #### GCC
 应考注意参考当前系统 GCC 编译选项 `gcc -v` 并进行简单调整：
@@ -43,8 +45,9 @@ make install
 > 优先启用工具链，否则可能在后续安装 clang 的过程中出现依赖错误导致的编译问题；
 
 ``` bash
-# file="/data/server/compiler/enable"
-# 指定默认编译器
+#@file="/data/server/compiler/enable"
+
+# 可选指定默认编译器
 # export CC=/data/server/compiler/bin/gcc
 # export CXX=/data/server/compiler/bin/g++
 # 执行路径
@@ -60,17 +63,25 @@ export LD_LIBRARY_PATH=/data/server/compiler/lib:/data/server/compiler/lib64${LD
 重合上面 GCC 安装，自动融合使用；注意:
 * GCC 若禁用了 `libunwind-exception` 对应 `llvm` 的 `libunwind` 可能无法构建成功；
 * GCC 编译 `llvm` 的代码可能出现 `warning` 默认会导致编译失败；
+* 下面编译过程分离了 projects / runtimes 的构建，能够更加兼容适配不同的构建环境（实测的两台虚机其中一台再同时构建 projects/runtimes 时会发生错误）；
 * 使用 `Ninja` 作为编译命令能稍微加快构建速度；
 * 相关参数参考：https://llvm.org/docs/CMake.html
 ``` bash
 wget https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.4/llvm-project-18.1.4.src.tar.xz
 tar xf llvm-project-18.1.4.src.tar.xz
 cd llvm-project-18.1.4.src
-mkdir stage
-cd stage
-CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ cmake -G Ninja -Wno-dev -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;polly;pstl" -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind;openmp" -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_WERROR=OFF -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64" ../llvm
-ninja -j8
-ninja install
+
+# project
+CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ cmake -G Ninja -B stage_projects -S llvm -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;openmp;polly;pstl"
+ninja -C stage_projects -j8
+ninja -C stage_projects install
+
+
+# runtime 
+CC=/data/server/compiler/bin/clang CXX=/data/server/compiler/bin/clang++ cmake -G Ninja -B stage_runtimes -S runtimes -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind"
+
+ninja -C stage_runtimes -j8
+ninja -C stage_runtimes install
 ```
 
 #### 动态库加载
