@@ -90,3 +90,11 @@ echo "/data/server/compiler/lib64" > /etc/ld.so.conf.d/compiler_x86_64.conf
 echo "/data/server/compiler/lib"  >> /etc/ld.so.conf.d/compiler_x86_64.conf
 ldconfig
 ```
+
+
+#### 使用 libc++/c++abi 库
+``` bash
+clang++ main.cpp -stdlib=libc++ -static-libstdc++ -static-libgcc -fuse-ld=lld -L/data/server/compiler/lib -Wl,-Bstatic -lc++ -lc++abi -Wl,-Bdynamic -o main -v
+```
+* 上述命令使用 lld 静态链接 c++ / gcc_s 依赖库；
+* 需要额外的库链接指令避免出现符号未定义情况；
