@@ -9,7 +9,7 @@ categories: post
 
 ---
 
-> 安装版本更新时间：2024-04-18 [gcc](https://gcc.gnu.org/releases.html)(13.2) / [llvm](https://github.com/llvm/llvm-project/releases)(18.1.4)
+> 安装版本更新时间：2024-05-08 [gcc](https://gcc.gnu.org/releases.html)(14.1) / [llvm](https://github.com/llvm/llvm-project/releases)(18.1.5)
 
 ### 安装脚本
 
@@ -18,8 +18,6 @@ categories: post
 ``` bash
 yum install -y doxygen libxml2-devel swig python3-devel cmake ninja-build
 ```
-注意：
-1. 我的一台开发机遇到了问题：https://reviews.llvm.org/D145596（使用 cmake >= 3.26 会导致一些编译参数问题；后退回到了 3.25 版本恢复）
 
 #### GCC
 应考注意参考当前系统 GCC 编译选项 `gcc -v` 并进行简单调整：
@@ -28,13 +26,13 @@ yum install -y doxygen libxml2-devel swig python3-devel cmake ninja-build
 * 去除如 `bugurl` 等无关参数；
 
 ``` bash
-wget https://ftp.gwdg.de/pub/misc/gcc/releases/gcc-13.2.0/gcc-13.2.0.tar.xz
-tar xf gcc-13.2.0.tar.xz
-cd gcc-13.2.0
-./contrib/download_prerequisites # 下载依赖源码
+wget https://gcc.gnu.org/pub/gcc/releases/gcc-14.1.0/gcc-14.1.0.tar.xz
+tar xf gcc-14.1.0.tar.xz
+cd gcc-14.1.0
+./contrib/download_prerequisites # 下载依赖组件
 mkdir stage
 cd stage
-../configure --enable-bootstrap --enable-languages=c,c++,lto --prefix=/data/server/compiler --enable-shared --enable-threads=posix --enable-checking=release --disable-multilib --with-system-zlib --enable-__cxa_atexit  --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl --disable-libmpx --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+../configure --enable-bootstrap --enable-languages=c,c++,lto --prefix=/data/server/compiler --enable-shared --enable-threads=posix --enable-checking=release --disable-multilib --with-system-zlib --enable-__cxa_atexit --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl --disable-libmpx --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
 make -j8
 make install
 ```
@@ -66,17 +64,15 @@ export LD_LIBRARY_PATH=/data/server/compiler/lib:/data/server/compiler/lib64${LD
 * 下面编译过程分离了 projects / runtimes 的构建，能够更加兼容适配不同的构建环境（实测的两台虚机其中一台再同时构建 projects/runtimes 时会发生错误）；
 * 使用 `Ninja` 作为编译命令能稍微加快构建速度；
 * 相关参数参考：https://llvm.org/docs/CMake.html
-``` bash
-wget https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.4/llvm-project-18.1.4.src.tar.xz
-tar xf llvm-project-18.1.4.src.tar.xz
-cd llvm-project-18.1.4.src
 
+``` bash
+wget https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.5/llvm-project-18.1.5.src.tar.xz
+tar xf llvm-project-18.1.5.src.tar.xz
+cd llvm-project-18.1.5.src
 # project
 CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ cmake -G Ninja -B stage_projects -S llvm -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;openmp;polly;pstl"
 ninja -C stage_projects -j8
 ninja -C stage_projects install
-
-
 # runtime 
 CC=/data/server/compiler/bin/clang CXX=/data/server/compiler/bin/clang++ cmake -G Ninja -B stage_runtimes -S runtimes -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind"
 
