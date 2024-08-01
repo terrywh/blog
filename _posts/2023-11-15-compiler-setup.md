@@ -9,7 +9,7 @@ categories: post
 
 ---
 
-> 安装版本更新时间：2024-05-08 [gcc](https://gcc.gnu.org/releases.html)(14.1) / [llvm](https://github.com/llvm/llvm-project/releases)(18.1.5)
+> 安装版本更新时间：2024-07-12 [gcc](https://gcc.gnu.org/releases.html)(14.1) / [llvm](https://github.com/llvm/llvm-project/releases)(18.1.8)
 
 ### 安装脚本
 
@@ -66,9 +66,9 @@ export LD_LIBRARY_PATH=/data/server/compiler/lib:/data/server/compiler/lib64${LD
 * 相关参数参考：https://llvm.org/docs/CMake.html
 
 ``` bash
-wget https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.5/llvm-project-18.1.5.src.tar.xz
-tar xf llvm-project-18.1.5.src.tar.xz
-cd llvm-project-18.1.5.src
+wget https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/llvm-project-18.1.8.src.tar.xz
+tar xf llvm-project-18.1.8.src.tar.xz
+cd llvm-project-18.1.8.src
 # project
 CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ cmake -G Ninja -B stage_projects -S llvm -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;openmp;polly;pstl"
 ninja -C stage_projects -j8
