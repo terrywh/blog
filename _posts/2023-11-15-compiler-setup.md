@@ -9,7 +9,7 @@ categories: post
 
 ---
 
-> 安装版本更新时间：2024-07-12 [gcc](https://gcc.gnu.org/releases.html)(14.1) / [llvm](https://github.com/llvm/llvm-project/releases)(18.1.8)
+> 安装版本更新时间：2024-08-08 [gcc](https://gcc.gnu.org/releases.html)(14.2) / [llvm](https://github.com/llvm/llvm-project/releases)(18.1.8)
 
 ### 安装脚本
 
@@ -23,16 +23,17 @@ yum install -y doxygen libxml2-devel swig python3-devel cmake ninja-build
 应考注意参考当前系统 GCC 编译选项 `gcc -v` 并进行简单调整：
 * 确认 `multilib` 的启用状态；
 * 确认 `unwind-exception` 的启用状态；
+* 确认 `arch_32` 架构相关参数；
 * 去除如 `bugurl` 等无关参数；
 
 ``` bash
-wget https://gcc.gnu.org/pub/gcc/releases/gcc-14.1.0/gcc-14.1.0.tar.xz
-tar xf gcc-14.1.0.tar.xz
-cd gcc-14.1.0
+wget https://gcc.gnu.org/pub/gcc/releases/gcc-14.2.0/gcc-14.2.0.tar.xz
+tar xf gcc-14.2.0.tar.xz
+cd gcc-14.2.0
 ./contrib/download_prerequisites # 下载依赖组件
 mkdir stage
 cd stage
-../configure --enable-bootstrap --enable-languages=c,c++,lto --prefix=/data/server/compiler --enable-shared --enable-threads=posix --enable-checking=release --disable-multilib --with-system-zlib --enable-__cxa_atexit --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl --disable-libmpx --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+../configure --enable-bootstrap --enable-languages=c,c++,lto --prefix=/data/server/compiler --enable-shared --enable-threads=posix --enable-checking=release --disable-multilib --with-system-zlib --enable-__cxa_atexit --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl --disable-libmpx --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic
 make -j8
 make install
 ```
