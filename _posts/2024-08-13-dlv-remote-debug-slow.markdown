@@ -38,6 +38,15 @@ dlv --listen :33333 --api-version=2 --headless --accept-multiclient --allow-non-
             # 加入适配器配置，否则可能导致调试极其缓慢的问题
             # 参见：https://github.com/golang/vscode-go/releases/tag/v0.41.3
             "debugAdapter": "dlv-dap", 
+            # 源代码路径映射
+            "substitutePath": [
+                {
+                    # 本地路径
+                    "from":"${workspaceFolder}",
+                    # 远程路径
+                    "to":"{remote-source-folder},
+                }
+            ]
         }
     ]
 }
