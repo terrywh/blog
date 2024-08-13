@@ -1,7 +1,7 @@
 ---
 
 title: "Flatpak 安装 Fcitx5 输入漏字母问题"
-date: 2023-11-20
+date: 2024-06-12
 tags:
   - fcitx5
   - rime
