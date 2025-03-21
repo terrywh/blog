@@ -37,8 +37,11 @@ cd stage
 make -j8
 make install
 ```
-
-请参考 [配置 GDB PrettyPrint 支持]({%post_url 2023-11-15-gdb-with-pretty-print %}) 
+* 若下载依赖组件步骤出现问题或极其缓慢可考虑寻找镜像地址自行下载对应版本：
+> https://gcc.gnu.org/mirrors.html  # 集中在 /infstructure 下
+> https://www.gnu.org/prep/ftp.html # 分别在 gmp / mpfr / mpc / isl / gettext 下
+  
+* 请参考 [配置 GDB PrettyPrint 支持]({%post_url 2023-11-15-gdb-with-pretty-print %}) 
 
 #### 启用工具链
 > 优先启用工具链，否则可能在后续安装 clang 的过程中出现依赖错误导致的编译问题；
