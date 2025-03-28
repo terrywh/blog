@@ -1,7 +1,7 @@
 ---
 
 title: "C++ 功能演示"
-date: 2021-07-21
+date: 2025-03-28
 tags: 
   - c++
 categories: post
@@ -18,6 +18,11 @@ categories: post
 * `coroutine` - [https://godbolt.org/z/YcG8M4fzG](https://godbolt.org/z/YcG8M4fzG)
 > 原生协程支持，有较高的自由度进行定制；
 
-* `pipe operator` [https://godbolt.org/z/GbfsKesaM](https://godbolt.org/z/GbfsKesaM)
+* `pipe operator` - [https://godbolt.org/z/GbfsKesaM](https://godbolt.org/z/GbfsKesaM)
 > 直观使用 operator | 形态表达一个处理流程（配合 outcome::result 错误处理）；
 
+* `proxy` - [https://godbolt.org/z/6oM34ePrz](https://godbolt.org/z/6oM34ePrz)
+> 微软 Proxy 库新形态的“多态”机制；
+
+* `return value optimization` - [https://godbolt.org/z/57W1sWrsP](https://godbolt.org/z/57W1sWrsP)
+> 返回值优化机制及可能的特例演示；
