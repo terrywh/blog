@@ -5,3 +5,4 @@ package.json
 bun.lock
 .hugo_build.lock
 hugo
+hugo_*.tar.gz
