@@ -1,14 +1,14 @@
 +++
 
 title =  "新版本 GCC / LLVM 安装"
-date = 2025-05-06
+date = 2025-05-19
 tags = ['c++', 'shell']
 thumbnail = "https://llvm.org/img/LLVMWyvernSmall.png"
 toc = true
 
 +++
 
-* 安装版本更新时间：2025-05-06 [gcc](https://gcc.gnu.org/releases.html)(15.1) / [llvm](https://github.com/llvm/llvm-project/releases)(20.1.4)
+* 安装版本更新时间：2025-05-06 [gcc](https://gcc.gnu.org/releases.html)(15.1) / [llvm](https://github.com/llvm/llvm-project/releases)(20.1.5)
 
 ## 依赖
 各种系统缺失的依赖组件不尽相同，常见容易缺失的组件可以考虑下面安装命令：
@@ -57,9 +57,9 @@ yum install -y doxygen libxml2-devel swig python3-devel cmake ninja-build
 * 相关参数参考：https://llvm.org/docs/CMake.html
 
     ``` bash
-    wget https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.4/llvm-project-20.1.4.src.tar.xz
-    tar xf llvm-project-20.1.4.src.tar.xz
-    cd llvm-project-20.1.4.src
+    wget https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.5/llvm-project-20.1.5.src.tar.xz
+    tar xf llvm-project-20.1.5.src.tar.xz
+    cd llvm-project-20.1.5.src
     # project
     CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ cmake -G Ninja -B stage_projects -S llvm -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;openmp;polly;pstl"
     ninja -C stage_projects -j8
