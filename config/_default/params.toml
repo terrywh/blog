@@ -5,6 +5,7 @@ description = "C++/Go/Js/PHP"
 profilePicture = "/avatar.jpg"
 customCss = ["css/custom.css"]
 mainSections = ["post"]
+reversepagetitle = true
 
 [mermaid]
 enable = true
