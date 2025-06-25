@@ -1,7 +1,7 @@
 ---
 
 title: "避免内存拷贝的字符串与字节串互转（Go）"
-date: 2021-10-14
+date: 2025-06-25
 tags:
   - go
 thumbnail: "https://camo.githubusercontent.com/ff89c51c9e5a3de2b752b37bf6ab32401b9649d7acb1633ece9a40c85ae28b95/68747470733a2f2f676f6c616e672e6f72672f646f632f676f706865722f6669766579656172732e6a7067"
@@ -18,7 +18,7 @@ thumbnail: "https://camo.githubusercontent.com/ff89c51c9e5a3de2b752b37bf6ab32401
   }
   ```
 
-* 避免内存拷贝：
+* 避免内存拷贝(旧版本）：
     ``` go
     func s2b(s string) (b []byte) {
         /* #nosec G103 */
@@ -37,3 +37,12 @@ thumbnail: "https://camo.githubusercontent.com/ff89c51c9e5a3de2b752b37bf6ab32401
     }
     ```
 
+* 避免内存拷贝（新版本 >= 1.20）：
+    ``` go
+    func s2b(s string) (b []byte) {
+        return unsafe.Slice(unsafe.StringData(s), len(s))
+    }
+    func b2s(b []byte) string {
+        return unsafe.String(unsafe.SliceData(b, len(b)))
+    }
+    ```
