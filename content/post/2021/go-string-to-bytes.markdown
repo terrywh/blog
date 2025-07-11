@@ -43,6 +43,6 @@ thumbnail: "https://camo.githubusercontent.com/ff89c51c9e5a3de2b752b37bf6ab32401
         return unsafe.Slice(unsafe.StringData(s), len(s))
     }
     func b2s(b []byte) string {
-        return unsafe.String(unsafe.SliceData(b, len(b)))
+        return unsafe.String(unsafe.SliceData(b), len(b))
     }
     ```
