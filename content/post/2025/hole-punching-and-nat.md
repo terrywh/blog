@@ -1,11 +1,11 @@
 +++
 title =  "打洞（P2P）与 NAT 类型"
-date = 2025-05-06
+date = 2025-08-01
 tags = ['network','p2p']
 
 +++
 
-之前一直有大致了解这里，无意发现一篇文章总结的比较到位，尤其是这个图：
+之前一直有大致了解这里，今天无意发现一篇文章总结的比较全面到位，尤其是这个图：
 
 ![NAT](https://support.dh2i.com/assets/images/nat_types-81eca38551a438b10ae1bb6c16ba1aee.png)
 
@@ -27,5 +27,5 @@ bun run hole-punching-client.js --name={client_id_1} --server={server_address:po
 # 客户端2（内网，尝试连接到客户端1）
 bun run hole-punching-client.js --name={client_id_2} --server={server_address:port=61002}
 
-connect to: client_id_1
+> connect {client_id_1}
 ```

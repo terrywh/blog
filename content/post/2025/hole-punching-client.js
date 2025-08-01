@@ -58,13 +58,13 @@ const socket = await Bun.udpSocket({
                     client.peer = Object.assign({}, client.peer, { port, addr });
                     clearTimeout(this._connectTo);
                     clearInterval(this._connect);
-                    client._ac.abort();
-                    client._readline.write("connected\r\n");
+                    if (client._ac) client._ac.abort();
+                    client._readline.write(`${Bun.color("green", "ansi-256")}connected:${Bun.color("black", "ansi-256")} ${addr}:${port}\r\n`);
                     if (client._resolve) client._resolve();
                     break;
                 case "data":
                     client._ac.abort();
-                    client._readline.write(`${data.data}\n`);
+                    client._readline.write(`${Bun.color("gray", "ansi-256")}${data.data}${Bun.color("black", "ansi-256")}\r\n`);
                     break;
             }
         }
@@ -125,6 +125,8 @@ await (async function () {
         } catch (ex) {
             continue;
         }
+        client._ac = null;
+        input = input.trim();
 
         if (input.startsWith("connect ")) {
             try {
@@ -133,12 +135,17 @@ await (async function () {
                 console.error("failed to connect:", ex)
                 continue
             }
+        } else if (input == "info") {
+            client._readline.write(`${Bun.color("green", "ansi-256")}self: ${Bun.color("black", "ansi-256")}${client.name}\r\n`);
+            if (client.peer)
+                client._readline.write(`${Bun.color("green", "ansi-256")}peer: ${Bun.color("black", "ansi-256")} ${client.peer.name} ${client.peer.addr}:${client.peer.port}\r\n`);
         } else if (input == "exit") {
             break;
         } else {
             await publish(input);
-        };
+        }
     }
+
 
     client._readline.close();
     socket.close();
