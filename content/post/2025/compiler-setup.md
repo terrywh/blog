@@ -8,7 +8,7 @@ toc = true
 
 +++
 
-* 安装版本更新时间：2025-07-14 [gcc](https://gcc.gnu.org/releases.html)(15.1) / [llvm](https://github.com/llvm/llvm-project/releases)(20.1.8)
+* 安装版本更新时间：2025-08-15 [gcc](https://gcc.gnu.org/releases.html)(15.2) / [llvm](https://github.com/llvm/llvm-project/releases)(20.1.8)
 
 ## 依赖
 各种系统缺失的依赖组件不尽相同，常见容易缺失的组件可以考虑下面安装命令：
@@ -26,9 +26,9 @@ yum install -y doxygen libxml2-devel swig python3-devel cmake ninja-build
 * 去除如 `bugurl` 等无关参数；
 
     ``` bash
-    wget https://ftp.gnu.org/gnu/gcc/gcc-15.1.0/gcc-15.1.0.tar.xz
-    tar xf gcc-15.1.0.tar.xz
-    cd gcc-15.1.0
+    wget https://ftp.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz
+    tar xf gcc-15.2.0.tar.xz
+    cd gcc-15.2.0
     ./contrib/download_prerequisites # 下载依赖组件
     mkdir stage
     cd stage
@@ -38,12 +38,12 @@ yum install -y doxygen libxml2-devel swig python3-devel cmake ninja-build
     ```
 
 * 若下载依赖组件步骤出现问题或极其缓慢可考虑寻找镜像地址自行下载对应版本：
-  * https://gcc.gnu.org/mirrors.html  # /infstructure  
-  * https://www.gnu.org/prep/ftp.html # /gmp | /mpfr | /mpc | /gettext  
-  * https://libisl.sourceforge.io/    # /isl  
-  
-* 请参考 [配置 GDB PrettyPrint 支持]({{% ref "/post/2025/gdb-with-pretty-print" %}}) 
-* 可以使用 Bun/Shell 执行脚本: 
+  * https://gcc.gnu.org/mirrors.html  # /infstructure
+  * https://www.gnu.org/prep/ftp.html # /gmp | /mpfr | /mpc | /gettext
+  * https://libisl.sourceforge.io/    # /isl
+
+* 请参考 [配置 GDB PrettyPrint 支持]({{% ref "/post/2025/gdb-with-pretty-print" %}})
+* 可以使用 Bun/Shell 执行脚本自动安装最新版本:
     ``` bash
     curl -fsSL {{% param baseURL %}}/post/2025/compiler-setup-gcc.js | bun -
     ```
@@ -64,7 +64,7 @@ yum install -y doxygen libxml2-devel swig python3-devel cmake ninja-build
     CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ cmake -G Ninja -B stage_projects -S llvm -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;openmp;polly;pstl"
     ninja -C stage_projects -j8
     ninja -C stage_projects install
-    # runtime 
+    # runtime
     CC=/data/server/compiler/bin/clang CXX=/data/server/compiler/bin/clang++ cmake -G Ninja -B stage_runtimes -S runtimes -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind"
 
     ninja -C stage_runtimes -j8

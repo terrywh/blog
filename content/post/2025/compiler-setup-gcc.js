@@ -4,13 +4,13 @@ import { $, semver } from "bun";
 import os from "node:os";
 import fs from "node:fs/promises";
 
-const concurrency = Math.trunc(os.cpus().length * 3 / 4);
+const concurrency = Math.trunc((os.cpus().length * 3) / 4);
 const gnumirror = "https://mirrors.ustc.edu.cn/gnu";
 
 async function isDirectory(path) {
     try {
         return (await fs.stat(path)).isDirectory();
-    } catch(ex) {
+    } catch (ex) {
         return false;
     }
 }
@@ -18,13 +18,13 @@ async function isDirectory(path) {
 async function isFile(path) {
     try {
         return (await fs.stat(path)).isFile();
-    } catch(ex) {
+    } catch (ex) {
         return false;
     }
 }
 
 async function latest() {
-    const vregex = /gcc-(\d+\.\d+\.\d+)/
+    const vregex = /gcc-(\d+\.\d+\.\d+)/;
     let version = "1.0.0";
     const rsp = await fetch(`${gnumirror}/gcc/`);
     for (let line of (await rsp.text()).split("\n")) {
@@ -43,50 +43,63 @@ function dependency(s) {
 }
 
 async function build() {
-    console.log("------------------------------------------------")
+    console.log("------------------------------------------------");
     await $`yum install -y doxygen libxml2-devel swig python3-devel cmake ninja-build`;
-    
-    console.log("------------------------------------------------")
-    
+
+    console.log("------------------------------------------------");
+
     const version = await latest();
     const filename = `gcc-${version}.tar.xz`;
+    await Bun.write(
+        Bun.file("compiler-gcc-setup.json"),
+        JSON.stringify({ filename, version }),
+    );
     console.log("latest:", version);
 
-    console.log("------------------------------------------------")
+    console.log("------------------------------------------------");
     if (await Bun.file(filename).exists()) {
         console.log("package already exists.");
     } else {
-        await $`wget -O ${filename} ${gnumirror}/gcc/gcc-${version}/${filename}`;
+        await $`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${gnumirror}/gcc/gcc-${version}/${filename}`;
     }
 
-    console.log("------------------------------------------------")
-    if (isDirectory(`gcc-${version}`)) {
-        console.log("package already deflated");
+    console.log("------------------------------------------------");
+    if (await isDirectory(`gcc-${version}`)) {
+        console.log("package already deflated.");
     } else {
+        console.log("deflating ...");
         await $`tar xf ${filename}`;
     }
 
-    console.log("------------------------------------------------")
-    const deps = await Bun.file(`gcc-${version}/contrib/download_prerequisites`).text();
+    console.log("------------------------------------------------");
+    console.log("preparing prerequisites ...");
+
+    const deps = await Bun.file(
+        `gcc-${version}/contrib/download_prerequisites`,
+    ).text();
     for (let line of deps.split("\n")) {
-        if (line.endsWith(".tar.gz'") || line.endsWith(".tar.bz2'") || line.endsWith(".tar.xz'")) {
+        if (
+            line.endsWith(".tar.gz'") ||
+            line.endsWith(".tar.bz2'") ||
+            line.endsWith(".tar.xz'")
+        ) {
             let [name, file] = dependency(line);
             if (!name) continue;
-            
-            if (isFile(`gcc-${version}/${file}`)) {
+
+            if (await isFile(`gcc-${version}/${file}`)) {
                 console.log("dependency exists:", file);
                 continue;
             }
 
             if (name == "isl") {
-                await $`wget -O gcc-${version}/${file} https://libisl.sourceforge.io/${file}`;
+                await $`wget --quiet --show-progress --progress=bar:force:noscroll -O gcc-${version}/${file} https://libisl.sourceforge.io/${file}`;
             } else {
-                await $`wget -O gcc-${version}/${file} ${gnumirror}/${name}/${file}`;
+                await $`wget --quiet --show-progress --progress=bar:force:noscroll -O gcc-${version}/${file} ${gnumirror}/${name}/${file}`;
             }
         }
     }
-    await $`cd gcc-${version}; ./contrib/download_prerequisites`;
 
+    await $`cd gcc-${version}; ./contrib/download_prerequisites`;
     console.log("------------------------------------------------");
     await $`rm -rf gcc-${version}/stage && mkdir gcc-${version}/stage`;
 
@@ -96,22 +109,22 @@ async function build() {
 
     const ignore_prefix = [
         "with-pkgversion=",
-        "mandir=", 
+        "mandir=",
         "infodir=",
         "with-bugurl=",
         "disable-libunwind-exceptions",
         "build=",
         "without-isl",
-    ]
+    ];
 
     let rst = ["../configure"];
     for (let entry of conf) {
         if (entry.startsWith("enable-languages=")) {
             rst.push("enable-languages=c,c++,lto");
         } else if (entry.startsWith("prefix=")) {
-            rst.push("prefix=/data/server/compiler")
+            rst.push("prefix=/data/server/compiler");
         } else if (ignore_prefix.some((p) => entry.startsWith(p))) {
-            ; // ignore
+            // ignore
         } else {
             rst.push(entry.trim());
         }
@@ -119,14 +132,35 @@ async function build() {
     rst = rst.filter((v) => v.length > 0);
     rst = rst.join(" --");
     console.log(rst);
-    await $`cd gcc-${version}/stage && ${{raw: rst}}`;
-
+    console.log("------------------------------------------------");
+    await $`cd gcc-${version}/stage && ${{ raw: rst }}`;
+    console.log("------------------------------------------------");
     await $`cd gcc-${version}/stage && make -j${concurrency} && make install`;
+    console.log("------------------------------------------------");
+    console.log("done.");
+}
+
+async function previousSetup() {
+    try {
+        return await Bun.file("compiler-gcc-setup.json").json();
+    } catch (ex) {
+        console.error(ex);
+        return { filename: "gcc-15.2.0.tar.xz", version: "15.2.0" };
+    }
 }
 
 async function clean() {
+    const { filename, version } = await previousSetup();
+    console.log("------------------------------------------------");
+    console.log("cleaning up ...");
     await $`rm -rf ${filename}`;
     await $`rm -rf gcc-${version}`;
+    console.log("------------------------------------------------");
+    console.log("done.");
 }
 
-await build();
+if (process.argv[2] === "clean") {
+    await clean();
+} else {
+    await build();
+}
