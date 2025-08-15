@@ -70,6 +70,10 @@ yum install -y doxygen libxml2-devel swig python3-devel cmake ninja-build
     ninja -C stage_runtimes -j8
     ninja -C stage_runtimes install
     ```
+* 可以使用 Bun/Shell 执行脚本自动安装最新版本:
+    ``` bash
+    curl -fsSL {{% param baseURL %}}/post/2025/compiler-setup-llvm.js | bun -
+    ```
 
 ## 配置
 ### 启用工具链

@@ -47,15 +47,8 @@ async function build() {
     await $`yum install -y doxygen libxml2-devel swig python3-devel cmake ninja-build`;
 
     console.log("------------------------------------------------");
-
-    const version = await latest();
-    const filename = `gcc-${version}.tar.xz`;
-    await Bun.write(
-        Bun.file("compiler-gcc-setup.json"),
-        JSON.stringify({ filename, version }),
-    );
-    console.log("latest:", version);
-
+    const { filename, version } = await setup();
+    console.log(filename);
     console.log("------------------------------------------------");
     if (await Bun.file(filename).exists()) {
         console.log("package already exists.");
@@ -101,6 +94,7 @@ async function build() {
 
     await $`cd gcc-${version}; ./contrib/download_prerequisites`;
     console.log("------------------------------------------------");
+    console.log("staging ...");
     await $`rm -rf gcc-${version}/stage && mkdir gcc-${version}/stage`;
 
     console.log("------------------------------------------------");
@@ -140,17 +134,27 @@ async function build() {
     console.log("done.");
 }
 
-async function previousSetup() {
+async function setup() {
+    const file = Bun.file("compiler-setup-gcc.json");
+    let stat = null;
     try {
-        return await Bun.file("compiler-gcc-setup.json").json();
+        const stat = await file.stat();
     } catch (ex) {
-        console.error(ex);
-        return { filename: "gcc-15.2.0.tar.xz", version: "15.2.0" };
+        stat = null;
+    }
+
+    if (stat == null || Date.now() - stat.mtime.getTime() > 3600 * 1000) {
+        const version = await latest();
+        const filename = `gcc-${version}.tar.xz`;
+        await Bun.write(file, { filename, version });
+        return { filename, version };
+    } else {
+        return await file.json();
     }
 }
 
 async function clean() {
-    const { filename, version } = await previousSetup();
+    const { filename, version } = await setup();
     console.log("------------------------------------------------");
     console.log("cleaning up ...");
     await $`rm -rf ${filename}`;
