@@ -1,8 +1,8 @@
 ---
 
 title: "安装和配置 Oh-My-Bash"
-date: 2025-03-28
-tags: 
+date: 2025-08-22
+tags:
   - bash
 
 ---
@@ -34,6 +34,15 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/mast
     ``` bash
     # ~/.bashrc
     OSH_THEME="powerline-multiline"
+    ```
+
+    * 简化文件夹
+    ``` bash
+    # ~/.oh-my-bash/themes/powerline/powerline.base.sh
+    function __powerline_cwd_prompt {
+      # _omb_util_print "$(pwd | sed "s|^${HOME}|~|")|${CWD_THEME_PROMPT_COLOR}"
+        _omb_util_print "\W|${CWD_THEME_PROMPT_COLOR}"
+    }
     ```
 
     * 隐藏主机用户：
