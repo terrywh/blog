@@ -138,7 +138,7 @@ async function setup() {
     const file = Bun.file("compiler-setup-gcc.json");
     let stat = null;
     try {
-        const stat = await file.stat();
+        stat = await file.stat();
     } catch (ex) {
         stat = null;
     }
