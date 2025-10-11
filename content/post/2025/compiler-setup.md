@@ -8,7 +8,7 @@ toc = true
 
 +++
 
-* 安装版本更新时间：2025-09-19 [gcc](https://gcc.gnu.org/releases.html)(15.2) / [llvm](https://github.com/llvm/llvm-project/releases)(21.1.1)
+* 安装版本更新时间：2025-10-10 [gcc](https://gcc.gnu.org/releases.html)(15.2) / [llvm](https://github.com/llvm/llvm-project/releases)(21.1.3)
 
 ## 依赖
 各种系统缺失的依赖组件不尽相同，常见容易缺失的组件可以考虑下面安装命令：
@@ -52,23 +52,18 @@ yum install -y doxygen libxml2-devel swig python3-devel cmake ninja-build
 重合上面 GCC 安装，自动融合使用；注意:
 * GCC 若禁用了 `libunwind-exception` 对应 `llvm` 的 `libunwind` 可能无法构建成功；
 * GCC 编译 `llvm` 的代码可能出现 `warning` 默认会导致编译失败；
-* 下面编译过程分离了 projects / runtimes 的构建，能够更加兼容适配不同的构建环境（实测的两台虚机其中一台再同时构建 projects/runtimes 时会发生错误）；
+* 可考虑分离了 projects / runtimes 的构建，部分场景可能规避错误问题；
 * 使用 `Ninja` 作为编译命令能稍微加快构建速度；
 * 相关参数参考：https://llvm.org/docs/CMake.html
 
     ``` bash
-    wget https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.1/llvm-project-21.1.1.src.tar.xz
-    tar xf llvm-project-21.1.1.src.tar.xz
-    cd llvm-project-21.1.1.src
+    wget https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.3/llvm-project-21.1.3.src.tar.xz
+    tar xf llvm-project-21.1.3.src.tar.xz
+    cd llvm-project-21.1.3.src
     # project
-    CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ cmake -G Ninja -B stage_projects -S llvm -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;openmp;polly;pstl"
-    ninja -C stage_projects -j8
-    ninja -C stage_projects install
-    # runtime
-    CC=/data/server/compiler/bin/clang CXX=/data/server/compiler/bin/clang++ cmake -G Ninja -B stage_runtimes -S runtimes -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind"
-
-    ninja -C stage_runtimes -j8
-    ninja -C stage_runtimes install
+    CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ cmake -G Ninja -B stage -S llvm -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;polly" -DLLVM_ENABLE_RUNTIMES="all"
+    ninja -C stage -j8
+    ninja -C stage install
     ```
 * 可以使用 Bun/Shell 执行脚本自动安装最新版本:
     ``` bash

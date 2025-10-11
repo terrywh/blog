@@ -89,21 +89,9 @@ async function build() {
                 "-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64",
         });
     }
-    await $`cd llvm-project-${version}.src && cmake -G Ninja -B stage_projects -S llvm -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;openmp;polly;pstl"`;
-    await $`cd llvm-project-${version}.src && ninja -C stage_projects -j${concurrency}`;
-    await $`cd llvm-project-${version}.src && ninja -C stage_projects install`;
-    console.log(
-        "--------------------------------------------------------------------------------------------------",
-    );
-    $.env({
-        ...process.env,
-        CXX: "/data/server/compiler/bin/clang++",
-        CC: "/data/server/compiler/bin/clang",
-        LDFLAGS: "-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64",
-    });
-    await $`cd llvm-project-${version}.src && cmake -G Ninja -B stage_runtimes -S runtimes -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind"`;
-    await $`cd llvm-project-${version}.src && ninja -C stage_runtimes -j${concurrency}`;
-    await $`cd llvm-project-${version}.src && ninja -C stage_runtimes install`;
+    await $`cd llvm-project-${version}.src && cmake -G Ninja -B stage -S llvm -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;polly" -DLLVM_ENABLE_RUNTIMES="all"`;
+    await $`cd llvm-project-${version}.src && ninja -C stage -j${concurrency}`;
+    await $`cd llvm-project-${version}.src && ninja -C stage install`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
