@@ -8,7 +8,7 @@ toc = true
 
 +++
 
-* 安装版本更新时间：2025-12-17 [gcc](https://gcc.gnu.org/releases.html)(15.2) / [llvm](https://github.com/llvm/llvm-project/releases)(21.1.8)
+* 安装版本更新时间：2026-05-09 [gcc](https://gcc.gnu.org/releases.html)(16.1) / [llvm](https://github.com/llvm/llvm-project/releases)(22.1.5)
 
 ## 依赖
 各种系统缺失的依赖组件不尽相同，常见容易缺失的组件可以考虑下面安装命令：
@@ -26,9 +26,9 @@ yum install -y doxygen libxml2-devel swig python3-devel cmake ninja-build
 * 去除如 `bugurl` 等无关参数；
 
     ``` bash
-    wget https://ftp.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz
-    tar xf gcc-15.2.0.tar.xz
-    cd gcc-15.2.0
+    wget https://ftp.gnu.org/gnu/gcc/gcc-16.1.0/gcc-16.1.0.tar.xz
+    tar xf gcc-16.1.0.tar.xz
+    cd gcc-16.1.0
     ./contrib/download_prerequisites # 下载依赖组件
     mkdir stage
     cd stage
@@ -57,9 +57,9 @@ yum install -y doxygen libxml2-devel swig python3-devel cmake ninja-build
 * 相关参数参考：https://llvm.org/docs/CMake.html
 
     ``` bash
-    wget https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/llvm-project-21.1.8.src.tar.xz
-    tar xf llvm-project-21.1.8.src.tar.xz
-    cd llvm-project-21.1.8.src
+    wget https://github.com/llvm/llvm-project/releases/download/llvmorg-22.1.5/llvm-project-22.1.5.src.tar.xz
+    tar xf llvm-project-22.1.5.src.tar.xz
+    cd llvm-project-22.1.5.src
     # project
     CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ cmake -G Ninja -B stage -S llvm -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;polly" -DLLVM_ENABLE_RUNTIMES="all"
     ninja -C stage -j8

@@ -5,7 +5,7 @@ import os from "node:os";
 import fs from "node:fs/promises";
 
 const concurrency = Math.trunc((os.cpus().length * 3) / 4);
-const gnumirror = "https://mirrors.ustc.edu.cn/gnu";
+const gnumirror = "https://mirrors.tuna.tsinghua.edu.cn/gnu";
 
 async function isDirectory(path) {
     try {
@@ -26,7 +26,11 @@ async function isFile(path) {
 async function latest() {
     const vregex = /gcc-(\d+\.\d+\.\d+)/;
     let version = "1.0.0";
-    const rsp = await fetch(`${gnumirror}/gcc/`);
+    const rsp = await fetch(`${gnumirror}/gcc/`, {
+        headers: {
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+        },
+    });
     for (let line of (await rsp.text()).split("\n")) {
         const r = vregex.exec(line);
         if (r && semver.order(version, r[1]) < 0) {
@@ -53,6 +57,7 @@ async function build() {
     if (await Bun.file(filename).exists()) {
         console.log("package already exists.");
     } else {
+        console.log(`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${gnumirror}/gcc/gcc-${version}/${filename}`);
         await $`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${gnumirror}/gcc/gcc-${version}/${filename}`;
     }
 
@@ -85,8 +90,10 @@ async function build() {
             }
 
             if (name == "isl") {
+                console.log(`wget --quiet --show-progress --progress=bar:force:noscroll -O gcc-${version}/${file} https://libisl.sourceforge.io/${file}`);
                 await $`wget --quiet --show-progress --progress=bar:force:noscroll -O gcc-${version}/${file} https://libisl.sourceforge.io/${file}`;
             } else {
+                console.log(`wget --quiet --show-progress --progress=bar:force:noscroll -O gcc-${version}/${file} ${gnumirror}/${name}/${file}`);
                 await $`wget --quiet --show-progress --progress=bar:force:noscroll -O gcc-${version}/${file} ${gnumirror}/${name}/${file}`;
             }
         }
@@ -146,7 +153,7 @@ async function setup() {
     if (stat == null || Date.now() - stat.mtime.getTime() > 3600 * 1000) {
         const version = await latest();
         const filename = `gcc-${version}.tar.xz`;
-        await Bun.write(file, { filename, version });
+        await Bun.write(file, JSON.stringify({ filename, version }));
         return { filename, version };
     } else {
         return await file.json();
