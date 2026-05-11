@@ -28,14 +28,14 @@ async function wget(url, filename) {
 
 async function latest() {
     const html = await (
-        await fetch(`https://github.com/openssl/openssl/releases/latest/`)
+        await fetch(`https://github.com/quickjs-ng/quickjs/releases/latest/`)
     ).text();
-    const match = /<h1 [^>]+>OpenSSL ([^<]+)<\/h1>/.exec(html);
+    const match = /<h1 [^>]+>v([^<]+)<\/h1>/.exec(html);
     return [match[1]];
 }
 
 async function setup() {
-    const setup = Bun.file("openssl-setup.json");
+    const setup = Bun.file("quickjs-setup.json");
     let stats;
     try {
         stats = await setup.stat();
@@ -44,13 +44,14 @@ async function setup() {
     }
     if (stats === null || Date.now() - stats.mtime.getTime() > 3600 * 1000) {
         const [version] = await latest();
-        const filename = `openssl-${version}.tar.xz`;
+        const filename = `quickjs-${version}.tar.gz`;
         await Bun.write(setup, JSON.stringify({ version, filename }));
-        const url = `https://github.com/openssl/openssl/releases/download/openssl-${version}/openssl-${version}.tar.gz`;
+        const url = `https://github.com/quickjs-ng/quickjs/archive/refs/tags/v${version}.tar.gz`;
+        // const url = `https://github.com/quickjs-ng/quickjs/releases/download/openssl-${version}/openssl-${version}.tar.gz`;
         return { filename, url, version };
     } else {
         const { version, filename } = await setup.json();
-        const url = `https://github.com/openssl/openssl/releases/download/openssl-${version}/openssl-${version}.tar.gz`;
+        const url = `https://github.com/quickjs-ng/quickjs/archive/refs/tags/v${version}.tar.gz`;
         return { filename, url, version };
     }
 }
@@ -74,7 +75,7 @@ async function build() {
         "--------------------------------------------------------------------------------------------------",
     );
     console.log("deflating ...");
-    if (!(await isDirectory(`openssl-${version}`))) {
+    if (!(await isDirectory(`quickjs-${version}`))) {
         await $`tar xf ${filename}`;
     }
     console.log(
@@ -89,9 +90,11 @@ async function build() {
                 "-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64",
         });
     }
-    await $`cd openssl-${version} && ./Configure no-shared --prefix=/data/vendor/openssl-${version}`;
-    await $`cd openssl-${version} && make -j${concurrency}`;
-    await $`cd openssl-${version} && make install`;
+    await $`cd quickjs-${version} && mkdir -p stage`;
+    console.log(`cd quickjs-${version}/stage && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/vendor/quickjs-${version} -DQJS_BUILD_LIBC=ON ../`)
+    await $`cd quickjs-${version}/stage && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/vendor/quickjs-${version} -DQJS_BUILD_LIBC=ON ../`;
+    await $`cd quickjs-${version}/stage && make -j${concurrency}`;
+    await $`cd quickjs-${version}/stage && make install`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
@@ -105,7 +108,7 @@ async function clean() {
     console.log("cleaning up ...");
     const { filename, version } = await setup();
     await $`rm -rf ${filename}`;
-    await $`rm -rf openssl-${version}`;
+    await $`rm -rf quickjs-${version}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
