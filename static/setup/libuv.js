@@ -1,8 +1,10 @@
 #! ~/.bun/bin/bun
 
-import { $, semver } from "bun";
+import { $ } from "bun";
 import os from "node:os";
 import fs from "node:fs/promises";
+
+const concurrency = Math.trunc((os.cpus().length * 3) / 4);
 
 async function isDirectory(path) {
     try {
@@ -26,20 +28,14 @@ async function wget(url, filename) {
 
 async function latest() {
     const html = await (
-        await fetch(`https://www.boost.org/releases/latest/`)
+        await fetch(`https://github.com/libuv/libuv/releases/latest/`)
     ).text();
-    const match1 = /http:\/\/www\.boost\.org\/doc\/libs\/([^<\s\b"]+)/.exec(
-        html,
-    );
-    const match2 =
-        /github\.com\/boostorg\/boost\/releases\/tag\/boost-([^<\s\b"]+)/.exec(
-            html,
-        );
-    return [match1[1], match2[1]];
+    const match = /<h1 [^>]+>v([^:\s]+)/.exec(html);
+    return [match[1]];
 }
 
 async function setup() {
-    const setup = Bun.file("boost-setup.json");
+    const setup = Bun.file("libuv-setup.json");
     let stats;
     try {
         stats = await setup.stat();
@@ -47,17 +43,15 @@ async function setup() {
         stats = null;
     }
     if (stats === null || Date.now() - stats.mtime.getTime() > 3600 * 1000) {
-        const [fversion, uversion] = await latest();
-        await Bun.write(setup, JSON.stringify({ fversion, uversion }));
-        const filename = `boost_${fversion}.tar.bz2`;
-        const url = `https://archives.boost.io/release/${uversion}/source/${filename}`;
-
-        return { filename, url, fversion, uversion };
+        const [version] = await latest();
+        const filename = `libuv-${version}.tar.xz`;
+        await Bun.write(setup, JSON.stringify({ version, filename }));
+        const url = `https://github.com/libuv/libuv/archive/refs/tags/v${version}.tar.gz`;
+        return { filename, url, version };
     } else {
-        const { fversion, uversion } = await setup.json();
-        const filename = `boost_${fversion}.tar.bz2`;
-        const url = `https://archives.boost.io/release/${uversion}/source/${filename}`;
-        return { filename, url, fversion, uversion };
+        const { version, filename } = await setup.json();
+        const url = `https://github.com/libuv/libuv/archive/refs/tags/v${version}.tar.gz`;
+        return { filename, url, version };
     }
 }
 
@@ -65,7 +59,7 @@ async function build() {
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
-    const { filename, url, fversion, uversion } = await setup();
+    const { filename, url, version } = await setup();
     console.log(filename);
     console.log(
         "--------------------------------------------------------------------------------------------------",
@@ -75,21 +69,29 @@ async function build() {
     } else {
         await wget(url, filename);
     }
+
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
     console.log("deflating ...");
-    if (!(await isDirectory(`boost_${fversion}`))) {
+    if (!(await isDirectory(`libuv-${version}`))) {
         await $`tar xf ${filename}`;
     }
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
-    await $`cd boost_${fversion} && ./bootstrap.sh --prefix=/data/vendor/boost-${uversion}`;
-    console.log(
-        "--------------------------------------------------------------------------------------------------",
-    );
-    await $`cd boost_${fversion} && ./b2 --prefix=/data/vendor/boost-${uversion} cxxflags="-fPIC" variant=release link=static threading=multi install`;
+    if (await isFile("/data/server/compiler/bin/gcc")) {
+        $.env({
+            ...process.env,
+            CXX: "/data/server/compiler/bin/g++",
+            CC: "/data/server/compiler/bin/gcc",
+            LDFLAGS:
+                "-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64",
+        });
+    }
+    await $`cd libuv-${version} && cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/vendor/libuv-${version}`;
+    await $`cd libuv-${version} && ninja -C build -j${concurrency}`;
+    await $`cd libuv-${version} && ninja -C build install`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
@@ -101,9 +103,9 @@ async function clean() {
         "--------------------------------------------------------------------------------------------------",
     );
     console.log("cleaning up ...");
-    const { filename, url, fversion, uversion } = await setup();
+    const { filename, version } = await setup();
     await $`rm -rf ${filename}`;
-    await $`rm -rf boost_${fversion}`;
+    await $`rm -rf libuv-${version}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
