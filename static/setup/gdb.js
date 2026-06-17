@@ -29,6 +29,7 @@ async function isFile(path) {
 }
 
 async function wget(url, filename) {
+    console.log(`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${url}`);
     await $`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${url}`;
 }
 
