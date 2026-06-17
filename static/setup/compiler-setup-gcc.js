@@ -5,7 +5,12 @@ import os from "node:os";
 import fs from "node:fs/promises";
 
 const concurrency = Math.trunc((os.cpus().length * 3) / 4);
-const gnumirror = "https://mirrors.tuna.tsinghua.edu.cn/gnu";
+
+// Directory configuration (can be overridden via environment variables)
+const CONFIG = {
+    serverDir: process.env.SERVER_DIR || "/data/server",
+    gnuMirror: process.env.GNU_MIRROR || "https://mirrors.tuna.tsinghua.edu.cn/gnu",
+};
 
 async function isDirectory(path) {
     try {
@@ -26,7 +31,7 @@ async function isFile(path) {
 async function latest() {
     const vregex = /gcc-(\d+\.\d+\.\d+)/;
     let version = "1.0.0";
-    const rsp = await fetch(`${gnumirror}/gcc/`, {
+        const rsp = await fetch(`${CONFIG.gnuMirror}/gcc/`, {
         headers: {
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
         },
@@ -58,7 +63,7 @@ async function build() {
         console.log("package already exists.");
     } else {
         console.log(`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${gnumirror}/gcc/gcc-${version}/${filename}`);
-        await $`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${gnumirror}/gcc/gcc-${version}/${filename}`;
+        await $`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${CONFIG.gnuMirror}/gcc/gcc-${version}/${filename}`;
     }
 
     console.log("------------------------------------------------");
@@ -93,8 +98,8 @@ async function build() {
                 console.log(`wget --quiet --show-progress --progress=bar:force:noscroll -O gcc-${version}/${file} https://libisl.sourceforge.io/${file}`);
                 await $`wget --quiet --show-progress --progress=bar:force:noscroll -O gcc-${version}/${file} https://libisl.sourceforge.io/${file}`;
             } else {
-                console.log(`wget --quiet --show-progress --progress=bar:force:noscroll -O gcc-${version}/${file} ${gnumirror}/${name}/${file}`);
-                await $`wget --quiet --show-progress --progress=bar:force:noscroll -O gcc-${version}/${file} ${gnumirror}/${name}/${file}`;
+                console.log(`wget --quiet --show-progress --progress=bar:force:noscroll -O gcc-${version}/${file} ${CONFIG.gnuMirror}/${name}/${file}`);
+                await $`wget --quiet --show-progress --progress=bar:force:noscroll -O gcc-${version}/${file} ${CONFIG.gnuMirror}/${name}/${file}`;
             }
         }
     }
@@ -123,7 +128,7 @@ async function build() {
         if (entry.startsWith("enable-languages=")) {
             rst.push("enable-languages=c,c++,lto");
         } else if (entry.startsWith("prefix=")) {
-            rst.push("prefix=/data/server/compiler");
+            rst.push(`prefix=${CONFIG.serverDir}/compiler`);
         } else if (ignore_prefix.some((p) => entry.startsWith(p))) {
             // ignore
         } else {

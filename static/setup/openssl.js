@@ -6,6 +6,12 @@ import fs from "node:fs/promises";
 
 const concurrency = Math.trunc((os.cpus().length * 3) / 4);
 
+// Directory configuration (can be overridden via environment variables)
+const CONFIG = {
+    serverDir: process.env.SERVER_DIR || "/data/server",
+    vendorDir: process.env.VENDOR_DIR || "/data/vendor",
+};
+
 async function isDirectory(path) {
     try {
         return (await fs.stat(path)).isDirectory();
@@ -80,16 +86,16 @@ async function build() {
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
-    if (await isFile("/data/server/compiler/bin/gcc")) {
+    if (os.platform() !== "darwin" && await isFile(`${CONFIG.serverDir}/compiler/bin/gcc`)) {
         $.env({
             ...process.env,
-            CXX: "/data/server/compiler/bin/g++",
-            CC: "/data/server/compiler/bin/gcc",
+            CXX: `${CONFIG.serverDir}/compiler/bin/g++`,
+            CC: `${CONFIG.serverDir}/compiler/bin/gcc`,
             LDFLAGS:
-                "-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64",
+                `-Wl,-rpath,${CONFIG.serverDir}/compiler/lib64 -L${CONFIG.serverDir}/compiler/lib64`,
         });
     }
-    await $`cd openssl-${version} && ./Configure no-shared --prefix=/data/vendor/openssl-${version}`;
+    await $`cd openssl-${version} && ./Configure no-shared --prefix=${CONFIG.vendorDir}/openssl-${version}`;
     await $`cd openssl-${version} && make -j${concurrency}`;
     await $`cd openssl-${version} && make install`;
     console.log(

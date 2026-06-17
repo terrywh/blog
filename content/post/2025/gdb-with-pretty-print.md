@@ -23,15 +23,19 @@ yum install -y python3-devel gmp-devel mpfr-devel ncurses-devel
 * 下载 GDB 编译安装：
 > 镜像列表：https://www.gnu.org/prep/ftp.html#gnu_mirror_list
 ``` bash
-wget https://ftp.gnu.org/gnu/gdb/gdb-17.1.tar.xz
-tar xf gdb-17.1.tar.xz
-cd gdb-17.1
+wget https://ftp.gnu.org/gnu/gdb/gdb-17.2.tar.xz
+tar xf gdb-17.2.tar.xz
+cd gdb-17.2
 mkdir stage
 cd stage
 CC=/data/server/compiler/bin/gcc CXX=/data/server/compiler/bin/g++ ../configure --prefix=/data/server/compiler --with-python=/usr/bin/python3
 make -j8
 make install
 ```
+* 可以使用 Bun/Shell 执行脚本自动安装最新版本:
+    ``` bash
+    curl -fsSL {{% param baseURL %}}/setup/gdb.js | bun -
+    ```
 
 * 启用 Pretty Print 支持
 编辑 ~/.gdbinit 文件并填写下述内容：

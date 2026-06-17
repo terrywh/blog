@@ -3,6 +3,11 @@
 import { $ } from "bun";
 import fs from "node:fs/promises";
 
+// Directory configuration (can be overridden via environment variables)
+const CONFIG = {
+    vendorDir: process.env.VENDOR_DIR || "/data/vendor",
+};
+
 async function isDirectory(path) {
     try {
         return (await fs.stat(path)).isDirectory();
@@ -84,11 +89,11 @@ async function build() {
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
-    await $`cd boost_${fversion} && ./bootstrap.sh --prefix=/data/vendor/boost-${uversion}`;
+    await $`cd boost_${fversion} && ./bootstrap.sh --prefix=${CONFIG.vendorDir}/boost-${uversion}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
-    await $`cd boost_${fversion} && ./b2 --prefix=/data/vendor/boost-${uversion} cxxflags="-fPIC" variant=release link=static threading=multi install`;
+    await $`cd boost_${fversion} && ./b2 --prefix=${CONFIG.vendorDir}/boost-${uversion} cxxflags="-fPIC" variant=release link=static threading=multi install`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );

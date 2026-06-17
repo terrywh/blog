@@ -11,9 +11,8 @@ import fs from "node:fs/promises";
 
 // 目录与路径配置
 const CONFIG = {
-    base: "/data/server", // 或 /data/server 根据你的实际环境修改
+    serverDir: process.env.SERVER_DIR || "/data/server", // 根据你的实际环境修改
     link: "llama",
-    repo: "ggml-org/llama.cpp",
     mirror: "https://gh-proxy.com/", // GitHub Release 代理加速地址
 };
 
@@ -29,7 +28,7 @@ async function getFileStatus(path) {
 
 // 获取最新版本号（参考 openssl.js 的逻辑，这里使用 GitHub API 提高准确性）
 async function getVersion() {
-    const apiUrl = `https://api.github.com/repos/${CONFIG.repo}/releases/latest`;
+    const apiUrl = `https://api.github.com/repos/ggml-org/llama.cpp/releases/latest`;
     try {
         const rsp = await fetch(apiUrl, {
             headers: {
@@ -59,13 +58,13 @@ async function build() {
     const archSuffix = await getSuffix();
 
     // 文件名模式：llama-b9637-bin-macos-arm64.tar.gz
-    const fileName = `llama-${version}-bin-${suffix}.tar.gz`;
-    const extractDir = `${CONFIG.base}/llama-${version}`;
-    const linkPath = `${CONFIG.base}/${CONFIG.link}`;
+    const fileName = `llama-${version}-bin-${archSuffix}.tar.gz`;
+    const extractDir = `${CONFIG.serverDir}/llama-${version}`;
+    const linkPath = `${CONFIG.serverDir}/${CONFIG.link}`;
 
     // 组合 URL，使用镜像代理
     // API 返回的 tag_name 可能不带 v 或带 v，此处假设直接匹配文件名规则
-    const downloadUrl = `${CONFIG.mirror}https://github.com/${CONFIG.repoOwner}/${CONFIG.repoName}/releases/download/${version}/${fileName}`;
+    const downloadUrl = `${CONFIG.mirror}https://github.com/ggml-org/llama.cpp/releases/download/${version}/${fileName}`;
 
     console.log(`目标版本: ${version}, 架构后缀: ${archSuffix}`);
     console.log(`下载文件: ${fileName}`);
@@ -77,20 +76,21 @@ async function build() {
     } else {
         // 2. 下载
         console.log(`正在下载 ${fileName} ...`);
+        console.log(`cd ${CONFIG.serverDir} && wget -q --show-progress --progress=bar:force:noscroll -O ${fileName} ${downloadUrl}`)
         try {
-            await $`cd ${CONFIG.base} && wget -q --show-progress --progress=bar:force:noscroll -O ${fileName} ${downloadUrl}`;
+            await $`cd ${CONFIG.serverDir} && wget -q --show-progress --progress=bar:force:noscroll -O ${fileName} ${downloadUrl}`;
         } catch (e) {
             console.error("下载失败:", e);
             return;
         }
 
         // 3. 解压
-        const fileExist = await getFileStatus(`${CONFIG.base}/${fileName}`);
+        const fileExist = await getFileStatus(`${CONFIG.serverDir}/${fileName}`);
         if (fileExist === 'file') {
             console.log(`正在解压到 ${extractDir} ...`);
             try {
                 // tar 命令自动创建目录并提取
-                await $`cd ${CONFIG.base} && tar -xzf ${fileName}`;
+                await $`cd ${CONFIG.serverDir} && tar -xzf ${fileName}`;
             } catch (e) {
                 console.error("解压失败:", e);
                 return;
@@ -98,7 +98,7 @@ async function build() {
 
             // 4. 清理压缩包
             try {
-                await $`rm -f ${CONFIG.base}/${fileName}`;
+                await $`rm -f ${CONFIG.serverDir}/${fileName}`;
             } catch (ignore) {}
         } else {
             throw new Error("下载文件丢失，执行失败");

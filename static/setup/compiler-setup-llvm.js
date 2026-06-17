@@ -1,10 +1,14 @@
 #! ~/.bun/bin/bun
 
 import { $, semver } from "bun";
-import os from "node:os";
 import fs from "node:fs/promises";
 
 const concurrency = Math.trunc((os.cpus().length * 3) / 4);
+
+// Directory configuration (can be overridden via environment variables)
+const CONFIG = {
+    serverDir: process.env.SERVER_DIR || "/data/server",
+};
 
 async function isDirectory(path) {
     try {
@@ -80,16 +84,16 @@ async function build() {
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
-    if (await isFile("/data/server/compiler/bin/gcc")) {
+    if (await isFile(`${CONFIG.serverDir}/compiler/bin/gcc`)) {
         $.env({
             ...process.env,
-            CXX: "/data/server/compiler/bin/g++",
-            CC: "/data/server/compiler/bin/gcc",
+            CXX: `${CONFIG.serverDir}/compiler/bin/g++`,
+            CC: `${CONFIG.serverDir}/compiler/bin/gcc`,
             LDFLAGS:
-                "-Wl,-rpath,/data/server/compiler/lib64 -L/data/server/compiler/lib64",
+                `-Wl,-rpath,${CONFIG.serverDir}/compiler/lib64 -L${CONFIG.serverDir}/compiler/lib64`,
         });
     }
-    await $`cd llvm-project-${version}.src && cmake -G Ninja -B stage -S llvm -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/data/server/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;polly" -DLLVM_ENABLE_RUNTIMES="all"`;
+    await $`cd llvm-project-${version}.src && cmake -G Ninja -B stage -S llvm -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${CONFIG.serverDir}/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;polly" -DLLVM_ENABLE_RUNTIMES="all"`;
     await $`cd llvm-project-${version}.src && ninja -C stage -j${concurrency}`;
     await $`cd llvm-project-${version}.src && ninja -C stage install`;
     console.log(
