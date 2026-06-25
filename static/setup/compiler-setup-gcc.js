@@ -62,7 +62,7 @@ async function build() {
     if (await Bun.file(filename).exists()) {
         console.log("package already exists.");
     } else {
-        console.log(`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${gnumirror}/gcc/gcc-${version}/${filename}`);
+        console.log(`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${CONFIG.gnuMirror}/gcc/gcc-${version}/${filename}`);
         await $`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${CONFIG.gnuMirror}/gcc/gcc-${version}/${filename}`;
     }
 
