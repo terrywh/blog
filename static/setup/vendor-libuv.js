@@ -1,6 +1,6 @@
 #! ~/.bun/bin/bun
 
-import { $, semver } from "bun";
+import { $ } from "bun";
 import os from "node:os";
 import fs from "node:fs/promises";
 
@@ -29,19 +29,20 @@ async function isFile(path) {
 }
 
 async function wget(url, filename) {
+    // URL和filename都已提前拼接好，直接使用单个插值
     await $`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${url}`;
 }
 
 async function latest() {
     const html = await (
-        await fetch(`https://github.com/openssl/openssl/releases/latest/`)
+        await fetch(`https://github.com/libuv/libuv/releases/latest/`)
     ).text();
-    const match = /<h1 [^>]+>OpenSSL ([^<]+)<\/h1>/.exec(html);
+    const match = /<h1 [^>]+>v([^:\s]+)/.exec(html);
     return [match[1]];
 }
 
 async function setup() {
-    const setup = Bun.file("openssl-setup.json");
+    const setup = Bun.file("libuv-setup.json");
     let stats;
     try {
         stats = await setup.stat();
@@ -50,13 +51,13 @@ async function setup() {
     }
     if (stats === null || Date.now() - stats.mtime.getTime() > 3600 * 1000) {
         const [version] = await latest();
-        const filename = `openssl-${version}.tar.xz`;
+        const filename = `libuv-${version}.tar.xz`;
         await Bun.write(setup, JSON.stringify({ version, filename }));
-        const url = `https://github.com/openssl/openssl/releases/download/openssl-${version}/openssl-${version}.tar.gz`;
+        const url = `https://github.com/libuv/libuv/archive/refs/tags/v${version}.tar.gz`;
         return { filename, url, version };
     } else {
         const { version, filename } = await setup.json();
-        const url = `https://github.com/openssl/openssl/releases/download/openssl-${version}/openssl-${version}.tar.gz`;
+        const url = `https://github.com/libuv/libuv/archive/refs/tags/v${version}.tar.gz`;
         return { filename, url, version };
     }
 }
@@ -80,7 +81,8 @@ async function build() {
         "--------------------------------------------------------------------------------------------------",
     );
     console.log("deflating ...");
-    if (!(await isDirectory(`openssl-${version}`))) {
+    const srcDir = `libuv-${version}`;
+    if (!(await isDirectory(srcDir))) {
         await $`tar xf ${filename}`;
     }
     console.log(
@@ -95,9 +97,13 @@ async function build() {
                 `-Wl,-rpath,${CONFIG.serverDir}/compiler/lib64 -L${CONFIG.serverDir}/compiler/lib64`,
         });
     }
-    await $`cd openssl-${version} && ./Configure no-shared --prefix=${CONFIG.vendorDir}/openssl-${version}`;
-    await $`cd openssl-${version} && make -j${concurrency}`;
-    await $`cd openssl-${version} && make install`;
+    const installPrefix = `${CONFIG.vendorDir}/libuv-${version}`;
+    const cmakeCmd = `cd ${srcDir} && cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${installPrefix}`;
+    await $`${{ raw: cmakeCmd }}`;
+    const ninjaBuildCmd = `cd ${srcDir} && ninja -C build -j${concurrency}`;
+    await $`${{ raw: ninjaBuildCmd }}`;
+    const ninjaInstallCmd = `cd ${srcDir} && ninja -C build install`;
+    await $`${{ raw: ninjaInstallCmd }}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
@@ -110,8 +116,9 @@ async function clean() {
     );
     console.log("cleaning up ...");
     const { filename, version } = await setup();
+    const srcDir = `libuv-${version}`;
     await $`rm -rf ${filename}`;
-    await $`rm -rf openssl-${version}`;
+    await $`rm -rf ${srcDir}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );

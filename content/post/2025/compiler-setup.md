@@ -8,7 +8,7 @@ toc = true
 
 +++
 
-* 安装版本更新时间：2026-05-09 [gcc](https://gcc.gnu.org/releases.html)(16.1) / [llvm](https://github.com/llvm/llvm-project/releases)(22.1.7)
+* 安装版本更新时间：2026-05-09 [gcc](https://gcc.gnu.org/releases.html)(16.1) / [llvm](https://github.com/llvm/llvm-project/releases)(22.1.8)
 
 ## 依赖
 各种系统缺失的依赖组件不尽相同，常见容易缺失的组件可以考虑下面安装命令：

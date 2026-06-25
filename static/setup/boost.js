@@ -25,6 +25,7 @@ async function isFile(path) {
 }
 
 async function wget(url, filename) {
+    // URL和filename都已提前拼接好，直接使用单个插值
     await $`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${url}`;
 }
 
@@ -83,17 +84,20 @@ async function build() {
         "--------------------------------------------------------------------------------------------------",
     );
     console.log("deflating ...");
-    if (!(await isDirectory(`boost_${fversion}`))) {
+    const srcDir = `boost_${fversion}`;
+    if (!(await isDirectory(srcDir))) {
         await $`tar xf ${filename}`;
     }
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
-    await $`cd boost_${fversion} && ./bootstrap.sh --prefix=${CONFIG.vendorDir}/boost-${uversion}`;
+    const prefix = `${CONFIG.vendorDir}/boost-${uversion}`;
+    await $`cd ${srcDir} && ./bootstrap.sh --prefix=${prefix}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
-    await $`cd boost_${fversion} && ./b2 --prefix=${CONFIG.vendorDir}/boost-${uversion} cxxflags="-fPIC" variant=release link=static threading=multi install`;
+    const b2Cmd = `cd ${srcDir} && ./b2 --prefix=${prefix} cxxflags="-fPIC" variant=release link=static threading=multi install`;
+    await $`${{ raw: b2Cmd }}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
@@ -106,8 +110,9 @@ async function clean() {
     );
     console.log("cleaning up ...");
     const { filename, url, fversion, uversion } = await setup();
+    const srcDir = `boost_${fversion}`;
     await $`rm -rf ${filename}`;
-    await $`rm -rf boost_${fversion}`;
+    await $`rm -rf ${srcDir}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );

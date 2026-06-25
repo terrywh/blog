@@ -63,12 +63,14 @@ async function build() {
     if (await Bun.file(filename).exists()) {
         console.log("package already exists.");
     } else {
-        console.log(`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${CONFIG.gnuMirror}/gcc/gcc-${version}/${filename}`);
-        await $`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${CONFIG.gnuMirror}/gcc/gcc-${version}/${filename}`;
+        const downloadCmd = `wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${CONFIG.gnuMirror}/gcc/gcc-${version}/${filename}`;
+        console.log(downloadCmd);
+        await $`${{raw: downloadCmd}}`;
     }
 
     console.log("------------------------------------------------");
-    if (await isDirectory(`gcc-${version}`)) {
+    const srcDir = `gcc-${version}`;
+    if (await isDirectory(srcDir)) {
         console.log("package already deflated.");
     } else {
         console.log("deflating ...");
@@ -79,7 +81,7 @@ async function build() {
     console.log("preparing prerequisites ...");
 
     const deps = await Bun.file(
-        `gcc-${version}/contrib/download_prerequisites`,
+        `${srcDir}/contrib/download_prerequisites`,
     ).text();
     for (let line of deps.split("\n")) {
         if (
@@ -90,25 +92,31 @@ async function build() {
             let [name, file] = dependency(line);
             if (!name) continue;
 
-            if (await isFile(`gcc-${version}/${file}`)) {
+            const depOutput = `${srcDir}/${file}`;
+            if (await isFile(depOutput)) {
                 console.log("dependency exists:", file);
                 continue;
             }
 
             if (name == "isl") {
-                console.log(`wget --quiet --show-progress --progress=bar:force:noscroll -O gcc-${version}/${file} https://libisl.sourceforge.io/${file}`);
-                await $`wget --quiet --show-progress --progress=bar:force:noscroll -O gcc-${version}/${file} https://libisl.sourceforge.io/${file}`;
+                const depUrl = `https://libisl.sourceforge.io/${file}`;
+                const depCmd = `wget --quiet --show-progress --progress=bar:force:noscroll -O ${depOutput} ${depUrl}`;
+                await $`${{raw: depCmd}}`;
             } else {
-                console.log(`wget --quiet --show-progress --progress=bar:force:noscroll -O gcc-${version}/${file} ${CONFIG.gnuMirror}/${name}/${file}`);
-                await $`wget --quiet --show-progress --progress=bar:force:noscroll -O gcc-${version}/${file} ${CONFIG.gnuMirror}/${name}/${file}`;
+                const depUrl = `${CONFIG.gnuMirror}/${name}/${file}`;
+                const depCmd = `wget --quiet --show-progress --progress=bar:force:noscroll -O ${depOutput} ${depUrl}`;
+                await $`${{raw: depCmd}}`;
             }
         }
     }
 
-    await $`cd gcc-${version}; ./contrib/download_prerequisites`;
+    const downloadCmd = `cd ${srcDir}; ./contrib/download_prerequisites`;
+    await $`${{ raw: downloadCmd }}`;
     console.log("------------------------------------------------");
     console.log("staging ...");
-    await $`rm -rf gcc-${version}/stage && mkdir gcc-${version}/stage`;
+    const stageDir = `${srcDir}/stage`;
+    const stageCmd = `rm -rf ${stageDir} && mkdir ${stageDir}`;
+    await $`${{ raw: stageCmd }}`;
 
     console.log("------------------------------------------------");
     let conf = await $`/usr/bin/gcc -v 2>&1 | grep ../configure`.text();
@@ -140,9 +148,11 @@ async function build() {
     rst = rst.join(" --");
     console.log(rst);
     console.log("------------------------------------------------");
-    await $`cd gcc-${version}/stage && ${{ raw: rst }}`;
+    const configureCmd = `cd ${stageDir} && ${rst}`;
+    await $`${{ raw: configureCmd }}`;
     console.log("------------------------------------------------");
-    await $`cd gcc-${version}/stage && make -j${concurrency} && make install`;
+    const makeCmd = `cd ${stageDir} && make -j${concurrency} && make install`;
+    await $`${{ raw: makeCmd }}`;
     console.log("------------------------------------------------");
     console.log("done.");
 }
@@ -168,10 +178,11 @@ async function setup() {
 
 async function clean() {
     const { filename, version } = await setup();
+    const srcDir = `gcc-${version}`;
     console.log("------------------------------------------------");
     console.log("cleaning up ...");
     await $`rm -rf ${filename}`;
-    await $`rm -rf gcc-${version}`;
+    await $`rm -rf ${srcDir}`;
     console.log("------------------------------------------------");
     console.log("done.");
 }

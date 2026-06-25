@@ -27,6 +27,7 @@ async function isFile(path) {
 }
 
 async function wget(url, filename) {
+    // URL和filename都已提前拼接好，直接使用单个插值
     await $`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${url}`;
 }
 
@@ -78,7 +79,8 @@ async function build() {
         "--------------------------------------------------------------------------------------------------",
     );
     console.log("deflating ...");
-    if (!(await isDirectory(`llvm-project-${version}.src`))) {
+    const srcDir = `llvm-project-${version}.src`;
+    if (!(await isDirectory(srcDir))) {
         await $`tar xf ${filename}`;
     }
     console.log(
@@ -93,9 +95,13 @@ async function build() {
                 `-Wl,-rpath,${CONFIG.serverDir}/compiler/lib64 -L${CONFIG.serverDir}/compiler/lib64`,
         });
     }
-    await $`cd llvm-project-${version}.src && cmake -G Ninja -B stage -S llvm -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${CONFIG.serverDir}/compiler -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;polly" -DLLVM_ENABLE_RUNTIMES="all"`;
-    await $`cd llvm-project-${version}.src && ninja -C stage -j${concurrency}`;
-    await $`cd llvm-project-${version}.src && ninja -C stage install`;
+    const installPrefix = `${CONFIG.serverDir}/compiler`;
+    const cmakeCmd = `cd ${srcDir} && cmake -G Ninja -B stage -S llvm -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${installPrefix} -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;polly" -DLLVM_ENABLE_RUNTIMES="all"`;
+    await $`${{ raw: cmakeCmd }}`;
+    const ninjaBuildCmd = `cd ${srcDir} && ninja -C stage -j${concurrency}`;
+    await $`${{ raw: ninjaBuildCmd }}`;
+    const ninjaInstallCmd = `cd ${srcDir} && ninja -C stage install`;
+    await $`${{ raw: ninjaInstallCmd }}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
@@ -108,8 +114,9 @@ async function clean() {
     );
     console.log("cleaning up ...");
     const { filename, version } = await setup();
+    const srcDir = `llvm-project-${version}.src`;
     await $`rm -rf ${filename}`;
-    await $`rm -rf llvm-project-${version}.src`;
+    await $`rm -rf ${srcDir}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );

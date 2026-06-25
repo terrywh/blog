@@ -33,7 +33,7 @@ make install
 ```
 * 可以使用 Bun/Shell 执行脚本自动安装最新版本:
     ``` bash
-    curl -fsSL {{% param baseURL %}}/setup/gdb.js | bun -
+    curl -fsSL {{% param baseURL %}}/setup/server-gdb.js | bun -
     ```
 
 * 启用 Pretty Print 支持

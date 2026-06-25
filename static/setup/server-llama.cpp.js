@@ -76,21 +76,25 @@ async function build() {
     } else {
         // 2. 下载
         console.log(`正在下载 ${fileName} ...`);
-        console.log(`cd ${CONFIG.serverDir} && wget -q --show-progress --progress=bar:force:noscroll -O ${fileName} ${downloadUrl}`)
+        const wgetCommand = `cd ${CONFIG.serverDir} && wget -q --show-progress --progress=bar:force:noscroll -O ${fileName} ${downloadUrl}`;
+        console.log(wgetCommand);
         try {
-            await $`cd ${CONFIG.serverDir} && wget -q --show-progress --progress=bar:force:noscroll -O ${fileName} ${downloadUrl}`;
+            // 使用 raw 让 shell 解析整段命令，避免 Bun 对相邻字面+插值的 argv 拆分/转义
+            await $`${{ raw: wgetCommand }}`;
         } catch (e) {
             console.error("下载失败:", e);
             return;
         }
 
         // 3. 解压
-        const fileExist = await getFileStatus(`${CONFIG.serverDir}/${fileName}`);
+        const archivePath = `${CONFIG.serverDir}/${fileName}`;
+        const fileExist = await getFileStatus(archivePath);
         if (fileExist === 'file') {
             console.log(`正在解压到 ${extractDir} ...`);
             try {
                 // tar 命令自动创建目录并提取
-                await $`cd ${CONFIG.serverDir} && tar -xzf ${fileName}`;
+                const tarCmd = `cd ${CONFIG.serverDir} && tar -xzf ${fileName}`;
+                await $`${{ raw: tarCmd }}`;
             } catch (e) {
                 console.error("解压失败:", e);
                 return;
@@ -98,7 +102,7 @@ async function build() {
 
             // 4. 清理压缩包
             try {
-                await $`rm -f ${CONFIG.serverDir}/${fileName}`;
+                await $`rm -f ${archivePath}`;
             } catch (ignore) {}
         } else {
             throw new Error("下载文件丢失，执行失败");

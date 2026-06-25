@@ -29,6 +29,7 @@ async function isFile(path) {
 }
 
 async function wget(url, filename) {
+    // URL和filename都已提前拼接好，直接使用单个插值
     console.log(`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${url}`);
     await $`wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${url}`;
 }
@@ -78,13 +79,16 @@ async function build() {
 
     console.log("------------------------------------------------");
     console.log("deflating ...");
-    if (!(await isDirectory(`gdb-${version}`))) {
+    const srcDir = `gdb-${version}`;
+    if (!(await isDirectory(srcDir))) {
         await $`tar xf ${filename}`;
     }
 
     console.log("------------------------------------------------");
     console.log("staging ...");
-    await $`rm -rf gdb-${version}/stage && mkdir gdb-${version}/stage`;
+    const stageDir = `${srcDir}/stage`;
+    const stageCmd = `rm -rf ${stageDir} && mkdir ${stageDir}`;
+    await $`${{ raw: stageCmd }}`;
 
     console.log("------------------------------------------------");
     $.env({
@@ -92,11 +96,14 @@ async function build() {
         CC:  `${CONFIG.serverDir}/compiler/bin/gcc`,
         CXX: `${CONFIG.serverDir}/compiler/bin/g++`,
     });
-    console.log(`../configure --prefix=${CONFIG.serverDir}/compiler --with-python=/usr/bin/python3`);
-    await $`cd gdb-${version}/stage && ../configure --prefix=${CONFIG.serverDir}/compiler --with-python=/usr/bin/python3`;
+    const prefix = `${CONFIG.serverDir}/compiler`;
+    console.log(`../configure --prefix=${prefix} --with-python=/usr/bin/python3`);
+    const configureCmd = `cd ${stageDir} && ../configure --prefix=${prefix} --with-python=/usr/bin/python3`;
+    await $`${{ raw: configureCmd }}`;
 
     console.log("------------------------------------------------");
-    await $`cd gdb-${version}/stage && make -j${concurrency} && make install`;
+    const makeCmd = `cd ${stageDir} && make -j${concurrency} && make install`;
+    await $`${{ raw: makeCmd }}`;
     console.log("------------------------------------------------");
     console.log("done.");
 }
@@ -105,8 +112,9 @@ async function clean() {
     console.log("------------------------------------------------");
     console.log("cleaning up ...");
     const { filename, version } = await setup();
+    const srcDir = `gdb-${version}`;
     await $`rm -rf ${filename}`;
-    await $`rm -rf gdb-${version}`;
+    await $`rm -rf ${srcDir}`;
     console.log("------------------------------------------------");
     console.log("done.");
 }
