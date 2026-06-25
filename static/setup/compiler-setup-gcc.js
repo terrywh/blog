@@ -30,13 +30,14 @@ async function isFile(path) {
 
 async function latest() {
     const vregex = /gcc-(\d+\.\d+\.\d+)/;
-    let version = "1.0.0";
-        const rsp = await fetch(`${CONFIG.gnuMirror}/gcc/`, {
+    let version = "16.1.0";
+    const rsp = await fetch(`${CONFIG.gnuMirror}/gcc/`, {
         headers: {
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
         },
     });
-    for (let line of (await rsp.text()).split("\n")) {
+    const data = await rsp.text();
+    for (let line of data.split("\n")) {
         const r = vregex.exec(line);
         if (r && semver.order(version, r[1]) < 0) {
             version = r[1];
@@ -174,8 +175,9 @@ async function clean() {
     console.log("------------------------------------------------");
     console.log("done.");
 }
-
-if (process.argv[2] === "clean") {
+if (process.argv[2] === "version") {
+    console.log(await latest());
+} else if (process.argv[2] === "clean") {
     await clean();
 } else {
     await build();
