@@ -20,7 +20,8 @@ async function isDirectory(path) {
 
 async function isFile(path) {
     try {
-        return (await fs.stat(path)).isFile();
+        const stat = await fs.stat(path);
+        return stat.isFile() && stat.size > 0;
     } catch (ex) {
         return false;
     }
@@ -72,6 +73,7 @@ async function build() {
     if (await isFile(filename)) {
         console.log("already exists.");
     } else {
+        await $`rm -f ${filename}`;
         await wget(url, filename);
     }
 

@@ -22,7 +22,8 @@ async function isDirectory(path) {
 
 async function isFile(path) {
     try {
-        return (await fs.stat(path)).isFile();
+        const stat = await fs.stat(path);
+        return stat.isFile() && stat.size > 0;
     } catch (ex) {
         return false;
     }
@@ -60,9 +61,10 @@ async function build() {
     const { filename, version } = await setup();
     console.log(filename);
     console.log("------------------------------------------------");
-    if (await Bun.file(filename).exists()) {
+    if (await isFile(filename)) {
         console.log("package already exists.");
     } else {
+        await $`rm -f ${filename}`;
         const downloadCmd = `wget --quiet --show-progress --progress=bar:force:noscroll -O ${filename} ${CONFIG.gnuMirror}/gcc/gcc-${version}/${filename}`;
         console.log(downloadCmd);
         await $`${{raw: downloadCmd}}`;
@@ -97,6 +99,7 @@ async function build() {
                 console.log("dependency exists:", file);
                 continue;
             }
+            await $`rm -f ${depOutput}`;
 
             if (name == "isl") {
                 const depUrl = `https://libisl.sourceforge.io/${file}`;
