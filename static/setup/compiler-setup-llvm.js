@@ -98,7 +98,7 @@ async function build() {
         });
     }
     const installPrefix = `${CONFIG.serverDir}/compiler`;
-    const cmakeCmd = `cd ${srcDir} && cmake -G Ninja -B stage -S llvm -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${installPrefix} -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;polly" -DLLVM_ENABLE_RUNTIMES="all"`;
+    const cmakeCmd = `cd ${srcDir} && cmake -G Ninja -B stage -S llvm -Wno-dev -DLLVM_ENABLE_RTTI=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${installPrefix} -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;polly" -DLLVM_ENABLE_RUNTIMES="libc;libunwind;libcxxabi;libcxx;compiler-rt;openmp;offload"`;
     await $`${{ raw: cmakeCmd }}`;
     const ninjaBuildCmd = `cd ${srcDir} && ninja -C stage -j${concurrency}`;
     await $`${{ raw: ninjaBuildCmd }}`;
