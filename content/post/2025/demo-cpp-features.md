@@ -26,4 +26,5 @@ thumbnail: "https://avatars.githubusercontent.com/u/32438672"
 * `return value optimization` - [https://godbolt.org/z/57W1sWrsP](https://godbolt.org/z/57W1sWrsP)
 > 返回值优化机制及可能的特例演示；
 
-* 
+* `reflection` - [https://godbolt.org/z/xbhfjnsYM](https://godbolt.org/z/xbhfjnsYM)
+> C++ 26 反射的基本用法；
