@@ -8,9 +8,8 @@
  * 2. Compose the archive URL for the current platform/arch (e.g.
  *    `https://golang.google.cn/dl/go1.26.4.linux-amd64.tar.gz`) and download
  *    it to /data/stage.
- * 3. Extract -> /data/stage/go, then move/rename to
- *    /data/server/go-MAJOR.MINOR (PATCH is ignored).
- * 4. Refresh the symlink /data/server/go -> /data/server/go-MAJOR.MINOR.
+ * 3. Extract -> /data/stage/go, then move/rename to /data/server/go-VERSION.
+ * 4. Refresh the symlink /data/server/go -> /data/server/go-VERSION.
  */
 
 import { $, semver } from "bun";
@@ -109,15 +108,13 @@ async function build() {
         "--------------------------------------------------------------------------------------------------",
     );
     const { filename, version, arch } = await setup();
-    const [major, minor /*, patch*/] = version.split(".");
-    const shortVersion = `${major}.${minor}`;
-    const targetDir = `${CONFIG.serverDir}/go-${shortVersion}`;
+    const targetDir = `${CONFIG.serverDir}/go-${version}`;
     const linkPath = `${CONFIG.serverDir}/${CONFIG.link}`;
     const url = `${CONFIG.mirror}/${filename}`;
     const archivePath = `${CONFIG.stageDir}/${filename}`;
     const extractedDir = `${CONFIG.stageDir}/go`;
 
-    console.log(`version: ${version} (short: ${shortVersion})`);
+    console.log(`version: ${version}`);
     console.log(`arch:    ${arch}`);
     console.log(`archive: ${filename}`);
     console.log(`url:     ${url}`);
@@ -154,12 +151,12 @@ async function build() {
         );
     }
 
-    // 3. rename/move to /data/server/go-X.XX
+    // 3. rename/move to /data/server/go-VERSION
     console.log(`moving ${extractedDir} -> ${targetDir} ...`);
     await $`rm -rf ${targetDir}`;
     await $`mv ${extractedDir} ${targetDir}`;
 
-    // 4. refresh symlink /data/server/go -> /data/server/go-X.XX
+    // 4. refresh symlink /data/server/go -> /data/server/go-VERSION
     console.log(`updating symlink ${linkPath} -> ${targetDir} ...`);
     await $`ln -snf ${targetDir} ${linkPath}`;
 

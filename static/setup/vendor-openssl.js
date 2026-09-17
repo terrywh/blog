@@ -11,6 +11,7 @@ const CONFIG = {
     serverDir: process.env.SERVER_DIR || "/data/server",
     vendorDir: process.env.VENDOR_DIR || "/data/vendor",
     mirror: "https://gh-proxy.com/", // GitHub Release 代理加速地址
+    link: "openssl",
 };
 
 async function isDirectory(path) {
@@ -99,9 +100,12 @@ async function build() {
         });
     }
     const prefix = `${CONFIG.vendorDir}/openssl-${version}`;
+    const linkPath = `${CONFIG.vendorDir}/${CONFIG.link}`;
     await $`cd ${srcDir} && ./Configure no-shared --prefix=${prefix}`;
     await $`cd ${srcDir} && make -j${concurrency}`;
     await $`cd ${srcDir} && make install`;
+    console.log(`updating symlink ${linkPath} -> ${prefix} ...`);
+    await $`ln -snf ${prefix} ${linkPath}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );

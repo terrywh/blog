@@ -11,6 +11,7 @@ const CONFIG = {
     serverDir: process.env.SERVER_DIR || "/data/server",
     vendorDir: process.env.VENDOR_DIR || "/data/vendor",
     mirror: "https://gh-proxy.com/", // GitHub Release 代理加速地址
+    link: "gsl",
 };
 
 async function isDirectory(path) {
@@ -105,12 +106,15 @@ async function build() {
         });
     }
     const installPrefix = `${CONFIG.vendorDir}/gsl-${version}`;
+    const linkPath = `${CONFIG.vendorDir}/${CONFIG.link}`;
     const cmakeCmd = `cd ${srcDir} && cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${installPrefix} -DGSL_INSTALL=ON -DGSL_TEST=OFF`;
     await $`${{ raw: cmakeCmd }}`;
     const ninjaBuildCmd = `cd ${srcDir} && ninja -C build -j${concurrency}`;
     await $`${{ raw: ninjaBuildCmd }}`;
     const ninjaInstallCmd = `cd ${srcDir} && ninja -C build install`;
     await $`${{ raw: ninjaInstallCmd }}`;
+    console.log(`updating symlink ${linkPath} -> ${installPrefix} ...`);
+    await $`ln -snf ${installPrefix} ${linkPath}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );

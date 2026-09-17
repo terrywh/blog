@@ -45,7 +45,7 @@ yum install -y doxygen libxml2-devel swig python3-devel cmake ninja-build
 * 请参考 [配置 GDB PrettyPrint 支持]({{% ref "/post/2025/gdb-with-pretty-print" %}})
 * 可以使用 Bun/Shell 执行脚本自动安装最新版本:
     ``` bash
-    curl -fsSL {{% param baseURL %}}/setup/compiler-setup-gcc.js | bun -
+    curl -fsSL {{% param baseURL %}}/setup/compiler-gcc.js | bun -
     ```
 
 ### LLVM
@@ -67,7 +67,7 @@ yum install -y doxygen libxml2-devel swig python3-devel cmake ninja-build
     ```
 * 可以使用 Bun/Shell 执行脚本自动安装最新版本:
     ``` bash
-    curl -fsSL {{% param baseURL %}}/setup/compiler-setup-llvm.js | bun -
+    curl -fsSL {{% param baseURL %}}/setup/compiler-llvm.js | bun -
     ```
 
 ## 配置

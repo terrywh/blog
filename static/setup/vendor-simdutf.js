@@ -11,6 +11,7 @@ const CONFIG = {
     serverDir: process.env.SERVER_DIR || "/data/server",
     vendorDir: process.env.VENDOR_DIR || "/data/vendor",
     mirror: "https://gh-proxy.com/", // GitHub Release 代理加速地址
+    link: "simdutf",
 };
 
 async function isDirectory(path) {
@@ -104,6 +105,7 @@ async function build() {
         });
     }
     const installPrefix = `${CONFIG.vendorDir}/simdutf-${version}`;
+    const linkPath = `${CONFIG.vendorDir}/${CONFIG.link}`;
     // 编译为 -fPIC 的静态库，供后续静态链接使用
     const cmakeCmd = `cd ${srcDir} && cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${installPrefix} -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DSIMDUTF_TESTS=OFF -DSIMDUTF_BENCHMARKS=OFF -DSIMDUTF_TOOLS=OFF -DSIMDUTF_ICONV=OFF`;
     await $`${{ raw: cmakeCmd }}`;
@@ -111,6 +113,8 @@ async function build() {
     await $`${{ raw: ninjaBuildCmd }}`;
     const ninjaInstallCmd = `cd ${srcDir} && ninja -C build install`;
     await $`${{ raw: ninjaInstallCmd }}`;
+    console.log(`updating symlink ${linkPath} -> ${installPrefix} ...`);
+    await $`ln -snf ${installPrefix} ${linkPath}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );

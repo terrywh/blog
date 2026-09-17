@@ -9,7 +9,7 @@ const concurrency = Math.trunc((os.cpus().length * 3) / 4);
 // Directory configuration (can be overridden via environment variables)
 const CONFIG = {
     serverDir: process.env.SERVER_DIR || "/data/server",
-    gnuMirror: process.env.GNU_MIRROR || "https://mirrors.tuna.tsinghua.edu.cn/gnu",
+    gnuMirror: process.env.GNU_MIRROR || "https://mirrors.tencent.com/gnu",
 };
 
 async function isDirectory(path) {
@@ -38,7 +38,8 @@ async function latest() {
     const html = await (
         await fetch("https://sourceware.org/gdb/")
     ).text();
-    const match = html.match(/version (\d+\.\d+)/);
+    // 取完整版本号（含 patch），避免截断为 major.minor
+    const match = html.match(/version (\d+(?:\.\d+)+)/);
     return match[1];
 }
 

@@ -6,6 +6,7 @@ import fs from "node:fs/promises";
 // Directory configuration (can be overridden via environment variables)
 const CONFIG = {
     vendorDir: process.env.VENDOR_DIR || "/data/vendor",
+    link: "boost",
 };
 
 async function isDirectory(path) {
@@ -88,13 +89,16 @@ async function build() {
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
-    const prefix = `${CONFIG.vendorDir}/boost-${version.split(".").slice(0, -1).join(".")}`;
+    const prefix = `${CONFIG.vendorDir}/boost-${version}`;
+    const linkPath = `${CONFIG.vendorDir}/${CONFIG.link}`;
     await $`cd ${srcDir} && ./bootstrap.sh --prefix=${prefix}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
     const b2Cmd = `cd ${srcDir} && ./b2 --prefix=${prefix} cxxflags="-fPIC" variant=release link=static threading=multi install`;
     await $`${{ raw: b2Cmd }}`;
+    console.log(`updating symlink ${linkPath} -> ${prefix} ...`);
+    await $`ln -snf ${prefix} ${linkPath}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );

@@ -10,8 +10,8 @@
  *    (e.g. `cmake-4.4.3-linux-x86_64.tar.gz`) and download it to /data/stage
  *    through the GitHub mirror.
  * 3. Extract -> /data/stage/cmake-VERSION-PLATFORM, then move/rename to
- *    /data/server/cmake-MAJOR.MINOR (PATCH is ignored).
- * 4. Refresh the symlink /data/server/cmake -> /data/server/cmake-MAJOR.MINOR.
+ *    /data/server/cmake-VERSION.
+ * 4. Refresh the symlink /data/server/cmake -> /data/server/cmake-VERSION.
  */
 
 import { $ } from "bun";
@@ -106,15 +106,13 @@ async function build() {
         "--------------------------------------------------------------------------------------------------",
     );
     const { filename, version, arch } = await setup();
-    const [major, minor /*, patch*/] = version.split(".");
-    const shortVersion = `${major}.${minor}`;
-    const targetDir = `${CONFIG.serverDir}/cmake-${shortVersion}`;
+    const targetDir = `${CONFIG.serverDir}/cmake-${version}`;
     const linkPath = `${CONFIG.serverDir}/${CONFIG.link}`;
     const url = `${CONFIG.mirror}https://github.com/Kitware/CMake/releases/download/v${version}/${filename}`;
     const archivePath = `${CONFIG.stageDir}/${filename}`;
     const extractedDir = `${CONFIG.stageDir}/cmake-${version}-${arch}`;
 
-    console.log(`version: ${version} (short: ${shortVersion})`);
+    console.log(`version: ${version}`);
     console.log(`arch:    ${arch}`);
     console.log(`archive: ${filename}`);
     console.log(`url:     ${url}`);
@@ -155,13 +153,13 @@ async function build() {
             );
         }
 
-        // 3. rename/move to /data/server/cmake-X.XX
+        // 3. rename/move to /data/server/cmake-VERSION
         console.log(`moving ${extractedDir} -> ${targetDir} ...`);
         await $`rm -rf ${targetDir}`;
         await $`mv ${extractedDir} ${targetDir}`;
     }
 
-    // 4. refresh symlink /data/server/cmake -> /data/server/cmake-X.XX
+    // 4. refresh symlink /data/server/cmake -> /data/server/cmake-VERSION
     console.log(`updating symlink ${linkPath} -> ${targetDir} ...`);
     await $`ln -snf ${targetDir} ${linkPath}`;
 

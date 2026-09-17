@@ -11,6 +11,7 @@ const CONFIG = {
     serverDir: process.env.SERVER_DIR || "/data/server",
     vendorDir: process.env.VENDOR_DIR || "/data/vendor",
     mirror: "https://gh-proxy.com/", // GitHub Release 代理加速地址
+    link: "quickjs",
 };
 
 async function isDirectory(path) {
@@ -102,6 +103,7 @@ async function build() {
     const stageDir = `${srcDir}/stage`;
     await $`cd ${srcDir} && mkdir -p stage`;
     const installPrefix = `${CONFIG.vendorDir}/quickjs-${version}`;
+    const linkPath = `${CONFIG.vendorDir}/${CONFIG.link}`;
     const cmakeCmd = `cd ${stageDir} && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${installPrefix} -DQJS_BUILD_LIBC=ON ../`;
     console.log(cmakeCmd);
     await $`${{ raw: cmakeCmd }}`;
@@ -109,6 +111,8 @@ async function build() {
     await $`${{ raw: makeCmd }}`;
     const installCmd = `cd ${stageDir} && make install`;
     await $`${{ raw: installCmd }}`;
+    console.log(`updating symlink ${linkPath} -> ${installPrefix} ...`);
+    await $`ln -snf ${installPrefix} ${linkPath}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );

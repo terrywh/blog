@@ -42,7 +42,7 @@ async function latest() {
 }
 
 async function setup() {
-    const setup = Bun.file("compiler-setup-llvm.json");
+    const setup = Bun.file("compiler-llvm.json");
     let stats;
     try {
         stats = await setup.stat();

@@ -11,6 +11,8 @@ const CONFIG = {
     serverDir: process.env.SERVER_DIR || "/data/server",
     vendorDir: process.env.VENDOR_DIR || "/data/vendor",
     mirror: "https://gh-proxy.com/", // GitHub Release 代理加速地址
+    link: "curl",
+    caresLink: "c-ares",
 };
 
 async function isDirectory(path) {
@@ -118,6 +120,10 @@ async function installCares() {
     const ninjaInstallCmd = `cd ${srcDir} && ninja -C build install`;
     await $`${{ raw: ninjaInstallCmd }}`;
 
+    const linkPath = `${CONFIG.vendorDir}/${CONFIG.caresLink}`;
+    console.log(`updating symlink ${linkPath} -> ${installPrefix} ...`);
+    await $`ln -snf ${installPrefix} ${linkPath}`;
+
     const includeDir = `${installPrefix}/include`;
     const library = await findLibrary(installPrefix, "libcares.a");
     if (library === null) {
@@ -222,6 +228,7 @@ async function build() {
     }
 
     const installPrefix = `${CONFIG.vendorDir}/curl-${version}`;
+    const linkPath = `${CONFIG.vendorDir}/${CONFIG.link}`;
     // 编译为 -fPIC 的静态 libcurl 及静态链接的 curl 二进制
     const options = [
         `-DCMAKE_BUILD_TYPE=Release`,
@@ -273,6 +280,8 @@ async function build() {
     await $`${{ raw: ninjaBuildCmd }}`;
     const ninjaInstallCmd = `cd ${srcDir} && ninja -C build install`;
     await $`${{ raw: ninjaInstallCmd }}`;
+    console.log(`updating symlink ${linkPath} -> ${installPrefix} ...`);
+    await $`ln -snf ${installPrefix} ${linkPath}`;
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );

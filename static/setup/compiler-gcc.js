@@ -9,7 +9,7 @@ const concurrency = Math.trunc((os.cpus().length * 3) / 4);
 // Directory configuration (can be overridden via environment variables)
 const CONFIG = {
     serverDir: process.env.SERVER_DIR || "/data/server",
-    gnuMirror: process.env.GNU_MIRROR || "https://mirrors.tuna.tsinghua.edu.cn/gnu",
+    gnuMirror: process.env.GNU_MIRROR || "https://mirrors.tencent.com/gnu",
 };
 
 async function isDirectory(path) {
@@ -161,7 +161,7 @@ async function build() {
 }
 
 async function setup() {
-    const file = Bun.file("compiler-setup-gcc.json");
+    const file = Bun.file("compiler-gcc.json");
     let stat = null;
     try {
         stat = await file.stat();
