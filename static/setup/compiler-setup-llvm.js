@@ -8,6 +8,7 @@ const concurrency = Math.trunc((os.cpus().length * 3) / 4);
 // Directory configuration (can be overridden via environment variables)
 const CONFIG = {
     serverDir: process.env.SERVER_DIR || "/data/server",
+    mirror: "https://gh-proxy.com/", // GitHub Release 代理加速地址
 };
 
 async function isDirectory(path) {
@@ -52,11 +53,11 @@ async function setup() {
         const [version] = await latest();
         const filename = `llvm-project-${version}.src.tar.xz`;
         await Bun.write(setup, JSON.stringify({ version, filename }));
-        const url = `https://github.com/llvm/llvm-project/releases/download/llvmorg-${version}/llvm-project-${version}.src.tar.xz`;
+        const url = `${CONFIG.mirror}https://github.com/llvm/llvm-project/releases/download/llvmorg-${version}/llvm-project-${version}.src.tar.xz`;
         return { filename, url, version };
     } else {
         const { version, filename } = await setup.json();
-        const url = `https://github.com/llvm/llvm-project/releases/download/llvmorg-${version}/llvm-project-${version}.src.tar.xz`;
+        const url = `${CONFIG.mirror}https://github.com/llvm/llvm-project/releases/download/llvmorg-${version}/llvm-project-${version}.src.tar.xz`;
         return { filename, url, version };
     }
 }

@@ -10,6 +10,7 @@ const concurrency = Math.trunc((os.cpus().length * 3) / 4);
 const CONFIG = {
     serverDir: process.env.SERVER_DIR || "/data/server",
     vendorDir: process.env.VENDOR_DIR || "/data/vendor",
+    mirror: "https://gh-proxy.com/", // GitHub Release 代理加速地址
 };
 
 async function isDirectory(path) {
@@ -53,12 +54,12 @@ async function setup() {
         const [version] = await latest();
         const filename = `quickjs-${version}.tar.gz`;
         await Bun.write(setup, JSON.stringify({ version, filename }));
-        const url = `https://github.com/quickjs-ng/quickjs/archive/refs/tags/v${version}.tar.gz`;
+        const url = `${CONFIG.mirror}https://github.com/quickjs-ng/quickjs/archive/refs/tags/v${version}.tar.gz`;
         // const url = `https://github.com/quickjs-ng/quickjs/releases/download/openssl-${version}/openssl-${version}.tar.gz`;
         return { filename, url, version };
     } else {
         const { version, filename } = await setup.json();
-        const url = `https://github.com/quickjs-ng/quickjs/archive/refs/tags/v${version}.tar.gz`;
+        const url = `${CONFIG.mirror}https://github.com/quickjs-ng/quickjs/archive/refs/tags/v${version}.tar.gz`;
         return { filename, url, version };
     }
 }

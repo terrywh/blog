@@ -23,7 +23,8 @@ async function isDirectory(path) {
 
 async function isFile(path) {
     try {
-        return (await fs.stat(path)).isFile();
+        const stat = await fs.stat(path);
+        return stat.isFile() && stat.size > 0;
     } catch (ex) {
         return false;
     }
@@ -36,14 +37,17 @@ async function wget(url, filename) {
 
 async function latest() {
     const html = await (
-        await fetch(`https://github.com/libuv/libuv/releases/latest/`)
+        await fetch(`https://github.com/microsoft/gsl/releases/latest/`)
     ).text();
-    const match = /<h1 [^>]+>v([^:\s]+)/.exec(html);
+    const match = /<h1 [^>]+>GSL v?([0-9][^<\s]*)/.exec(html);
+    if (match === null) {
+        throw new Error("unable to detect the latest GSL version.");
+    }
     return [match[1]];
 }
 
 async function setup() {
-    const setup = Bun.file("libuv-setup.json");
+    const setup = Bun.file("gsl-setup.json");
     let stats;
     try {
         stats = await setup.stat();
@@ -52,13 +56,13 @@ async function setup() {
     }
     if (stats === null || Date.now() - stats.mtime.getTime() > 3600 * 1000) {
         const [version] = await latest();
-        const filename = `libuv-${version}.tar.xz`;
+        const filename = `gsl-${version}.tar.gz`;
         await Bun.write(setup, JSON.stringify({ version, filename }));
-        const url = `${CONFIG.mirror}https://github.com/libuv/libuv/archive/refs/tags/v${version}.tar.gz`;
+        const url = `${CONFIG.mirror}https://github.com/microsoft/gsl/archive/refs/tags/v${version}.tar.gz`;
         return { filename, url, version };
     } else {
         const { version, filename } = await setup.json();
-        const url = `${CONFIG.mirror}https://github.com/libuv/libuv/archive/refs/tags/v${version}.tar.gz`;
+        const url = `${CONFIG.mirror}https://github.com/microsoft/gsl/archive/refs/tags/v${version}.tar.gz`;
         return { filename, url, version };
     }
 }
@@ -75,6 +79,7 @@ async function build() {
     if (await isFile(filename)) {
         console.log("already exists.");
     } else {
+        await $`rm -f ${filename}`;
         await wget(url, filename);
     }
 
@@ -82,14 +87,15 @@ async function build() {
         "--------------------------------------------------------------------------------------------------",
     );
     console.log("deflating ...");
-    const srcDir = `libuv-${version}`;
+    // GitHub archive 会去掉 tag 上的 v 前缀，但保留仓库名大小写
+    const srcDir = `GSL-${version}`;
     if (!(await isDirectory(srcDir))) {
         await $`tar xf ${filename}`;
     }
     console.log(
         "--------------------------------------------------------------------------------------------------",
     );
-    if (os.platform() !== "darwin" && await isFile(`${CONFIG.serverDir}/compiler/bin/gcc`)) {
+    if (os.platform() !== "darwin" && (await isFile(`${CONFIG.serverDir}/compiler/bin/gcc`))) {
         $.env({
             ...process.env,
             CXX: `${CONFIG.serverDir}/compiler/bin/g++`,
@@ -98,8 +104,8 @@ async function build() {
                 `-Wl,-rpath,${CONFIG.serverDir}/compiler/lib64 -L${CONFIG.serverDir}/compiler/lib64`,
         });
     }
-    const installPrefix = `${CONFIG.vendorDir}/libuv-${version}`;
-    const cmakeCmd = `cd ${srcDir} && cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${installPrefix}`;
+    const installPrefix = `${CONFIG.vendorDir}/gsl-${version}`;
+    const cmakeCmd = `cd ${srcDir} && cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${installPrefix} -DGSL_INSTALL=ON -DGSL_TEST=OFF`;
     await $`${{ raw: cmakeCmd }}`;
     const ninjaBuildCmd = `cd ${srcDir} && ninja -C build -j${concurrency}`;
     await $`${{ raw: ninjaBuildCmd }}`;
@@ -117,7 +123,7 @@ async function clean() {
     );
     console.log("cleaning up ...");
     const { filename, version } = await setup();
-    const srcDir = `libuv-${version}`;
+    const srcDir = `GSL-${version}`;
     await $`rm -rf ${filename}`;
     await $`rm -rf ${srcDir}`;
     console.log(
