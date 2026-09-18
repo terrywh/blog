@@ -20,11 +20,14 @@ thumbnail: "https://avatars.githubusercontent.com/u/32438672"
 * `pipe operator` - [https://godbolt.org/z/GbfsKesaM](https://godbolt.org/z/GbfsKesaM)
 > 直观使用 operator | 形态表达一个处理流程（配合 outcome::result 错误处理）；
 
-* `proxy` - [https://godbolt.org/z/6oM34ePrz](https://godbolt.org/z/6oM34ePrz)
-> 微软 Proxy 库新形态的“多态”机制；
+* `proxy` - https://godbolt.org/z/jne6z5rf8
+> 新形态的“多态”机制；
 
 * `return value optimization` - [https://godbolt.org/z/57W1sWrsP](https://godbolt.org/z/57W1sWrsP)
 > 返回值优化机制及可能的特例演示；
 
 * `reflection` - [https://godbolt.org/z/xbhfjnsYM](https://godbolt.org/z/xbhfjnsYM)
 > C++ 26 反射的基本用法；
+
+* `boost.openmethod` - https://godbolt.org/z/3bTGTW711
+> 通过“开放”的机制来解决“多态”问题；
